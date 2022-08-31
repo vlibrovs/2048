@@ -85,7 +85,7 @@ fun GameScreen(
         ) {
             Text(
                 modifier = Modifier.padding(start = 20.dp),
-                text = stringResource(id = R.string.score),
+                text = stringResource(id = R.string.score)+':',
                 textAlign = TextAlign.Start,
                 fontFamily = Fonts.Poppins,
                 fontWeight = FontWeight.Normal,

@@ -114,7 +114,7 @@ fun MainMenuScreen(
                         .fillMaxWidth(0.9f)
                         .fillMaxHeight(),
                     icon = painterResource(id = R.drawable.ic_bar_chart),
-                    contentDescription = stringResource(id = R.string.settings),
+                    contentDescription = stringResource(id = R.string.stats),
                     iconSize = iconSize,
                     onClick = { },
                     theme = theme
