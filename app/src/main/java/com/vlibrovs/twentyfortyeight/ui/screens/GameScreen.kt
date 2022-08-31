@@ -26,8 +26,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.vlibrovs.twentyfortyeight.R
 import com.vlibrovs.twentyfortyeight.data.model.Theme
+import com.vlibrovs.twentyfortyeight.ui.common.composables.Button
 import com.vlibrovs.twentyfortyeight.ui.common.fonts.Fonts
-import com.vlibrovs.twentyfortyeight.ui.common.window.WindowDensity
+import com.vlibrovs.twentyfortyeight.ui.common.window.WindowInfo
 import com.vlibrovs.twentyfortyeight.ui.common.window.rememberWindowInfo
 
 @Preview(name = "Compact", device = Devices.PIXEL_4)
@@ -37,27 +38,13 @@ fun GameScreen(
     theme: Theme = Theme.Main
 ) {
     val windowInfo = rememberWindowInfo()
-    val primaryFontSize = remember {
-        when (windowInfo.screenWidthInfo) {
-            WindowDensity.WindowType.Compact -> 60.sp
-            WindowDensity.WindowType.Medium -> 80.sp
-            WindowDensity.WindowType.Expanded -> 100.sp
-        }
-    }
-    val secondaryFontSize = remember {
-        when (windowInfo.screenWidthInfo) {
-            WindowDensity.WindowType.Compact -> 24.sp
-            WindowDensity.WindowType.Medium -> 30.sp
-            WindowDensity.WindowType.Expanded -> 36.sp
-        }
-    }
-    val lineWidth = remember {
-        when (windowInfo.screenWidthInfo) {
-            WindowDensity.WindowType.Compact -> 1.dp
-            WindowDensity.WindowType.Medium -> 2.dp
-            WindowDensity.WindowType.Expanded -> 3.dp
-        }
-    }
+    val primaryFontSize =
+        windowInfo.rememberValues(compact = 60.sp, medium = 80.sp, expanded = 100.sp)
+    val secondaryFontSize =
+        windowInfo.rememberValues(compact = 24.sp, medium = 30.sp, expanded = 36.sp)
+    val lineWidth = windowInfo.rememberValues(compact = 1.dp, medium = 2.dp, expanded = 3.dp)
+    val horizontalPadding =
+        windowInfo.rememberValues(compact = 32.dp, medium = 60.dp, expanded = 100.dp)
     var score by remember {
         mutableStateOf(0)
     }
@@ -66,12 +53,7 @@ fun GameScreen(
             .fillMaxSize()
             .background(brush = Brush.verticalGradient(theme.backgroundGradient))
             .padding(
-                horizontal =
-                when (windowInfo.screenWidthInfo) {
-                    WindowDensity.WindowType.Compact -> 32.dp
-                    WindowDensity.WindowType.Medium -> 60.dp
-                    WindowDensity.WindowType.Expanded -> 100.dp
-                },
+                horizontal = horizontalPadding,
                 vertical = 32.dp
             ),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -182,30 +164,13 @@ fun GameScreen(
             }
             GameLayer(modifier = Modifier.fillMaxSize())
         }
-
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(
-                    color = theme.buttonColor,
-                    shape = RoundedCornerShape(50.dp)
-                )
-                .clickable {
-
-                }
-        ) {
-            Text(
-                modifier = Modifier
-                    .padding(end = 20.dp)
-                    .fillMaxWidth(),
-                text = stringResource(id = R.string.back),
-                textAlign = TextAlign.Center,
-                fontFamily = Fonts.Poppins,
-                fontWeight = FontWeight.SemiBold,
-                color = theme.textColor,
-                fontSize = secondaryFontSize
-            )
-        }
+        Button(
+            modifier = Modifier.fillMaxWidth(),
+            text = stringResource(id = R.string.back),
+            fontSize = secondaryFontSize,
+            onClick = {  },
+            theme = theme
+        )
     }
 }
 

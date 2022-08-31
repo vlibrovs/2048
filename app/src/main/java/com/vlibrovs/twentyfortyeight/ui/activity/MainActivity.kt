@@ -11,6 +11,7 @@ import androidx.compose.ui.unit.Density
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.vlibrovs.twentyfortyeight.data.model.Theme
 import com.vlibrovs.twentyfortyeight.ui.screens.GameScreen
+import com.vlibrovs.twentyfortyeight.ui.screens.MainMenuScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -21,7 +22,7 @@ class MainActivity : ComponentActivity() {
                 mutableStateOf(Theme.Main)
             }
             systemUiController.setStatusBarColor(theme.backgroundGradient[0])
-            GameScreen()
+            MainMenuScreen()
         }
     }
 }

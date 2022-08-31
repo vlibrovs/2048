@@ -1,6 +1,9 @@
 <resources>
-    <string name="app_name">2048</string>
+    <string name="app_name" translatable="false">2048</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="score">Score:</string>
     <string name="back">Back</string>
+    <string name="continueStr">Continue</string>
+    <string name="new_game">New Game</string>
+    <string name="settings">Settings</string>
 </resources>

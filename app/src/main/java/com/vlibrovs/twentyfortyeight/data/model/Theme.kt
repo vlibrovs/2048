@@ -42,5 +42,17 @@ data class Theme(
             textColor = Color(0xFFF0FFFF),
             linesColor = Color(0x1E1E1E1E)
         )
+
+        val Test = Theme(
+            name = "Main Theme",
+            backgroundGradient = mutableListOf(
+                Color(0xFF66FFFF),
+                Color(0xFFCCFFFF),
+            ),
+            secondaryBackgroundColor = Color(0x75324E4E),
+            buttonColor = Color(0xFF73CCCC),
+            textColor = Color(0xFF555555),
+            linesColor = Color(0x1E1E1E1E)
+        )
     }
 }
