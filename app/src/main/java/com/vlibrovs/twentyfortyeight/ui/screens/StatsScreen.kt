@@ -22,6 +22,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.vlibrovs.twentyfortyeight.R
+import com.vlibrovs.twentyfortyeight.common.getValues
 import com.vlibrovs.twentyfortyeight.data.entity.Game
 import com.vlibrovs.twentyfortyeight.data.model.Theme
 import com.vlibrovs.twentyfortyeight.ui.common.composables.Button
@@ -46,20 +47,7 @@ fun StatsScreen(
     mostMoves: Int = 0,
     averageMoves: Int = 0
 ) {
-    val windowInfo = rememberWindowInfo()
-    val titleFontSize = windowInfo.rememberValues(compact = 48.sp, medium = 56.sp, expanded = 64.sp)
-    val boxCornerRadius =
-        windowInfo.rememberValues(compact = 20.dp, medium = 22.dp, expanded = 25.dp)
-    val padding = windowInfo.rememberValues(compact = 32.dp, medium = 48.dp, expanded = 60.dp)
-    val contentFontSize =
-        windowInfo.rememberValues(compact = 16.sp, medium = 24.sp, expanded = 32.sp)
-    val lineWidth = windowInfo.rememberValues(compact = 1.dp, medium = 2.dp, expanded = 3.dp)
-    val tableHeight =
-        windowInfo.rememberValues(compact = 100.dp, medium = 150.dp, expanded = 200.dp)
-    val secondaryFontSize =
-        windowInfo.rememberValues(compact = 24.sp, medium = 30.sp, expanded = 36.sp)
-    val gameBoxHeight =
-        windowInfo.rememberValues(compact = 400.dp, medium = 500.dp, expanded = 600.dp)
+    val values = getValues(rememberWindowInfo().screenWidthInfo)
 
     Column(
         modifier = Modifier
@@ -67,7 +55,7 @@ fun StatsScreen(
             .background(
                 brush = Brush.verticalGradient(theme.backgroundGradient)
             )
-            .padding(padding),
+            .padding(values.statsPadding),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceBetween
     ) {
@@ -75,7 +63,7 @@ fun StatsScreen(
         Text(
             text = stringResource(id = R.string.stats),
             color = theme.textColor,
-            fontSize = titleFontSize,
+            fontSize = values.defaultTitleFontSize,
             fontFamily = Fonts.Poppins,
             fontWeight = FontWeight.SemiBold,
             style = TextStyle(
@@ -90,9 +78,9 @@ fun StatsScreen(
         SecondaryBackgroundBox(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(tableHeight),
+                .height(values.statsTableHeight),
             theme = theme,
-            cornerRadius = boxCornerRadius
+            cornerRadius = values.boxCornerRadius
         ) {
             Column(
                 modifier = Modifier.fillMaxSize(),
@@ -107,7 +95,7 @@ fun StatsScreen(
                     Spacer(modifier = Modifier.fillMaxWidth(0.33f))
                     Divider(
                         modifier = Modifier
-                            .width(lineWidth)
+                            .width(values.lineWidth)
                             .fillMaxHeight(), color = theme.linesColor
                     )
                     Text(
@@ -115,13 +103,13 @@ fun StatsScreen(
                         textAlign = TextAlign.Center,
                         text = stringResource(id = R.string.score),
                         color = theme.textColor,
-                        fontSize = contentFontSize,
+                        fontSize = values.contentFontSize,
                         fontFamily = Fonts.Poppins,
                         fontWeight = FontWeight.Normal
                     )
                     Divider(
                         modifier = Modifier
-                            .width(lineWidth)
+                            .width(values.lineWidth)
                             .fillMaxHeight(), color = theme.linesColor
                     )
                     Text(
@@ -129,7 +117,7 @@ fun StatsScreen(
                         textAlign = TextAlign.Center,
                         text = stringResource(id = R.string.moves),
                         color = theme.textColor,
-                        fontSize = contentFontSize,
+                        fontSize = values.contentFontSize,
                         fontFamily = Fonts.Poppins,
                         fontWeight = FontWeight.Normal
                     )
@@ -137,7 +125,7 @@ fun StatsScreen(
                 Divider(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(lineWidth)
+                        .height(values.lineWidth)
                 )
                 Row(
                     modifier = Modifier
@@ -150,13 +138,13 @@ fun StatsScreen(
                         textAlign = TextAlign.Center,
                         text = stringResource(R.string.best),
                         color = theme.textColor,
-                        fontSize = contentFontSize,
+                        fontSize = values.contentFontSize,
                         fontFamily = Fonts.Poppins,
                         fontWeight = FontWeight.Normal
                     )
                     Divider(
                         modifier = Modifier
-                            .width(lineWidth)
+                            .width(values.lineWidth)
                             .fillMaxHeight(), color = theme.linesColor
                     )
                     Text(
@@ -164,13 +152,13 @@ fun StatsScreen(
                         textAlign = TextAlign.Center,
                         text = "$bestScore",
                         color = theme.textColor,
-                        fontSize = contentFontSize,
+                        fontSize = values.contentFontSize,
                         fontFamily = Fonts.Poppins,
                         fontWeight = FontWeight.Bold
                     )
                     Divider(
                         modifier = Modifier
-                            .width(lineWidth)
+                            .width(values.lineWidth)
                             .fillMaxHeight(), color = theme.linesColor
                     )
                     Text(
@@ -178,7 +166,7 @@ fun StatsScreen(
                         textAlign = TextAlign.Center,
                         text = "$mostMoves",
                         color = theme.textColor,
-                        fontSize = contentFontSize,
+                        fontSize = values.contentFontSize,
                         fontFamily = Fonts.Poppins,
                         fontWeight = FontWeight.Bold
                     )
@@ -186,7 +174,7 @@ fun StatsScreen(
                 Divider(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(lineWidth)
+                        .height(values.lineWidth)
                 )
                 Row(
                     modifier = Modifier.fillMaxSize(),
@@ -197,13 +185,13 @@ fun StatsScreen(
                         textAlign = TextAlign.Center,
                         text = stringResource(id = R.string.average),
                         color = theme.textColor,
-                        fontSize = contentFontSize,
+                        fontSize = values.contentFontSize,
                         fontFamily = Fonts.Poppins,
                         fontWeight = FontWeight.Normal
                     )
                     Divider(
                         modifier = Modifier
-                            .width(lineWidth)
+                            .width(values.lineWidth)
                             .fillMaxHeight(), color = theme.linesColor
                     )
                     Text(
@@ -211,13 +199,13 @@ fun StatsScreen(
                         textAlign = TextAlign.Center,
                         text = "$averageScore",
                         color = theme.textColor,
-                        fontSize = contentFontSize,
+                        fontSize = values.contentFontSize,
                         fontFamily = Fonts.Poppins,
                         fontWeight = FontWeight.Bold
                     )
                     Divider(
                         modifier = Modifier
-                            .width(lineWidth)
+                            .width(values.lineWidth)
                             .fillMaxHeight(), color = theme.linesColor
                     )
                     Text(
@@ -225,7 +213,7 @@ fun StatsScreen(
                         textAlign = TextAlign.Center,
                         text = "$averageMoves",
                         color = theme.textColor,
-                        fontSize = contentFontSize,
+                        fontSize = values.contentFontSize,
                         fontFamily = Fonts.Poppins,
                         fontWeight = FontWeight.Bold
                     )
@@ -236,9 +224,9 @@ fun StatsScreen(
         // Games
         SecondaryBackgroundBox(
             modifier = Modifier
-                .fillMaxWidth().height(gameBoxHeight),
+                .fillMaxWidth().height(values.gamesStatsBoxHeight),
             theme = theme,
-            cornerRadius = boxCornerRadius
+            cornerRadius = values.boxCornerRadius
         ) {
             Column(
                 modifier = Modifier
@@ -249,7 +237,7 @@ fun StatsScreen(
                 Text(
                     text = stringResource(id = R.string.games),
                     color = theme.textColor,
-                    fontSize = secondaryFontSize,
+                    fontSize = values.buttonTextSize,
                     fontFamily = Fonts.Poppins,
                     fontWeight = FontWeight.Bold
                 )
@@ -261,7 +249,7 @@ fun StatsScreen(
                         modifier = Modifier.fillMaxWidth(0.15f),
                         textAlign = TextAlign.Center,
                         text = "№",
-                        fontSize = contentFontSize,
+                        fontSize = values.contentFontSize,
                         fontFamily = Fonts.Poppins,
                         fontWeight = FontWeight.Normal,
                         color = theme.textColor
@@ -270,7 +258,7 @@ fun StatsScreen(
                         modifier = Modifier.fillMaxWidth(0.5f),
                         textAlign = TextAlign.Center,
                         text = stringResource(id = R.string.score),
-                        fontSize = contentFontSize,
+                        fontSize = values.contentFontSize,
                         fontFamily = Fonts.Poppins,
                         fontWeight = FontWeight.Normal,
                         color = theme.textColor
@@ -279,7 +267,7 @@ fun StatsScreen(
                         modifier = Modifier.fillMaxWidth(0.4f),
                         textAlign = TextAlign.Center,
                         text = stringResource(id = R.string.moves),
-                        fontSize = contentFontSize,
+                        fontSize = values.contentFontSize,
                         fontFamily = Fonts.Poppins,
                         fontWeight = FontWeight.Normal,
                         color = theme.textColor
@@ -288,7 +276,7 @@ fun StatsScreen(
                         modifier = Modifier.fillMaxWidth(),
                         textAlign = TextAlign.Center,
                         text = stringResource(id = R.string.finished),
-                        fontSize = contentFontSize,
+                        fontSize = values.contentFontSize,
                         fontFamily = Fonts.Poppins,
                         fontWeight = FontWeight.Normal,
                         color = theme.textColor
@@ -306,7 +294,7 @@ fun StatsScreen(
                                 modifier = Modifier.fillMaxWidth(0.15f),
                                 textAlign = TextAlign.Center,
                                 text = "${game.number}",
-                                fontSize = contentFontSize,
+                                fontSize = values.contentFontSize,
                                 fontFamily = Fonts.Poppins,
                                 fontWeight = FontWeight.SemiBold,
                                 color = theme.textColor
@@ -315,7 +303,7 @@ fun StatsScreen(
                                 modifier = Modifier.fillMaxWidth(0.5f),
                                 textAlign = TextAlign.Center,
                                 text = "${game.score}",
-                                fontSize = contentFontSize,
+                                fontSize = values.contentFontSize,
                                 fontFamily = Fonts.Poppins,
                                 fontWeight = FontWeight.SemiBold,
                                 color = theme.textColor
@@ -324,7 +312,7 @@ fun StatsScreen(
                                 modifier = Modifier.fillMaxWidth(0.4f),
                                 textAlign = TextAlign.Center,
                                 text = "${game.moves}",
-                                fontSize = contentFontSize,
+                                fontSize = values.contentFontSize,
                                 fontFamily = Fonts.Poppins,
                                 fontWeight = FontWeight.SemiBold,
                                 color = theme.textColor
@@ -333,7 +321,7 @@ fun StatsScreen(
                                 modifier = Modifier.fillMaxWidth(),
                                 textAlign = TextAlign.Center,
                                 text = game.date,
-                                fontSize = contentFontSize,
+                                fontSize = values.contentFontSize,
                                 fontFamily = Fonts.Poppins,
                                 fontWeight = FontWeight.SemiBold,
                                 color = theme.textColor
@@ -346,7 +334,7 @@ fun StatsScreen(
         // Button
         Button(
             text = stringResource(id = R.string.back),
-            fontSize = secondaryFontSize,
+            fontSize = values.buttonTextSize,
             onClick = { },
             theme = theme
         )

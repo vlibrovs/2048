@@ -25,6 +25,8 @@ import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.vlibrovs.twentyfortyeight.R
+import com.vlibrovs.twentyfortyeight.common.Values
+import com.vlibrovs.twentyfortyeight.common.getValues
 import com.vlibrovs.twentyfortyeight.data.model.Theme
 import com.vlibrovs.twentyfortyeight.ui.common.composables.Button
 import com.vlibrovs.twentyfortyeight.ui.common.fonts.Fonts
@@ -37,14 +39,7 @@ import com.vlibrovs.twentyfortyeight.ui.common.window.rememberWindowInfo
 fun GameScreen(
     theme: Theme = Theme.Main
 ) {
-    val windowInfo = rememberWindowInfo()
-    val primaryFontSize =
-        windowInfo.rememberValues(compact = 60.sp, medium = 80.sp, expanded = 100.sp)
-    val secondaryFontSize =
-        windowInfo.rememberValues(compact = 24.sp, medium = 30.sp, expanded = 36.sp)
-    val lineWidth = windowInfo.rememberValues(compact = 1.dp, medium = 2.dp, expanded = 3.dp)
-    val horizontalPadding =
-        windowInfo.rememberValues(compact = 32.dp, medium = 60.dp, expanded = 100.dp)
+    val values = getValues(rememberWindowInfo().screenWidthInfo)
     var score by remember {
         mutableStateOf(0)
     }
@@ -52,17 +47,14 @@ fun GameScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(brush = Brush.verticalGradient(theme.backgroundGradient))
-            .padding(
-                horizontal = horizontalPadding,
-                vertical = 32.dp
-            ),
+            .padding(values.gamePadding),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceBetween
     ) {
         Text(
             text = "2048",
             color = theme.textColor,
-            fontSize = primaryFontSize,
+            fontSize = values.gameTitleFontSize,
             fontFamily = Fonts.Poppins,
             fontWeight = FontWeight.SemiBold,
             style = TextStyle(
@@ -90,7 +82,7 @@ fun GameScreen(
                 fontFamily = Fonts.Poppins,
                 fontWeight = FontWeight.Normal,
                 color = theme.textColor,
-                fontSize = secondaryFontSize
+                fontSize = values.buttonTextSize
             )
             Text(
                 modifier = Modifier
@@ -101,7 +93,7 @@ fun GameScreen(
                 fontFamily = Fonts.Poppins,
                 fontWeight = FontWeight.SemiBold,
                 color = theme.textColor,
-                fontSize = secondaryFontSize
+                fontSize = values.buttonTextSize
             )
         }
 
@@ -122,19 +114,19 @@ fun GameScreen(
                 Divider(
                     modifier = Modifier
                         .fillMaxHeight()
-                        .width(lineWidth)
+                        .width(values.lineWidth)
                         .background(color = theme.linesColor)
                 )
                 Divider(
                     modifier = Modifier
                         .fillMaxHeight()
-                        .width(lineWidth)
+                        .width(values.lineWidth)
                         .background(color = theme.linesColor)
                 )
                 Divider(
                     modifier = Modifier
                         .fillMaxHeight()
-                        .width(lineWidth)
+                        .width(values.lineWidth)
                         .background(color = theme.linesColor)
                 )
             }
@@ -146,19 +138,19 @@ fun GameScreen(
                 Divider(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(lineWidth)
+                        .height(values.lineWidth)
                         .background(color = theme.linesColor)
                 )
                 Divider(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(lineWidth)
+                        .height(values.lineWidth)
                         .background(color = theme.linesColor)
                 )
                 Divider(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(lineWidth)
+                        .height(values.lineWidth)
                         .background(color = theme.linesColor)
                 )
             }
@@ -167,7 +159,7 @@ fun GameScreen(
         Button(
             modifier = Modifier.fillMaxWidth(),
             text = stringResource(id = R.string.back),
-            fontSize = secondaryFontSize,
+            fontSize = values.buttonTextSize,
             onClick = {  },
             theme = theme
         )
