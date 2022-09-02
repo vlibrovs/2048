@@ -32,6 +32,10 @@ sealed class Values {
     abstract val gamesStatsBoxHeight: Dp
     abstract val gameTitleFontSize: TextUnit
     abstract val gamePadding: PaddingValues
+    abstract val settingsInboxPadding: PaddingValues
+    abstract val addThemeButtonSize: Dp
+    abstract val settingsBoxHeight: Dp
+    abstract val themeItemPadding: PaddingValues
 
     object Compact : Values() {
         override val mainMenuTitleSize = 80.sp
@@ -50,6 +54,11 @@ sealed class Values {
         override val gamesStatsBoxHeight = 400.dp
         override val gameTitleFontSize = 60.sp
         override val gamePadding = PaddingValues(horizontal = 32.dp, vertical = 32.dp)
+        override val settingsInboxPadding = PaddingValues(10.dp)
+        override val addThemeButtonSize = 50.dp
+        override val settingsBoxHeight = 500.dp
+        override val themeItemPadding =
+            PaddingValues(vertical = 10.dp, horizontal = 15.dp)
     }
 
     object Medium : Values() {
@@ -69,6 +78,11 @@ sealed class Values {
         override val gamesStatsBoxHeight = 500.dp
         override val gameTitleFontSize = 80.sp
         override val gamePadding = PaddingValues(horizontal = 60.dp, vertical = 32.dp)
+        override val settingsInboxPadding = PaddingValues(15.dp)
+        override val addThemeButtonSize = 70.dp
+        override val settingsBoxHeight = 600.dp
+        override val themeItemPadding =
+            PaddingValues(vertical = 12.dp, horizontal = 17.dp)
     }
 
     object Expanded : Values() {
@@ -88,6 +102,11 @@ sealed class Values {
         override val gamesStatsBoxHeight = 600.dp
         override val gameTitleFontSize = 60.sp
         override val gamePadding = PaddingValues(horizontal = 100.dp, vertical = 32.dp)
+        override val settingsInboxPadding = PaddingValues(20.dp)
+        override val addThemeButtonSize = 90.dp
+        override val settingsBoxHeight = 700.dp
+        override val themeItemPadding =
+            PaddingValues(vertical = 15.dp, horizontal = 20.dp)
     }
 }
 

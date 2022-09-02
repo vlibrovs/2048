@@ -12,6 +12,7 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.vlibrovs.twentyfortyeight.data.model.Theme
 import com.vlibrovs.twentyfortyeight.ui.screens.GameScreen
 import com.vlibrovs.twentyfortyeight.ui.screens.MainMenuScreen
+import com.vlibrovs.twentyfortyeight.ui.screens.SettingScreen
 import com.vlibrovs.twentyfortyeight.ui.screens.StatsScreen
 
 class MainActivity : ComponentActivity() {
@@ -23,7 +24,7 @@ class MainActivity : ComponentActivity() {
                 mutableStateOf(Theme.Main)
             }
             systemUiController.setStatusBarColor(theme.backgroundGradient[0])
-            StatsScreen()
+            SettingScreen()
         }
     }
 }

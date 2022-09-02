@@ -2,6 +2,7 @@ package com.vlibrovs.twentyfortyeight.data.model
 
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.res.stringResource
 import com.vlibrovs.twentyfortyeight.data.entity.ThemeEntity
 
 data class Theme(
@@ -11,7 +12,8 @@ data class Theme(
     var buttonColor: Color,
     var textColor: Color,
     var linesColor: Color,
-    val tileStyles: List<TileStyle> = List(16) { index -> TileStyle(index+1) }
+    val tileStyles: List<TileStyle> = List(16) { index -> TileStyle(index+1) },
+    var isSelected: Boolean = false
 ) {
     fun toThemeEntity(): ThemeEntity {
         val tileStylesBuilder = StringBuilder()
@@ -40,19 +42,8 @@ data class Theme(
             secondaryBackgroundColor = Color(0x75324E4E),
             buttonColor = Color(0xFF73CCCC),
             textColor = Color(0xFFF0FFFF),
-            linesColor = Color(0x1E1E1E1E)
-        )
-
-        val Test = Theme(
-            name = "Main Theme",
-            backgroundGradient = mutableListOf(
-                Color(0xFF66FFFF),
-                Color(0xFFCCFFFF),
-            ),
-            secondaryBackgroundColor = Color(0x75324E4E),
-            buttonColor = Color(0xFF73CCCC),
-            textColor = Color(0xFF555555),
-            linesColor = Color(0x1E1E1E1E)
+            linesColor = Color(0x1E1E1E1E),
+            isSelected = true
         )
     }
 }
