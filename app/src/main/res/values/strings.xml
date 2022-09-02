@@ -13,4 +13,13 @@
     <string name="games">Games</string>
     <string name="finished">Finished</string>
     <string name="themes">Themes</string>
+    <string name="save">Save</string>
+    <string name="theme_name">Theme Name</string>
+    <string name="edit_tiles_styles">Edit tiles styles</string>
+
+    <string name="primary_background">Primary\nbackground:</string>
+    <string name="secondary_background">Secondary\nbackground:</string>
+    <string name="buttons">Buttons:</string>
+    <string name="text">Text:</string>
+    <string name="lines">Lines:</string>
 </resources>
