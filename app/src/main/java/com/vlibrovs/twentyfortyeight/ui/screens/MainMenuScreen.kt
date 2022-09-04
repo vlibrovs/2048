@@ -67,7 +67,7 @@ fun MainMenuScreen(
                     .height(values.buttonHeight),
                 text = stringResource(id = R.string.continueStr),
                 fontSize = values.buttonTextSize,
-                onClick = {  },
+                onClick = { navController.navigate(Screen.Game.route) },
                 theme = theme
             )
 
@@ -77,7 +77,7 @@ fun MainMenuScreen(
                     .height(values.buttonHeight),
                 text = stringResource(id = R.string.new_game),
                 fontSize = values.buttonTextSize,
-                onClick = { },
+                onClick = { navController.navigate(Screen.Game.route) },
                 theme = theme
             )
 

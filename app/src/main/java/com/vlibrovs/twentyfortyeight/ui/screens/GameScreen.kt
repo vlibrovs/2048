@@ -31,6 +31,7 @@ import com.vlibrovs.twentyfortyeight.common.getValues
 import com.vlibrovs.twentyfortyeight.data.model.Theme
 import com.vlibrovs.twentyfortyeight.ui.common.composables.Button
 import com.vlibrovs.twentyfortyeight.ui.common.fonts.Fonts
+import com.vlibrovs.twentyfortyeight.ui.common.navigation.Screen
 import com.vlibrovs.twentyfortyeight.ui.common.window.WindowInfo
 import com.vlibrovs.twentyfortyeight.ui.common.window.rememberWindowInfo
 
@@ -160,7 +161,7 @@ fun GameScreen(
             modifier = Modifier.fillMaxWidth(),
             text = stringResource(id = R.string.back),
             fontSize = values.buttonTextSize,
-            onClick = {  },
+            onClick = { navController.navigate(Screen.MainMenu.route) },
             theme = theme
         )
     }
