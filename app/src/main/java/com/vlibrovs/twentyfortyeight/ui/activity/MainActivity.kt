@@ -21,7 +21,7 @@ class MainActivity : ComponentActivity() {
                 mutableStateOf(Theme.Main)
             }
             systemUiController.setStatusBarColor(theme.backgroundGradient[0])
-            ThemeEditScreen()
+            TileStylesScreen()
         }
     }
 }

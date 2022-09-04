@@ -2,6 +2,7 @@ package com.vlibrovs.twentyfortyeight.ui.common.composables
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -16,7 +17,8 @@ fun ColorCircle(
     fillColor: Color,
     outlineColor: Color,
     outlineWidth: Dp,
-    size: Dp
+    size: Dp,
+    onClick: () -> Unit = {}
 ) {
     Box(
         modifier = Modifier
@@ -27,6 +29,8 @@ fun ColorCircle(
                 shape = CircleShape,
                 color = fillColor
             )
+            .clickable {
 
+            }
     )
 }

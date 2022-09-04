@@ -36,6 +36,10 @@ sealed class Values {
     abstract val addThemeButtonSize: Dp
     abstract val settingsBoxHeight: Dp
     abstract val themeItemPadding: PaddingValues
+    abstract val tileStyleSize: Dp
+    abstract val tileStyleCornerRadius: Dp
+    abstract val tileStyleFontSize: Map<Int, TextUnit>
+    abstract val colorCircleOutlineWidth: Dp
 
     object Compact : Values() {
         override val mainMenuTitleSize = 80.sp
@@ -59,6 +63,17 @@ sealed class Values {
         override val settingsBoxHeight = 500.dp
         override val themeItemPadding =
             PaddingValues(vertical = 10.dp, horizontal = 15.dp)
+        override val tileStyleSize = 70.dp
+        override val tileStyleCornerRadius = 10.dp
+        override val tileStyleFontSize = mapOf(
+            Pair(1, 32.sp),
+            Pair(2, 30.sp),
+            Pair(3, 28.sp),
+            Pair(4, 24.sp),
+            Pair(5, 18.sp),
+            Pair(6, 16.sp)
+        )
+        override val colorCircleOutlineWidth = 2.dp
     }
 
     object Medium : Values() {
@@ -83,6 +98,17 @@ sealed class Values {
         override val settingsBoxHeight = 600.dp
         override val themeItemPadding =
             PaddingValues(vertical = 12.dp, horizontal = 17.dp)
+        override val tileStyleSize = 95.dp
+        override val tileStyleCornerRadius = 12.dp
+        override val tileStyleFontSize = mapOf(
+            Pair(1, 36.sp),
+            Pair(2, 28.sp),
+            Pair(3, 36.sp),
+            Pair(4, 36.sp),
+            Pair(5, 36.sp),
+            Pair(6, 36.sp)
+        )
+        override val colorCircleOutlineWidth = 3.dp
     }
 
     object Expanded : Values() {
@@ -107,6 +133,18 @@ sealed class Values {
         override val settingsBoxHeight = 700.dp
         override val themeItemPadding =
             PaddingValues(vertical = 15.dp, horizontal = 20.dp)
+        override val tileStyleSize = 120.dp
+        override val tileStyleCornerRadius = 14.dp
+        override val tileStyleFontSize = mapOf(
+            Pair(1, 60.sp),
+            Pair(2, 54.sp),
+            Pair(3, 48.sp),
+            Pair(4, 40.sp),
+            Pair(5, 32.sp),
+            Pair(6, 28.sp)
+        )
+        override val colorCircleOutlineWidth = 4.dp
+
     }
 }
 

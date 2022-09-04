@@ -181,7 +181,7 @@ fun PropertyItem(
                 ColorCircle(
                     fillColor = secondColor,
                     outlineColor = theme.linesColor,
-                    outlineWidth = values.lineWidth*2f,
+                    outlineWidth = values.colorCircleOutlineWidth,
                     size = values.addThemeButtonSize
                 )
                 Spacer(modifier = Modifier.width(values.settingsInboxPadding.calculateTopPadding()))
@@ -189,7 +189,7 @@ fun PropertyItem(
             ColorCircle(
                 fillColor = color,
                 outlineColor = theme.linesColor,
-                outlineWidth = values.lineWidth*2f,
+                outlineWidth = values.colorCircleOutlineWidth,
                 size = values.addThemeButtonSize
             )
         }
