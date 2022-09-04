@@ -22,4 +22,5 @@
     <string name="buttons">Buttons:</string>
     <string name="text">Text:</string>
     <string name="lines">Lines:</string>
+    <string name="cancel">Cancel</string>
 </resources>

@@ -40,6 +40,10 @@ sealed class Values {
     abstract val tileStyleCornerRadius: Dp
     abstract val tileStyleFontSize: Map<Int, TextUnit>
     abstract val colorCircleOutlineWidth: Dp
+    abstract val colorPickerSize: Dp
+    abstract val colorStringSize: TextUnit
+    abstract val sliderHeight: Dp
+
 
     object Compact : Values() {
         override val mainMenuTitleSize = 80.sp
@@ -74,6 +78,9 @@ sealed class Values {
             Pair(6, 16.sp)
         )
         override val colorCircleOutlineWidth = 2.dp
+        override val colorPickerSize = 250.dp
+        override val colorStringSize = 18.sp
+        override val sliderHeight = 20.dp
     }
 
     object Medium : Values() {
@@ -109,6 +116,9 @@ sealed class Values {
             Pair(6, 36.sp)
         )
         override val colorCircleOutlineWidth = 3.dp
+        override val colorPickerSize = 300.dp
+        override val colorStringSize = 20.sp
+        override val sliderHeight = 26.dp
     }
 
     object Expanded : Values() {
@@ -144,7 +154,9 @@ sealed class Values {
             Pair(6, 28.sp)
         )
         override val colorCircleOutlineWidth = 4.dp
-
+        override val colorPickerSize = 350.dp
+        override val colorStringSize = 22.sp
+        override val sliderHeight = 32.dp
     }
 }
 
