@@ -15,6 +15,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.github.skydoves.colorpicker.compose.AlphaSlider
 import com.github.skydoves.colorpicker.compose.BrightnessSlider
 import com.github.skydoves.colorpicker.compose.HsvColorPicker
@@ -27,12 +28,12 @@ import com.vlibrovs.twentyfortyeight.ui.common.composables.SecondaryBackgroundBo
 import com.vlibrovs.twentyfortyeight.ui.common.fonts.Fonts
 import com.vlibrovs.twentyfortyeight.ui.common.window.rememberWindowInfo
 
-@Preview(name = "Compact", device = Devices.PIXEL_4)
-@Preview(name = "Expanded", device = Devices.PIXEL_C, heightDp = 1280, widthDp = 900)
 @Composable
 fun ColorPickerScreen(
-    theme: Theme = Theme.Main,
-    color: Color = Color.White
+    theme: Theme,
+    color: Color,
+    navController: NavController,
+    entryRoute: String
 ) {
     val values = getValues(rememberWindowInfo().screenWidthInfo)
     val controller = rememberColorPickerController()
@@ -141,7 +142,9 @@ fun ColorPickerScreen(
                 .height(values.buttonHeight),
             text = stringResource(id = R.string.save),
             fontSize = values.buttonTextSize,
-            onClick = { /*TODO*/ },
+            onClick = {
+                navController.navigate(entryRoute.replace('*', '/'))
+            },
             theme = theme
         )
         Button(
@@ -150,7 +153,9 @@ fun ColorPickerScreen(
                 .height(values.buttonHeight),
             text = stringResource(id = R.string.cancel),
             fontSize = values.buttonTextSize,
-            onClick = { /*TODO*/ },
+            onClick = {
+                navController.navigate(entryRoute.replace('*', '/'))
+            },
             theme = theme
         )
     }

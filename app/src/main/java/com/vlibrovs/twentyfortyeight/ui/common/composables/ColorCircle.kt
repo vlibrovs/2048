@@ -29,8 +29,6 @@ fun ColorCircle(
                 shape = CircleShape,
                 color = fillColor
             )
-            .clickable {
-
-            }
+            .clickable(onClick = onClick)
     )
 }

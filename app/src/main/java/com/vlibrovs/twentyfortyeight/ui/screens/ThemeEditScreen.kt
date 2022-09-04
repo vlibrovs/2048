@@ -12,6 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -19,6 +20,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.vlibrovs.twentyfortyeight.R
 import com.vlibrovs.twentyfortyeight.common.Values
 import com.vlibrovs.twentyfortyeight.common.getValues
@@ -27,14 +29,14 @@ import com.vlibrovs.twentyfortyeight.ui.common.composables.Button
 import com.vlibrovs.twentyfortyeight.ui.common.composables.ColorCircle
 import com.vlibrovs.twentyfortyeight.ui.common.composables.SecondaryBackgroundBox
 import com.vlibrovs.twentyfortyeight.ui.common.fonts.Fonts
+import com.vlibrovs.twentyfortyeight.ui.common.navigation.Screen
 import com.vlibrovs.twentyfortyeight.ui.common.window.rememberWindowInfo
 
-@Preview(name = "Compact", device = Devices.PIXEL_4)
-@Preview(name = "Expanded", device = Devices.PIXEL_C, heightDp = 1280, widthDp = 900)
 @Composable
 fun ThemeEditScreen(
-    currentTheme: Theme = Theme.Main,
-    editTheme: Theme? = Theme.Main
+    currentTheme: Theme,
+    editTheme: Theme?,
+    navController: NavController
 ) {
     val values = getValues(rememberWindowInfo().screenWidthInfo)
     var themeName by remember {
@@ -99,35 +101,40 @@ fun ThemeEditScreen(
                             theme = currentTheme,
                             name = stringResource(id = R.string.primary_background),
                             color = (editTheme ?: currentTheme).backgroundGradient.last(),
-                            secondColor = (editTheme ?: currentTheme).backgroundGradient.first()
+                            secondColor = (editTheme ?: currentTheme).backgroundGradient.first(),
+                            navController = navController
                         )
                     }
                     item {
                         PropertyItem(
                             theme = currentTheme,
                             name = stringResource(id = R.string.secondary_background),
-                            color = (editTheme ?: currentTheme).secondaryBackgroundColor
+                            color = (editTheme ?: currentTheme).secondaryBackgroundColor,
+                            navController = navController
                         )
                     }
                     item {
                         PropertyItem(
                             theme = currentTheme,
                             name = stringResource(id = R.string.buttons),
-                            color = (editTheme ?: currentTheme).buttonColor
+                            color = (editTheme ?: currentTheme).buttonColor,
+                            navController = navController
                         )
                     }
                     item {
                         PropertyItem(
                             theme = currentTheme,
                             name = stringResource(id = R.string.text),
-                            color = (editTheme ?: currentTheme).textColor
+                            color = (editTheme ?: currentTheme).textColor,
+                            navController = navController
                         )
                     }
                     item {
                         PropertyItem(
                             theme = currentTheme,
                             name = stringResource(id = R.string.lines),
-                            color = (editTheme ?: currentTheme).linesColor
+                            color = (editTheme ?: currentTheme).linesColor,
+                            navController = navController
                         )
                     }
                 }
@@ -135,7 +142,7 @@ fun ThemeEditScreen(
                     modifier = Modifier.fillMaxWidth(),
                     text = stringResource(id = R.string.edit_tiles_styles),
                     fontSize = values.buttonTextSize,
-                    onClick = { },
+                    onClick = { navController.navigate(Screen.TilesStyles.route+"?editTheme=${editTheme?.name}") },
                     theme = currentTheme
                 )
             }
@@ -143,7 +150,7 @@ fun ThemeEditScreen(
         Button(
             text = stringResource(id = R.string.save),
             fontSize = values.buttonTextSize,
-            onClick = { },
+            onClick = { navController.navigate(Screen.Settings.route) },
             theme = currentTheme
         )
     }
@@ -154,7 +161,8 @@ fun PropertyItem(
     theme: Theme,
     name: String,
     color: Color,
-    secondColor: Color? = null
+    secondColor: Color? = null,
+    navController: NavController
 ) {
     val values = getValues(rememberWindowInfo().screenWidthInfo)
     Row(
@@ -182,7 +190,10 @@ fun PropertyItem(
                     fillColor = secondColor,
                     outlineColor = theme.linesColor,
                     outlineWidth = values.colorCircleOutlineWidth,
-                    size = values.addThemeButtonSize
+                    size = values.addThemeButtonSize,
+                    onClick = {
+                        navController.navigate(Screen.ColorPicker.route+"/${secondColor.toArgb()}/${Screen.ThemeEdit.route}")
+                    }
                 )
                 Spacer(modifier = Modifier.width(values.settingsInboxPadding.calculateTopPadding()))
             }
@@ -190,7 +201,10 @@ fun PropertyItem(
                 fillColor = color,
                 outlineColor = theme.linesColor,
                 outlineWidth = values.colorCircleOutlineWidth,
-                size = values.addThemeButtonSize
+                size = values.addThemeButtonSize,
+                onClick = {
+                    navController.navigate(Screen.ColorPicker.route+"/${color.toArgb()}/${Screen.ThemeEdit.route}")
+                }
             )
         }
     }

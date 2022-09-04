@@ -21,6 +21,7 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.vlibrovs.twentyfortyeight.R
 import com.vlibrovs.twentyfortyeight.common.getValues
 import com.vlibrovs.twentyfortyeight.data.entity.Game
@@ -28,24 +29,19 @@ import com.vlibrovs.twentyfortyeight.data.model.Theme
 import com.vlibrovs.twentyfortyeight.ui.common.composables.Button
 import com.vlibrovs.twentyfortyeight.ui.common.composables.SecondaryBackgroundBox
 import com.vlibrovs.twentyfortyeight.ui.common.fonts.Fonts
+import com.vlibrovs.twentyfortyeight.ui.common.navigation.Screen
 import com.vlibrovs.twentyfortyeight.ui.common.window.rememberWindowInfo
 import java.util.*
 
-@Preview(name = "Compact", device = Devices.PIXEL_4)
-@Preview(name = "Expanded", device = Devices.PIXEL_C, heightDp = 1280, widthDp = 900)
 @Composable
 fun StatsScreen(
-    theme: Theme = Theme.Main,
-    games: List<Game> = listOf(
-        Game(1, 19287, 236, Date()),
-        Game(2, 187236, 123, Date()),
-        Game(3, 127863, 136, Date()),
-        Game(4, 123412, 743, Date())
-    ),
-    bestScore: Int = 0,
-    averageScore: Int = 0,
-    mostMoves: Int = 0,
-    averageMoves: Int = 0
+    theme: Theme,
+    games: List<Game>,
+    bestScore: Int,
+    averageScore: Int,
+    mostMoves: Int,
+    averageMoves: Int,
+    navController: NavController
 ) {
     val values = getValues(rememberWindowInfo().screenWidthInfo)
 
@@ -335,7 +331,7 @@ fun StatsScreen(
         Button(
             text = stringResource(id = R.string.back),
             fontSize = values.buttonTextSize,
-            onClick = { },
+            onClick = { navController.navigate(Screen.MainMenu.route) },
             theme = theme
         )
 

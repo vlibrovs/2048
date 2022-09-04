@@ -16,19 +16,20 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavController
 import com.vlibrovs.twentyfortyeight.R
 import com.vlibrovs.twentyfortyeight.common.getValues
 import com.vlibrovs.twentyfortyeight.data.model.Theme
 import com.vlibrovs.twentyfortyeight.ui.common.composables.Button
 import com.vlibrovs.twentyfortyeight.ui.common.composables.IconButton
 import com.vlibrovs.twentyfortyeight.ui.common.fonts.Fonts
+import com.vlibrovs.twentyfortyeight.ui.common.navigation.Screen
 import com.vlibrovs.twentyfortyeight.ui.common.window.rememberWindowInfo
 
-@Preview(name = "Compact", device = Devices.PIXEL_4)
-@Preview(name = "Expanded", device = Devices.PIXEL_C, heightDp = 1280, widthDp = 900)
 @Composable
 fun MainMenuScreen(
-    theme: Theme = Theme.Main
+    theme: Theme,
+    navController: NavController
 ) {
     val values = getValues(rememberWindowInfo().screenWidthInfo)
     Column(
@@ -94,7 +95,7 @@ fun MainMenuScreen(
                     icon = painterResource(id = R.drawable.ic_settings),
                     contentDescription = stringResource(id = R.string.settings),
                     iconSize = values.mainMenuIconSize,
-                    onClick = { },
+                    onClick = { navController.navigate(Screen.Settings.route) },
                     theme = theme
                 )
                 IconButton(
@@ -104,7 +105,7 @@ fun MainMenuScreen(
                     icon = painterResource(id = R.drawable.ic_bar_chart),
                     contentDescription = stringResource(id = R.string.stats),
                     iconSize = values.mainMenuIconSize,
-                    onClick = { },
+                    onClick = { navController.navigate(Screen.Stats.route) },
                     theme = theme
                 )
             }

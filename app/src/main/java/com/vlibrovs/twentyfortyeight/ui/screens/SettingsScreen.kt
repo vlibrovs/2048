@@ -1,6 +1,7 @@
 package com.vlibrovs.twentyfortyeight.ui.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -20,34 +21,22 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Devices
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.vlibrovs.twentyfortyeight.R
 import com.vlibrovs.twentyfortyeight.common.getValues
 import com.vlibrovs.twentyfortyeight.data.model.Theme
 import com.vlibrovs.twentyfortyeight.ui.common.composables.Button
 import com.vlibrovs.twentyfortyeight.ui.common.composables.SecondaryBackgroundBox
 import com.vlibrovs.twentyfortyeight.ui.common.fonts.Fonts
+import com.vlibrovs.twentyfortyeight.ui.common.navigation.Screen
 import com.vlibrovs.twentyfortyeight.ui.common.window.rememberWindowInfo
 
-@Preview(name = "Compact", device = Devices.PIXEL_4)
-@Preview(name = "Expanded", device = Devices.PIXEL_C, heightDp = 1280, widthDp = 900)
 @Composable
-fun SettingScreen(
-    theme: Theme = Theme.Main,
-    themes: List<Theme> = listOf(Theme.Main, Theme(
-        name = "Green Theme",
-        backgroundGradient = mutableListOf(
-            Color.Green,
-            Color.White,
-        ),
-        secondaryBackgroundColor = Color(0x75324E4E),
-        buttonColor = Color(0xFF73CCCC),
-        textColor = Color.Yellow,
-        linesColor = Color(0x1E1E1E1E),
-        isSelected = false
-    ))
+fun SettingsScreen(
+    theme: Theme,
+    themes: List<Theme>,
+    navController: NavController
 ) {
     val values = getValues(rememberWindowInfo().screenWidthInfo)
     Column(
@@ -117,7 +106,7 @@ fun SettingScreen(
                     modifier = Modifier.fillMaxSize()
                 ) {
                     items(themes) {
-                        ThemeItem(theme = it)
+                        ThemeItem(theme = it, navController = navController)
                     }
                 }
             }
@@ -128,14 +117,14 @@ fun SettingScreen(
                 .height(values.buttonHeight),
             text = stringResource(id = R.string.back),
             fontSize = values.buttonTextSize,
-            onClick = { },
+            onClick = { navController.navigate(Screen.MainMenu.route) },
             theme = theme
         )
     }
 }
 
 @Composable
-fun ThemeItem(theme: Theme = Theme.Main) {
+fun ThemeItem(theme: Theme, navController: NavController) {
     val values = getValues(rememberWindowInfo().screenWidthInfo)
     Row(
         modifier = Modifier
@@ -145,7 +134,10 @@ fun ThemeItem(theme: Theme = Theme.Main) {
                 shape = RoundedCornerShape(50.dp),
                 brush = Brush.horizontalGradient(theme.backgroundGradient)
             )
-            .padding(values.themeItemPadding),
+            .padding(values.themeItemPadding)
+            .clickable {
+                navController.navigate(Screen.ThemeEdit.route+"?editTheme=${theme.name}")
+            },
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement =
         if (theme.isSelected) Arrangement.SpaceBetween

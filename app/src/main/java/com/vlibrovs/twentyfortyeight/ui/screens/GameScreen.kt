@@ -24,6 +24,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.vlibrovs.twentyfortyeight.R
 import com.vlibrovs.twentyfortyeight.common.Values
 import com.vlibrovs.twentyfortyeight.common.getValues
@@ -33,11 +34,10 @@ import com.vlibrovs.twentyfortyeight.ui.common.fonts.Fonts
 import com.vlibrovs.twentyfortyeight.ui.common.window.WindowInfo
 import com.vlibrovs.twentyfortyeight.ui.common.window.rememberWindowInfo
 
-@Preview(name = "Compact", device = Devices.PIXEL_4)
-@Preview(name = "Expanded", device = Devices.PIXEL_C, heightDp = 1280, widthDp = 900)
 @Composable
 fun GameScreen(
-    theme: Theme = Theme.Main
+    theme: Theme,
+    navController: NavController
 ) {
     val values = getValues(rememberWindowInfo().screenWidthInfo)
     var score by remember {

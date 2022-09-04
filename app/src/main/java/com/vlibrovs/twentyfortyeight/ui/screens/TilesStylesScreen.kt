@@ -9,9 +9,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavController
 import com.vlibrovs.twentyfortyeight.R
 import com.vlibrovs.twentyfortyeight.common.getValues
 import com.vlibrovs.twentyfortyeight.data.model.Theme
@@ -19,13 +21,14 @@ import com.vlibrovs.twentyfortyeight.ui.common.composables.Button
 import com.vlibrovs.twentyfortyeight.ui.common.composables.ColorCircle
 import com.vlibrovs.twentyfortyeight.ui.common.composables.SecondaryBackgroundBox
 import com.vlibrovs.twentyfortyeight.ui.common.composables.Tile
+import com.vlibrovs.twentyfortyeight.ui.common.navigation.Screen
 import com.vlibrovs.twentyfortyeight.ui.common.window.rememberWindowInfo
 
-@Preview(name = "Compact", device = Devices.PIXEL_4)
-@Preview(name = "Expanded", device = Devices.PIXEL_C, heightDp = 1280, widthDp = 900)
 @Composable
 fun TileStylesScreen(
-    theme: Theme = Theme.Main
+    theme: Theme,
+    editTheme: Theme?,
+    navController: NavController
 ) {
     val values = getValues(rememberWindowInfo().screenWidthInfo)
     Column(
@@ -49,14 +52,19 @@ fun TileStylesScreen(
                     .fillMaxSize()
             ) {
                 items(17) { index ->
-                    TileStyleSetting(tileLevel = index + 1, theme = theme)
+                    TileStyleSetting(
+                        tileLevel = index + 1,
+                        theme = theme,
+                        editTheme = editTheme,
+                        navController = navController
+                    )
                 }
             }
         }
         Button(
             text = stringResource(id = R.string.save),
             fontSize = values.buttonTextSize,
-            onClick = { },
+            onClick = { navController.navigate(Screen.ThemeEdit.route + "?editTheme=${editTheme?.name}") },
             theme = theme
         )
     }
@@ -65,7 +73,9 @@ fun TileStylesScreen(
 @Composable
 fun TileStyleSetting(
     tileLevel: Int,
-    theme: Theme
+    theme: Theme,
+    editTheme: Theme?,
+    navController: NavController
 ) {
     val values = getValues(rememberWindowInfo().screenWidthInfo)
     Row(
@@ -86,18 +96,25 @@ fun TileStyleSetting(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.End
         ) {
+            val style = (editTheme ?: theme).tileStyles[tileLevel - 1]
             ColorCircle(
-                fillColor = theme.tileStyles[tileLevel - 1].colorStart,
+                fillColor = style.colorStart,
                 outlineColor = theme.linesColor,
                 outlineWidth = values.colorCircleOutlineWidth,
-                size = values.addThemeButtonSize
+                size = values.addThemeButtonSize,
+                onClick = {
+                    navController.navigate(Screen.ColorPicker.route+"/${style.colorStart.toArgb()}/${Screen.TilesStyles.route}")
+                }
             )
             Spacer(modifier = Modifier.width(values.settingsInboxPadding.calculateTopPadding()))
             ColorCircle(
-                fillColor = theme.tileStyles[tileLevel - 1].colorEnd,
+                fillColor = style.colorEnd,
                 outlineColor = theme.linesColor,
                 outlineWidth = values.colorCircleOutlineWidth,
-                size = values.addThemeButtonSize
+                size = values.addThemeButtonSize,
+                onClick = {
+                    navController.navigate(Screen.ColorPicker.route+"/${style.colorEnd.toArgb()}/${Screen.TilesStyles.route}")
+                }
             )
         }
     }
