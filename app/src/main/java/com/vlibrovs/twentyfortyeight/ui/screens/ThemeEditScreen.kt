@@ -46,7 +46,7 @@ fun ThemeEditScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(
-                brush = Brush.verticalGradient(currentTheme.backgroundGradient)
+                brush = Brush.verticalGradient(currentTheme.backgroundGradient.toList())
             )
             .padding(values.statsPadding),
         verticalArrangement = Arrangement.SpaceBetween,
@@ -100,8 +100,8 @@ fun ThemeEditScreen(
                         PropertyItem(
                             theme = currentTheme,
                             name = stringResource(id = R.string.primary_background),
-                            color = (editTheme ?: currentTheme).backgroundGradient.last(),
-                            secondColor = (editTheme ?: currentTheme).backgroundGradient.first(),
+                            color = (editTheme ?: currentTheme).backgroundGradient.colorStart,
+                            secondColor = (editTheme ?: currentTheme).backgroundGradient.colorEnd,
                             navController = navController
                         )
                     }

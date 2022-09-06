@@ -35,12 +35,7 @@ fun Tile(
             .size(size)
             .background(
                 shape = RoundedCornerShape(cornerRadius),
-                brush = Brush.verticalGradient(
-                    listOf(
-                        theme.tileStyles[level - 1].colorStart,
-                        theme.tileStyles[level - 1].colorEnd
-                    )
-                )
+                brush = Brush.verticalGradient(theme.tileStyles[level]!!.toList())
             ),
         contentAlignment = Alignment.Center
     ) {

@@ -35,7 +35,7 @@ fun TileStylesScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(
-                brush = Brush.verticalGradient(theme.backgroundGradient)
+                brush = Brush.verticalGradient(theme.backgroundGradient.toList())
             )
             .padding(values.statsPadding),
         verticalArrangement = Arrangement.SpaceBetween,
@@ -96,7 +96,7 @@ fun TileStyleSetting(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.End
         ) {
-            val style = (editTheme ?: theme).tileStyles[tileLevel - 1]
+            val style = (editTheme ?: theme).tileStyles[tileLevel]!!
             ColorCircle(
                 fillColor = style.colorStart,
                 outlineColor = theme.linesColor,

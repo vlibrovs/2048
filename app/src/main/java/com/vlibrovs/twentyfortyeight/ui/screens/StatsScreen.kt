@@ -49,7 +49,7 @@ fun StatsScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(
-                brush = Brush.verticalGradient(theme.backgroundGradient)
+                brush = Brush.verticalGradient(theme.backgroundGradient.toList())
             )
             .padding(values.statsPadding),
         horizontalAlignment = Alignment.CenterHorizontally,

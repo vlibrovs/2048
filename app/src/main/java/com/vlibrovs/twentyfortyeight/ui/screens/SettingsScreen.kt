@@ -42,7 +42,7 @@ fun SettingsScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(brush = Brush.verticalGradient(theme.backgroundGradient))
+            .background(brush = Brush.verticalGradient(theme.backgroundGradient.toList()))
             .padding(values.statsPadding),
         verticalArrangement = Arrangement.SpaceBetween,
         horizontalAlignment = Alignment.CenterHorizontally
@@ -132,7 +132,7 @@ fun ThemeItem(theme: Theme, navController: NavController) {
             .fillMaxWidth()
             .background(
                 shape = RoundedCornerShape(50.dp),
-                brush = Brush.horizontalGradient(theme.backgroundGradient)
+                brush = Brush.horizontalGradient(theme.backgroundGradient.toList())
             )
             .padding(values.themeItemPadding)
             .clickable {

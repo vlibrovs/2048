@@ -14,13 +14,13 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgs
 import androidx.navigation.navArgument
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.vlibrovs.twentyfortyeight.data.entity.Game
 import com.vlibrovs.twentyfortyeight.data.model.Theme
 import com.vlibrovs.twentyfortyeight.ui.common.navigation.Screen
 import com.vlibrovs.twentyfortyeight.ui.screens.*
+import com.vlibrovs.twentyfortyeight.ui.screens.gamescreen.GameScreen
 import java.util.*
 
 class MainActivity : ComponentActivity() {
@@ -32,7 +32,7 @@ class MainActivity : ComponentActivity() {
                 mutableStateOf(Theme.Main)
             }
             val navController = rememberNavController()
-            systemUiController.setStatusBarColor(theme.backgroundGradient[0])
+            systemUiController.setStatusBarColor(theme.backgroundGradient.colorStart)
             NavHost(
                 modifier = Modifier.fillMaxSize(),
                 navController = navController,

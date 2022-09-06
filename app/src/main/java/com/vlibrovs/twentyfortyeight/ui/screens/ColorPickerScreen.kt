@@ -47,7 +47,7 @@ fun ColorPickerScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(
-                brush = Brush.verticalGradient(theme.backgroundGradient)
+                brush = Brush.verticalGradient(theme.backgroundGradient.toList())
             )
             .padding(values.statsPadding),
         verticalArrangement = Arrangement.SpaceEvenly

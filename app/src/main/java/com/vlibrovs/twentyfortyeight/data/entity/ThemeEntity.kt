@@ -3,8 +3,8 @@ package com.vlibrovs.twentyfortyeight.data.entity
 import androidx.compose.ui.graphics.Color
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.vlibrovs.twentyfortyeight.data.model.Gradient
 import com.vlibrovs.twentyfortyeight.data.model.Theme
-import com.vlibrovs.twentyfortyeight.data.model.TileStyle
 
 @Entity(tableName = "themes")
 data class ThemeEntity(
@@ -19,20 +19,19 @@ data class ThemeEntity(
     val tileStyles: String
 ) {
     fun toTheme(): Theme {
-        val tileStylesList = mutableListOf<TileStyle>()
+        val tileStylesMap = mutableMapOf<Int, Gradient>()
+        var level = 1
         for (line in tileStyles.lines()) {
             val values = line.split('/')
-            tileStylesList.add(
-                TileStyle(
-                    values[0].toInt(),
-                    Color(values[1].toInt()),
-                    Color(values[0].toInt())
-                )
+            tileStylesMap[level] = Gradient(
+                Color(values[0].toInt()),
+                Color(values[1].toInt())
             )
+            level++
         }
         return Theme(
             name = name,
-            backgroundGradient = mutableListOf(
+            backgroundGradient = Gradient(
                 Color(firstBackgroundColorInt),
                 Color(secondBackgroundColorInt)
             ),
@@ -40,7 +39,7 @@ data class ThemeEntity(
             buttonColor = Color(buttonColorInt),
             textColor = Color(textColorInt),
             linesColor = Color(linesColorInt),
-            tileStyles = tileStylesList
+            tileStyles = tileStylesMap
         )
     }
 }

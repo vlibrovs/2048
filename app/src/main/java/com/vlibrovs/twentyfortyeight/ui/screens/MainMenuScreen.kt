@@ -35,7 +35,7 @@ fun MainMenuScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(brush = Brush.verticalGradient(theme.backgroundGradient))
+            .background(brush = Brush.verticalGradient(theme.backgroundGradient.toList()))
             .padding(values.mainMenuPadding),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {

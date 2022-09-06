@@ -1,8 +1,6 @@
-package com.vlibrovs.twentyfortyeight.ui.screens
+package com.vlibrovs.twentyfortyeight.ui.screens.gamescreen
 
-import android.content.res.Configuration
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
@@ -14,25 +12,18 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shadow
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Devices
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.vlibrovs.twentyfortyeight.R
-import com.vlibrovs.twentyfortyeight.common.Values
 import com.vlibrovs.twentyfortyeight.common.getValues
 import com.vlibrovs.twentyfortyeight.data.model.Theme
 import com.vlibrovs.twentyfortyeight.ui.common.composables.Button
 import com.vlibrovs.twentyfortyeight.ui.common.fonts.Fonts
 import com.vlibrovs.twentyfortyeight.ui.common.navigation.Screen
-import com.vlibrovs.twentyfortyeight.ui.common.window.WindowInfo
 import com.vlibrovs.twentyfortyeight.ui.common.window.rememberWindowInfo
 
 @Composable
@@ -47,7 +38,7 @@ fun GameScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(brush = Brush.verticalGradient(theme.backgroundGradient))
+            .background(brush = Brush.verticalGradient(theme.backgroundGradient.toList()))
             .padding(values.gamePadding),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceBetween
@@ -165,11 +156,4 @@ fun GameScreen(
             theme = theme
         )
     }
-}
-
-@Composable
-fun GameLayer(
-    modifier: Modifier = Modifier
-) {
-
 }
