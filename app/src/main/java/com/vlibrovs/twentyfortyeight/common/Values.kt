@@ -43,6 +43,7 @@ sealed class Values {
     abstract val colorPickerSize: Dp
     abstract val colorStringSize: TextUnit
     abstract val sliderHeight: Dp
+    abstract val gameFieldInnerPadding: Dp
 
 
     object Compact : Values() {
@@ -81,6 +82,7 @@ sealed class Values {
         override val colorPickerSize = 250.dp
         override val colorStringSize = 18.sp
         override val sliderHeight = 20.dp
+        override val gameFieldInnerPadding = 3.dp
     }
 
     object Medium : Values() {
@@ -119,6 +121,8 @@ sealed class Values {
         override val colorPickerSize = 300.dp
         override val colorStringSize = 20.sp
         override val sliderHeight = 26.dp
+        override val gameFieldInnerPadding = 5.dp
+
     }
 
     object Expanded : Values() {
@@ -157,6 +161,8 @@ sealed class Values {
         override val colorPickerSize = 350.dp
         override val colorStringSize = 22.sp
         override val sliderHeight = 32.dp
+        override val gameFieldInnerPadding = 7.dp
+
     }
 }
 

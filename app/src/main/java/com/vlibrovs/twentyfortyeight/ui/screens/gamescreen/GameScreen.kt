@@ -32,7 +32,7 @@ fun GameScreen(
     navController: NavController
 ) {
     val values = getValues(rememberWindowInfo().screenWidthInfo)
-    var score by remember {
+    val score = remember {
         mutableStateOf(0)
     }
     Column(
@@ -69,7 +69,7 @@ fun GameScreen(
         ) {
             Text(
                 modifier = Modifier.padding(start = 20.dp),
-                text = stringResource(id = R.string.score)+':',
+                text = stringResource(id = R.string.score) + ':',
                 textAlign = TextAlign.Start,
                 fontFamily = Fonts.Poppins,
                 fontWeight = FontWeight.Normal,
@@ -80,7 +80,7 @@ fun GameScreen(
                 modifier = Modifier
                     .padding(end = 20.dp)
                     .fillMaxWidth(),
-                text = "$score",
+                text = "${score.value}",
                 textAlign = TextAlign.End,
                 fontFamily = Fonts.Poppins,
                 fontWeight = FontWeight.SemiBold,
@@ -89,7 +89,7 @@ fun GameScreen(
             )
         }
 
-        Box(
+        BoxWithConstraints(
             modifier = Modifier
                 .fillMaxWidth()
                 .aspectRatio(1f)
@@ -146,7 +146,12 @@ fun GameScreen(
                         .background(color = theme.linesColor)
                 )
             }
-            GameLayer(modifier = Modifier.fillMaxSize())
+            GameLayer(
+                modifier = Modifier.fillMaxSize(),
+                innerPadding = values.gameFieldInnerPadding,
+                theme = theme,
+                squareSize = maxWidth / 4
+            )
         }
         Button(
             modifier = Modifier.fillMaxWidth(),
