@@ -1,5 +1,6 @@
 package com.vlibrovs.twentyfortyeight.ui.screens.gamescreen
 
+import android.util.Log
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectDragGestures
@@ -19,14 +20,19 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.vlibrovs.twentyfortyeight.common.Constants
 import com.vlibrovs.twentyfortyeight.data.model.Direction
 import com.vlibrovs.twentyfortyeight.data.model.Gradient
 import com.vlibrovs.twentyfortyeight.data.model.Theme
+import com.vlibrovs.twentyfortyeight.domain.game.GameController
+import com.vlibrovs.twentyfortyeight.domain.game.TileData
 import com.vlibrovs.twentyfortyeight.ui.common.fonts.Fonts
 import kotlinx.coroutines.*
 import kotlin.math.abs
 import kotlin.math.pow
 import kotlin.math.roundToInt
+
+const val TAG = "GameLayer"
 
 @Composable
 fun GameLayer(
@@ -35,19 +41,11 @@ fun GameLayer(
     theme: Theme,
     squareSize: Dp
 ) {
-    var offsetX by remember { mutableStateOf(0f) }
-    var offsetY by remember { mutableStateOf(0f) }
-    var level by remember {
-        mutableStateOf(1)
+    val controller = remember {
+        GameController()
     }
-    var horizontal by remember {
-        mutableStateOf(0)
-    }
-    var vertical by remember {
-        mutableStateOf(0)
-    }
-    val horizontalAnimator by animateDpAsState(targetValue = squareSize * horizontal)
-    val verticalAnimator by animateDpAsState(targetValue = squareSize * vertical)
+    val animatorX = controller.getAnimatorX(squareSize = squareSize, animationDuration = Constants.ANIMATION_DURATION)
+    val animatorY = controller.getAnimatorY(squareSize = squareSize, animationDuration = Constants.ANIMATION_DURATION)
     val swipeDirection = remember {
         mutableStateOf(Direction.UNIT)
     }
@@ -55,24 +53,206 @@ fun GameLayer(
         modifier = modifier
             .swipeDirectionListener(swipeDirection) { direction ->
                 when (direction) {
-                    Direction.RIGHT -> if (horizontal in 0..2) horizontal++
-                    Direction.UP -> if (vertical in 1..3) vertical--
-                    Direction.DOWN -> if (vertical in 0..2) vertical++
-                    Direction.LEFT -> if (horizontal in 1..3) horizontal--
+                    Direction.RIGHT -> controller.moveRight()
+                    Direction.UP -> Log.d(TAG, "GameLayer: Swipe up detected")
+                    Direction.DOWN -> Log.d(TAG, "GameLayer: Swipe down detected")
+                    Direction.LEFT -> Log.d(TAG, "GameLayer: Swipe left detected")
                     Direction.UNIT -> Unit
                 }
             }
     ) {
-        Tile(
-            modifier = Modifier
-                .padding(
-                    start = innerPadding + horizontalAnimator,
-                    top = innerPadding + verticalAnimator
-                )
-                .size(squareSize - innerPadding * 2),
-            styles = theme.tileStyles,
-            level = level
-        )
+        if (controller.gameState[0].level.value != null) {
+            Tile(
+                modifier = Modifier
+                    .padding(
+                        start = innerPadding + animatorX[0].value,
+                        top = innerPadding + animatorY[0].value
+                    )
+                    .size(squareSize - innerPadding * 2),
+                styles = theme.tileStyles,
+                level = controller.gameState[0].level.value!!
+            )
+        }
+        if (controller.gameState[1].level.value != null) {
+            Tile(
+                modifier = Modifier
+                    .padding(
+                        start = innerPadding + animatorX[1].value,
+                        top = innerPadding + animatorY[1].value
+                    )
+                    .size(squareSize - innerPadding * 2),
+                styles = theme.tileStyles,
+                level = controller.gameState[1].level.value!!
+            )
+        }
+        if (controller.gameState[2].level.value != null) {
+            Tile(
+                modifier = Modifier
+                    .padding(
+                        start = innerPadding + animatorX[2].value,
+                        top = innerPadding + animatorY[2].value
+                    )
+                    .size(squareSize - innerPadding * 2),
+                styles = theme.tileStyles,
+                level = controller.gameState[2].level.value!!
+            )
+        }
+        if (controller.gameState[3].level.value != null) {
+            Tile(
+                modifier = Modifier
+                    .padding(
+                        start = innerPadding + animatorX[3].value,
+                        top = innerPadding + animatorY[3].value
+                    )
+                    .size(squareSize - innerPadding * 2),
+                styles = theme.tileStyles,
+                level = controller.gameState[3].level.value!!
+            )
+        }
+        if (controller.gameState[4].level.value != null) {
+            Tile(
+                modifier = Modifier
+                    .padding(
+                        start = innerPadding + animatorX[4].value,
+                        top = innerPadding + animatorY[4].value
+                    )
+                    .size(squareSize - innerPadding * 2),
+                styles = theme.tileStyles,
+                level = controller.gameState[4].level.value!!
+            )
+        }
+        if (controller.gameState[5].level.value != null) {
+            Tile(
+                modifier = Modifier
+                    .padding(
+                        start = innerPadding + animatorX[5].value,
+                        top = innerPadding + animatorY[5].value
+                    )
+                    .size(squareSize - innerPadding * 2),
+                styles = theme.tileStyles,
+                level = controller.gameState[5].level.value!!
+            )
+        }
+        if (controller.gameState[6].level.value != null) {
+            Tile(
+                modifier = Modifier
+                    .padding(
+                        start = innerPadding + animatorX[6].value,
+                        top = innerPadding + animatorY[6].value
+                    )
+                    .size(squareSize - innerPadding * 2),
+                styles = theme.tileStyles,
+                level = controller.gameState[6].level.value!!
+            )
+        }
+        if (controller.gameState[7].level.value != null) {
+            Tile(
+                modifier = Modifier
+                    .padding(
+                        start = innerPadding + animatorX[7].value,
+                        top = innerPadding + animatorY[7].value
+                    )
+                    .size(squareSize - innerPadding * 2),
+                styles = theme.tileStyles,
+                level = controller.gameState[7].level.value!!
+            )
+        }
+        if (controller.gameState[8].level.value != null) {
+            Tile(
+                modifier = Modifier
+                    .padding(
+                        start = innerPadding + animatorX[8].value,
+                        top = innerPadding + animatorY[8].value
+                    )
+                    .size(squareSize - innerPadding * 2),
+                styles = theme.tileStyles,
+                level = controller.gameState[8].level.value!!
+            )
+        }
+        if (controller.gameState[9].level.value != null) {
+            Tile(
+                modifier = Modifier
+                    .padding(
+                        start = innerPadding + animatorX[9].value,
+                        top = innerPadding + animatorY[9].value
+                    )
+                    .size(squareSize - innerPadding * 2),
+                styles = theme.tileStyles,
+                level = controller.gameState[9].level.value!!
+            )
+        }
+        if (controller.gameState[10].level.value != null) {
+            Tile(
+                modifier = Modifier
+                    .padding(
+                        start = innerPadding + animatorX[10].value,
+                        top = innerPadding + animatorY[10].value
+                    )
+                    .size(squareSize - innerPadding * 2),
+                styles = theme.tileStyles,
+                level = controller.gameState[10].level.value!!
+            )
+        }
+        if (controller.gameState[11].level.value != null) {
+            Tile(
+                modifier = Modifier
+                    .padding(
+                        start = innerPadding + animatorX[11].value,
+                        top = innerPadding + animatorY[11].value
+                    )
+                    .size(squareSize - innerPadding * 2),
+                styles = theme.tileStyles,
+                level = controller.gameState[11].level.value!!
+            )
+        }
+        if (controller.gameState[12].level.value != null) {
+            Tile(
+                modifier = Modifier
+                    .padding(
+                        start = innerPadding + animatorX[12].value,
+                        top = innerPadding + animatorY[12].value
+                    )
+                    .size(squareSize - innerPadding * 2),
+                styles = theme.tileStyles,
+                level = controller.gameState[12].level.value!!
+            )
+        }
+        if (controller.gameState[13].level.value != null) {
+            Tile(
+                modifier = Modifier
+                    .padding(
+                        start = innerPadding + animatorX[13].value,
+                        top = innerPadding + animatorY[13].value
+                    )
+                    .size(squareSize - innerPadding * 2),
+                styles = theme.tileStyles,
+                level = controller.gameState[13].level.value!!
+            )
+        }
+        if (controller.gameState[14].level.value != null) {
+            Tile(
+                modifier = Modifier
+                    .padding(
+                        start = innerPadding + animatorX[14].value,
+                        top = innerPadding + animatorY[14].value
+                    )
+                    .size(squareSize - innerPadding * 2),
+                styles = theme.tileStyles,
+                level = controller.gameState[14].level.value!!
+            )
+        }
+        if (controller.gameState[15].level.value != null) {
+            Tile(
+                modifier = Modifier
+                    .padding(
+                        start = innerPadding + animatorX[15].value,
+                        top = innerPadding + animatorY[15].value
+                    )
+                    .size(squareSize - innerPadding * 2),
+                styles = theme.tileStyles,
+                level = controller.gameState[15].level.value!!
+            )
+        }
     }
 }
 
@@ -106,7 +286,6 @@ fun Modifier.swipeDirectionListener(
         detectDragGestures(
             onDrag = { change, dragAmount ->
                 change.consume()
-
                 val (x, y) = dragAmount
                 if (abs(x) > abs(y)) {
                     when {
@@ -131,7 +310,6 @@ fun Modifier.swipeDirectionListener(
                         }
                     }
                 }
-
             },
             onDragEnd = {
                 onSwipeEnd(directionState.value)
