@@ -22,17 +22,17 @@ class GameController(private val coroutineScope: CoroutineScope) {
             positionY = mutableStateOf(0)
         ),
         TileData(
-            level = mutableStateOf(2),
+            level = mutableStateOf(null),
             positionX = mutableStateOf(2),
+            positionY = mutableStateOf(0)
+        ),
+        TileData(
+            level = mutableStateOf(null),
+            positionX = mutableStateOf(3),
             positionY = mutableStateOf(0)
         ),
         TileData(
             level = mutableStateOf(1),
-            positionX = mutableStateOf(3),
-            positionY = mutableStateOf(0)
-        ),
-        TileData(
-            level = mutableStateOf(null),
             positionX = mutableStateOf(0),
             positionY = mutableStateOf(1)
         ),
@@ -52,7 +52,7 @@ class GameController(private val coroutineScope: CoroutineScope) {
             positionY = mutableStateOf(1)
         ),
         TileData(
-            level = mutableStateOf(null),
+            level = mutableStateOf(1),
             positionX = mutableStateOf(0),
             positionY = mutableStateOf(2)
         ),
@@ -72,7 +72,7 @@ class GameController(private val coroutineScope: CoroutineScope) {
             positionY = mutableStateOf(2)
         ),
         TileData(
-            level = mutableStateOf(null),
+            level = mutableStateOf(1),
             positionX = mutableStateOf(0),
             positionY = mutableStateOf(3)
         ),
@@ -101,6 +101,18 @@ class GameController(private val coroutineScope: CoroutineScope) {
         }
         for (tileData in gameState) {
             array[tileData.positionY.value][tileData.positionX.value] = tileData
+        }
+        return array.map { row -> row.map { item -> item!! }.toTypedArray() }.toTypedArray()
+    }
+
+    private fun getColumnScheme(): Array<Array<TileData>> {
+        val array: Array<Array<TileData?>> = Array(4) {
+            Array(4) {
+                null
+            }
+        }
+        for (tileData in gameState) {
+            array[tileData.positionX.value][tileData.positionY.value] = tileData
         }
         return array.map { row -> row.map { item -> item!! }.toTypedArray() }.toTypedArray()
     }
@@ -626,6 +638,269 @@ class GameController(private val coroutineScope: CoroutineScope) {
                 "0100" -> {
                     row[1].positionX.value = 0
                     row[0].positionX.value = 1
+                }
+            }
+        }
+    }
+
+    fun moveDown() {
+        val scheme = getColumnScheme()
+        for (column in scheme) {
+            when (String(CharArray(4) { index -> if (column[index].level.value == null) '0' else '1' })) {
+                "1111" -> {
+                    if (column[3].level.value == column[2].level.value && column[0].level.value == column[1].level.value) {
+                        column[2].positionY.value++
+                        column[1].positionY.value++
+                        column[0].positionY.value += 2
+                        coroutineScope.launch {
+                            delay(Constants.ANIMATION_DURATION.toLong())
+                            column[0].level.value = null
+                            column[1].level.value = column[1].level.value!! + 1
+                            column[2].level.value = null
+                            column[3].level.value = column[3].level.value!! + 1
+                            column[0].positionY.value = 0
+                            column[2].positionY.value = 1
+                        }
+                    }
+                    else if (column[3].level.value == column[2].level.value) {
+                        column[0].positionY.value++
+                        column[1].positionY.value++
+                        column[2].positionY.value++
+                        coroutineScope.launch {
+                            delay(Constants.ANIMATION_DURATION.toLong())
+                            column[3].level.value = column[3].level.value!! + 1
+                            column[2].level.value = null
+                            column[2].positionY.value = 0
+                        }
+                    }
+                    else if (column[2].level.value == column[1].level.value) {
+                        column[0].positionY.value++
+                        column[1].positionY.value++
+                        coroutineScope.launch {
+                            delay(Constants.ANIMATION_DURATION.toLong())
+                            column[2].level.value = column[2].level.value!! + 1
+                            column[1].level.value = null
+                            column[1].positionY.value = 0
+                        }
+                    }
+                    else if (column[0].level.value == column[1].level.value) {
+                        column[0].positionY.value++
+                        coroutineScope.launch {
+                            delay(Constants.ANIMATION_DURATION.toLong())
+                            column[1].level.value = column[1].level.value!! + 1
+                            column[0].level.value = null
+                            column[0].positionY.value = 0
+
+                        }
+                    }
+                    else continue
+                }
+
+                "1110" -> {
+                    if (column[1].level.value == column[2].level.value) {
+                        column[0].positionY.value += 2
+                        column[1].positionY.value += 2
+                        column[2].positionY.value++
+                        column[3].positionY.value = 1
+                        coroutineScope.launch {
+                            delay(Constants.ANIMATION_DURATION.toLong())
+                            column[2].level.value = column[2].level.value!! + 1
+                            column[1].level.value = null
+                            column[1].positionY.value = 0
+                        }
+                    } else if (column[0].level.value == column[1].level.value) {
+                        column[0].positionY.value += 2
+                        column[1].positionY.value++
+                        column[2].positionY.value++
+                        column[3].positionY.value = 1
+                        coroutineScope.launch {
+                            delay(Constants.ANIMATION_DURATION.toLong())
+                            column[1].level.value = column[1].level.value!! + 1
+                            column[0].level.value = null
+                            column[0].positionY.value = 0
+                        }
+                    } else {
+                        column[0].positionY.value++
+                        column[1].positionY.value++
+                        column[2].positionY.value++
+                        column[3].positionY.value = 0
+                    }
+                }
+                "0111" -> {
+                    if (column[2].level.value == column[3].level.value) {
+                        column[1].positionY.value++
+                        column[2].positionY.value++
+                        coroutineScope.launch {
+                            delay(Constants.ANIMATION_DURATION.toLong())
+                            column[3].level.value = column[3].level.value!! + 1
+                            column[2].level.value = null
+                            column[2].positionY.value = 1
+                        }
+                    } else if (column[1].level.value == column[2].level.value) {
+                        column[1].positionY.value++
+                        coroutineScope.launch {
+                            delay(Constants.ANIMATION_DURATION.toLong())
+                            column[2].level.value = column[2].level.value!! + 1
+                            column[1].level.value = null
+                            column[1].positionY.value = 1
+                        }
+                    } else continue
+                }
+                "1011" -> {
+                    if (column[2].level.value == column[3].level.value) {
+                        column[0].positionY.value += 2
+                        column[2].positionY.value++
+                        coroutineScope.launch {
+                            delay(Constants.ANIMATION_DURATION.toLong())
+                            column[3].level.value = column[3].level.value!! + 1
+                            column[2].level.value = null
+                            column[2].positionY.value = 0
+                        }
+                    } else if (column[0].level.value == column[2].level.value) {
+                        column[0].positionY.value += 2
+                        coroutineScope.launch {
+                            delay(Constants.ANIMATION_DURATION.toLong())
+                            column[2].level.value = column[2].level.value!! + 1
+                            column[0].level.value = null
+                            column[0].positionY.value = 0
+                        }
+                    } else {
+                        column[0].positionY.value++
+                        column[1].positionY.value = 0
+                    }
+                }
+                "1101" -> {
+                    if (column[1].level.value == column[3].level.value) {
+                        column[0].positionY.value += 2
+                        column[1].positionY.value += 2
+                        column[2].positionY.value = 1
+                        coroutineScope.launch {
+                            delay(Constants.ANIMATION_DURATION.toLong())
+                            column[3].level.value = column[3].level.value!! + 1
+                            column[1].level.value = null
+                            column[1].positionY.value = 0
+                        }
+                    } else if (column[0].level.value == column[1].level.value) {
+                        column[1].positionY.value++
+                        column[0].positionY.value += 2
+                        column[2].positionY.value = 1
+                        coroutineScope.launch {
+                            delay(Constants.ANIMATION_DURATION.toLong())
+                            column[1].level.value = column[1].level.value!! + 1
+                            column[0].level.value = null
+                            column[0].positionY.value = 0
+                        }
+                    } else {
+                        column[0].positionY.value++
+                        column[1].positionY.value++
+                        column[2].positionY.value = 0
+                    }
+                }
+
+                "1100" -> {
+                    if (column[0].level.value == column[1].level.value) {
+                        column[1].positionY.value += 2
+                        column[0].positionY.value += 3
+                        column[2].positionY.value = 0
+                        column[3].positionY.value = 1
+                        coroutineScope.launch {
+                            delay(Constants.ANIMATION_DURATION.toLong())
+                            column[1].level.value = column[1].level.value!! + 1
+                            column[0].level.value = null
+                            column[0].positionY.value = 2
+                        }
+                    } else {
+                        column[0].positionY.value += 2
+                        column[1].positionY.value += 2
+                        column[2].positionY.value = 0
+                        column[3].positionY.value = 1
+                    }
+                }
+                "1010" -> {
+                    if (column[0].level.value == column[2].level.value) {
+                        column[2].positionY.value++
+                        column[0].positionY.value += 3
+                        column[3].positionY.value = 0
+                        coroutineScope.launch {
+                            delay(Constants.ANIMATION_DURATION.toLong())
+                            column[2].level.value = column[2].level.value!! + 1
+                            column[0].level.value = null
+                            column[0].positionY.value = 2
+                        }
+                    } else {
+                        column[0].positionY.value += 2
+                        column[2].positionY.value++
+                        column[3].positionY.value = 0
+                    }
+                }
+                "1001" -> {
+                    if (column[0].level.value == column[3].level.value) {
+                        column[0].positionY.value += 3
+                        coroutineScope.launch {
+                            delay(Constants.ANIMATION_DURATION.toLong())
+                            column[3].level.value = column[3].level.value!! + 1
+                            column[0].level.value = null
+                            column[0].positionY.value = 0
+                        }
+                    } else {
+                        column[0].positionY.value += 2
+                        column[2].positionY.value -= 2
+                    }
+                }
+                "0101" -> {
+                    if (column[1].level.value == column[3].level.value) {
+                        column[1].positionY.value += 2
+                        coroutineScope.launch {
+                            delay(Constants.ANIMATION_DURATION.toLong())
+                            column[3].level.value = column[3].level.value!! + 1
+                            column[1].level.value = null
+                            column[1].positionY.value = 1
+                        }
+                    } else {
+                        column[1].positionY.value++
+                        column[2].positionY.value--
+                    }
+                }
+                "0110" -> {
+                    if (column[1].level.value == column[2].level.value) {
+                        column[2].positionY.value++
+                        column[1].positionY.value += 2
+                        column[3].positionY.value = 1
+                        coroutineScope.launch {
+                            delay(Constants.ANIMATION_DURATION.toLong())
+                            column[2].level.value = column[2].level.value!! + 1
+                            column[1].level.value = null
+                            column[1].positionY.value = 2
+                        }
+                    } else {
+                        column[1].positionY.value++
+                        column[2].positionY.value++
+                        column[3].positionY.value = 1
+                    }
+                }
+                "0011" -> {
+                    if (column[2].level.value == column[3].level.value) {
+                        column[2].positionY.value++
+                        coroutineScope.launch {
+                            delay(Constants.ANIMATION_DURATION.toLong())
+                            column[3].level.value = column[3].level.value!! + 1
+                            column[2].level.value = null
+                            column[2].positionY.value = 2
+                        }
+                    } else continue
+                }
+
+                "1000" -> {
+                    column[0].positionY.value = 3
+                    column[3].positionY.value = 0
+                }
+                "0100" -> {
+                    column[1].positionY.value = 3
+                    column[3].positionY.value = 1
+                }
+                "0010" -> {
+                    column[2].positionY.value = 3
+                    column[3].positionY.value = 2
                 }
             }
         }
