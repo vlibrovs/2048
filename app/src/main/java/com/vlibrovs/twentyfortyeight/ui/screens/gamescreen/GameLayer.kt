@@ -57,7 +57,7 @@ fun GameLayer(
                     Direction.RIGHT -> controller.moveRight()
                     Direction.UP -> Log.d(TAG, "GameLayer: Swipe up detected")
                     Direction.DOWN -> Log.d(TAG, "GameLayer: Swipe down detected")
-                    Direction.LEFT -> Log.d(TAG, "GameLayer: Swipe left detected")
+                    Direction.LEFT -> controller.moveLeft()
                     Direction.UNIT -> Unit
                 }
             }
