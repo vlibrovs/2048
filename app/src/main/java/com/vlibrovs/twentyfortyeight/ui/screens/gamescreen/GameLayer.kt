@@ -55,7 +55,7 @@ fun GameLayer(
             .swipeDirectionListener(swipeDirection) { direction ->
                 when (direction) {
                     Direction.RIGHT -> controller.moveRight()
-                    Direction.UP -> Log.d(TAG, "GameLayer: Swipe up detected")
+                    Direction.UP -> controller.moveUp()
                     Direction.DOWN -> controller.moveDown()
                     Direction.LEFT -> controller.moveLeft()
                     Direction.UNIT -> Unit
