@@ -41,8 +41,9 @@ fun GameLayer(
     theme: Theme,
     squareSize: Dp
 ) {
+    val scope = rememberCoroutineScope()
     val controller = remember {
-        GameController()
+        GameController(scope)
     }
     val animatorX = controller.getAnimatorX(squareSize = squareSize, animationDuration = Constants.ANIMATION_DURATION)
     val animatorY = controller.getAnimatorY(squareSize = squareSize, animationDuration = Constants.ANIMATION_DURATION)

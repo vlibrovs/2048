@@ -1,15 +1,15 @@
 package com.vlibrovs.twentyfortyeight.domain.game
 
-import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.unit.Dp
-import java.lang.StringBuilder
+import com.vlibrovs.twentyfortyeight.common.Constants
+import kotlinx.coroutines.*
 
-class GameController {
+class GameController(private val coroutineScope: CoroutineScope) {
     val gameState = arrayOf(
         TileData(
             level = mutableStateOf(1),
@@ -32,62 +32,62 @@ class GameController {
             positionY = mutableStateOf(0)
         ),
         TileData(
-            level = mutableStateOf(null),
+            level = mutableStateOf(1),
             positionX = mutableStateOf(0),
             positionY = mutableStateOf(1)
         ),
         TileData(
-            level = mutableStateOf(null),
+            level = mutableStateOf(1),
             positionX = mutableStateOf(1),
             positionY = mutableStateOf(1)
         ),
         TileData(
-            level = mutableStateOf(null),
+            level = mutableStateOf(1),
             positionX = mutableStateOf(2),
             positionY = mutableStateOf(1)
         ),
         TileData(
-            level = mutableStateOf(null),
+            level = mutableStateOf(2),
             positionX = mutableStateOf(3),
             positionY = mutableStateOf(1)
         ),
         TileData(
-            level = mutableStateOf(null),
+            level = mutableStateOf(1),
             positionX = mutableStateOf(0),
             positionY = mutableStateOf(2)
         ),
         TileData(
-            level = mutableStateOf(null),
+            level = mutableStateOf(2),
             positionX = mutableStateOf(1),
             positionY = mutableStateOf(2)
         ),
         TileData(
-            level = mutableStateOf(null),
+            level = mutableStateOf(1),
             positionX = mutableStateOf(2),
             positionY = mutableStateOf(2)
         ),
         TileData(
-            level = mutableStateOf(null),
+            level = mutableStateOf(1),
             positionX = mutableStateOf(3),
             positionY = mutableStateOf(2)
         ),
         TileData(
-            level = mutableStateOf(null),
+            level = mutableStateOf(2),
             positionX = mutableStateOf(0),
             positionY = mutableStateOf(3)
         ),
         TileData(
-            level = mutableStateOf(null),
+            level = mutableStateOf(2),
             positionX = mutableStateOf(1),
             positionY = mutableStateOf(3)
         ),
         TileData(
-            level = mutableStateOf(null),
+            level = mutableStateOf(3),
             positionX = mutableStateOf(2),
             positionY = mutableStateOf(3)
         ),
         TileData(
-            level = mutableStateOf(null),
+            level = mutableStateOf(2),
             positionX = mutableStateOf(3),
             positionY = mutableStateOf(3)
         )
@@ -111,53 +111,254 @@ class GameController {
             when (String(CharArray(4) { index -> if (row[index].level.value == null) '0' else '1' })) {
                 "1111" -> {
                     if (row[3].level.value == row[2].level.value && row[0].level.value == row[1].level.value) {
-//                        row[3].level.value!!.inc()
                         row[2].positionX.value++
                         row[1].positionX.value++
                         row[0].positionX.value += 2
-                    }
+                        coroutineScope.launch {
+                            delay(Constants.ANIMATION_DURATION.toLong())
+                            row[0].level.value = null
+                            row[1].level.value = row[1].level.value!! + 1
+                            row[2].level.value = null
+                            row[3].level.value = row[3].level.value!! + 1
+                            row[0].positionX.value = 0
+                            row[2].positionX.value = 1
+                        }
+                    } else if (row[3].level.value == row[2].level.value) {
+                        row[0].positionX.value++
+                        row[1].positionX.value++
+                        row[2].positionX.value++
+                        coroutineScope.launch {
+                            delay(Constants.ANIMATION_DURATION.toLong())
+                                row[3].level.value = row[3].level.value!! + 1
+                                row[2].level.value = null
+                                row[2].positionX.value = 0
+                        }
+                    } else if (row[2].level.value == row[1].level.value) {
+                        row[0].positionX.value++
+                        row[1].positionX.value++
+                        coroutineScope.launch {
+                            delay(Constants.ANIMATION_DURATION.toLong())
+                                row[2].level.value = row[2].level.value!! + 1
+                                row[1].level.value = null
+                                row[1].positionX.value = 0
+                        }
+                    } else if (row[0].level.value == row[1].level.value) {
+                        row[0].positionX.value++
+                        coroutineScope.launch {
+                            delay(Constants.ANIMATION_DURATION.toLong())
+                                row[1].level.value = row[1].level.value!! + 1
+                                row[0].level.value = null
+                                row[0].positionX.value = 0
+
+                        }
+                    } else continue
                 }
 
                 "1110" -> {
-                    TODO()
+                    if (row[1].level.value == row[2].level.value) {
+                        row[0].positionX.value += 2
+                        row[1].positionX.value += 2
+                        row[2].positionX.value++
+                        row[3].positionX.value = 1
+                        coroutineScope.launch {
+                            delay(Constants.ANIMATION_DURATION.toLong())
+                            row[2].level.value = row[2].level.value!! + 1
+                            row[1].level.value = null
+                            row[1].positionX.value = 0
+                        }
+                    } else if (row[0].level.value == row[1].level.value) {
+                        row[0].positionX.value += 2
+                        row[1].positionX.value++
+                        row[2].positionX.value++
+                        row[3].positionX.value = 1
+                        coroutineScope.launch {
+                            delay(Constants.ANIMATION_DURATION.toLong())
+                            row[1].level.value = row[1].level.value!! + 1
+                            row[0].level.value = null
+                            row[0].positionX.value = 0
+                        }
+                    } else {
+                        row[0].positionX.value++
+                        row[1].positionX.value++
+                        row[2].positionX.value++
+                        row[3].positionX.value = 0
+                    }
                 }
                 "0111" -> {
-                    TODO()
+                    if (row[2].level.value == row[3].level.value) {
+                        row[1].positionX.value++
+                        row[2].positionX.value++
+                        coroutineScope.launch {
+                            delay(Constants.ANIMATION_DURATION.toLong())
+                            row[3].level.value = row[3].level.value!! + 1
+                            row[2].level.value = null
+                            row[2].positionX.value = 0
+                        }
+                    } else if (row[1].level.value == row[2].level.value) {
+                        row[1].positionX.value++
+                        coroutineScope.launch {
+                            delay(Constants.ANIMATION_DURATION.toLong())
+                            row[2].level.value = row[2].level.value!! + 1
+                            row[1].level.value = null
+                            row[1].positionX.value = 0
+                        }
+                    } else continue
                 }
                 "1011" -> {
-                    TODO()
+                    if (row[2].level.value == row[3].level.value) {
+                        row[0].positionX.value += 2
+                        row[2].positionX.value++
+                        coroutineScope.launch {
+                            delay(Constants.ANIMATION_DURATION.toLong())
+                            row[3].level.value = row[3].level.value!! + 1
+                            row[2].level.value = null
+                            row[2].positionX.value = 0
+                        }
+                    } else if (row[0].level.value == row[2].level.value) {
+                        row[0].positionX.value += 2
+                        coroutineScope.launch {
+                            delay(Constants.ANIMATION_DURATION.toLong())
+                            row[2].level.value = row[2].level.value!! + 1
+                            row[0].level.value = null
+                            row[0].positionX.value = 0
+                        }
+                    } else {
+                        row[0].positionX.value++
+                        row[1].positionX.value = 0
+                    }
                 }
                 "1101" -> {
-                    TODO()
+                    if (row[1].level.value == row[3].level.value) {
+                        row[0].positionX.value += 2
+                        row[1].positionX.value += 2
+                        row[2].positionX.value = 1
+                        coroutineScope.launch {
+                            delay(Constants.ANIMATION_DURATION.toLong())
+                            row[3].level.value = row[3].level.value!! + 1
+                            row[1].level.value = null
+                            row[1].positionX.value = 0
+                        }
+                    } else if (row[0].level.value == row[1].level.value) {
+                        row[1].positionX.value++
+                        row[0].positionX.value += 2
+                        row[2].positionX.value = 1
+                        coroutineScope.launch {
+                            delay(Constants.ANIMATION_DURATION.toLong())
+                            row[1].level.value = row[1].level.value!! + 1
+                            row[0].level.value = null
+                            row[0].positionX.value = 0
+                        }
+                    } else {
+                        row[0].positionX.value++
+                        row[1].positionX.value++
+                        row[2].positionX.value = 0
+                    }
                 }
 
                 "1100" -> {
-                    TODO()
+                    if (row[0].level.value == row[1].level.value) {
+                        row[1].positionX.value += 2
+                        row[0].positionX.value += 3
+                        row[2].positionX.value = 0
+                        row[3].positionX.value = 1
+                        coroutineScope.launch {
+                            delay(Constants.ANIMATION_DURATION.toLong())
+                            row[1].level.value = row[1].level.value!! + 1
+                            row[0].level.value = null
+                            row[0].positionX.value = 2
+                        }
+                    } else {
+                        row[0].positionX.value += 2
+                        row[1].positionX.value += 2
+                        row[2].positionX.value = 0
+                        row[3].positionX.value = 1
+                    }
                 }
                 "1010" -> {
-                    TODO()
+                    if (row[0].level.value == row[2].level.value) {
+                        row[2].positionX.value++
+                        row[0].positionX.value += 3
+                        row[3].positionX.value = 0
+                        coroutineScope.launch {
+                            delay(Constants.ANIMATION_DURATION.toLong())
+                            row[2].level.value = row[2].level.value!! + 1
+                            row[0].level.value = null
+                            row[0].positionX.value = 2
+                        }
+                    } else {
+                        row[0].positionX.value += 2
+                        row[2].positionX.value++
+                        row[3].positionX.value = 0
+                    }
                 }
                 "1001" -> {
-                    TODO()
+                    if (row[0].level.value == row[3].level.value) {
+                        row[0].positionX.value += 3
+                        coroutineScope.launch {
+                            delay(Constants.ANIMATION_DURATION.toLong())
+                            row[3].level.value = row[3].level.value!! + 1
+                            row[0].level.value = null
+                            row[0].positionX.value = 0
+                        }
+                    } else {
+                        row[0].positionX.value += 2
+                        row[2].positionX.value -= 2
+                    }
                 }
                 "0101" -> {
-                    TODO()
+                    if (row[1].level.value == row[3].level.value) {
+                        row[1].positionX.value += 2
+                        coroutineScope.launch {
+                            delay(Constants.ANIMATION_DURATION.toLong())
+                            row[3].level.value = row[3].level.value!! + 1
+                            row[1].level.value = null
+                            row[1].positionX.value = 1
+                        }
+                    } else {
+                        row[1].positionX.value++
+                        row[2].positionX.value--
+                    }
                 }
                 "0110" -> {
-                    TODO()
+                    if (row[1].level.value == row[2].level.value) {
+                        row[2].positionX.value++
+                        row[1].positionX.value += 2
+                        row[3].positionX.value = 1
+                        coroutineScope.launch {
+                            delay(Constants.ANIMATION_DURATION.toLong())
+                            row[2].level.value = row[2].level.value!! + 1
+                            row[1].level.value = null
+                            row[1].positionX.value = 2
+                        }
+                    } else {
+                        row[1].positionX.value++
+                        row[2].positionX.value++
+                        row[3].positionX.value = 1
+                    }
                 }
                 "0011" -> {
-                    TODO()
+                    if (row[2].level.value == row[3].level.value) {
+                        row[2].positionX.value++
+                        coroutineScope.launch {
+                            delay(Constants.ANIMATION_DURATION.toLong())
+                            row[3].level.value = row[3].level.value!! + 1
+                            row[2].level.value = null
+                            row[2].positionX.value = 2
+                        }
+                    } else continue
                 }
 
                 "1000" -> {
-                    TODO()
+                    row[0].positionX.value = 3
+                    row[3].positionX.value = 0
                 }
                 "0100" -> {
-                    TODO()
+                    row[1].positionX.value = 3
+                    row[3].positionX.value = 1
                 }
                 "0010" -> {
-                    TODO()
+                    row[2].positionX.value = 3
+                    row[3].positionX.value = 2
                 }
             }
 
