@@ -8,8 +8,20 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.unit.Dp
 import com.vlibrovs.twentyfortyeight.common.Constants
 import kotlinx.coroutines.*
+import kotlin.random.Random
 
 class GameController(private val coroutineScope: CoroutineScope) {
+
+    private val _score = mutableStateOf(0)
+    val score
+        get() = _score
+
+    private val _gameEnded = mutableStateOf(false)
+    val gameEnded
+        get() = _gameEnded
+
+    private val moves = mutableStateOf(0)
+
     val gameState = arrayOf(
         TileData(
             level = mutableStateOf(null),
@@ -42,7 +54,7 @@ class GameController(private val coroutineScope: CoroutineScope) {
             positionY = mutableStateOf(1)
         ),
         TileData(
-            level = mutableStateOf(3),
+            level = mutableStateOf(null),
             positionX = mutableStateOf(2),
             positionY = mutableStateOf(1)
         ),
@@ -52,27 +64,27 @@ class GameController(private val coroutineScope: CoroutineScope) {
             positionY = mutableStateOf(1)
         ),
         TileData(
-            level = mutableStateOf(1),
+            level = mutableStateOf(null),
             positionX = mutableStateOf(0),
             positionY = mutableStateOf(2)
         ),
         TileData(
-            level = mutableStateOf(2),
+            level = mutableStateOf(null),
             positionX = mutableStateOf(1),
             positionY = mutableStateOf(2)
         ),
         TileData(
-            level = mutableStateOf(3),
+            level = mutableStateOf(null),
             positionX = mutableStateOf(2),
             positionY = mutableStateOf(2)
         ),
         TileData(
-            level = mutableStateOf(4),
+            level = mutableStateOf(null),
             positionX = mutableStateOf(3),
             positionY = mutableStateOf(2)
         ),
         TileData(
-            level = mutableStateOf(1),
+            level = mutableStateOf(null),
             positionX = mutableStateOf(0),
             positionY = mutableStateOf(3)
         ),
@@ -82,7 +94,7 @@ class GameController(private val coroutineScope: CoroutineScope) {
             positionY = mutableStateOf(3)
         ),
         TileData(
-            level = mutableStateOf(4),
+            level = mutableStateOf(null),
             positionX = mutableStateOf(2),
             positionY = mutableStateOf(3)
         ),
@@ -118,6 +130,7 @@ class GameController(private val coroutineScope: CoroutineScope) {
     }
 
     fun moveRight() {
+        var successful = false
         val scheme = getRowScheme()
         for (row in scheme) {
             when (String(CharArray(4) { index -> if (row[index].level.value == null) '0' else '1' })) {
@@ -135,8 +148,8 @@ class GameController(private val coroutineScope: CoroutineScope) {
                             row[0].positionX.value = 0
                             row[2].positionX.value = 1
                         }
-                    }
-                    else if (row[3].level.value == row[2].level.value) {
+                        successful = true
+                    } else if (row[3].level.value == row[2].level.value) {
                         row[0].positionX.value++
                         row[1].positionX.value++
                         row[2].positionX.value++
@@ -146,8 +159,8 @@ class GameController(private val coroutineScope: CoroutineScope) {
                             row[2].level.value = null
                             row[2].positionX.value = 0
                         }
-                    }
-                    else if (row[2].level.value == row[1].level.value) {
+                        successful = true
+                    } else if (row[2].level.value == row[1].level.value) {
                         row[0].positionX.value++
                         row[1].positionX.value++
                         coroutineScope.launch {
@@ -156,8 +169,8 @@ class GameController(private val coroutineScope: CoroutineScope) {
                             row[1].level.value = null
                             row[1].positionX.value = 0
                         }
-                    }
-                    else if (row[0].level.value == row[1].level.value) {
+                        successful = true
+                    } else if (row[0].level.value == row[1].level.value) {
                         row[0].positionX.value++
                         coroutineScope.launch {
                             delay(Constants.ANIMATION_DURATION.toLong())
@@ -166,8 +179,8 @@ class GameController(private val coroutineScope: CoroutineScope) {
                             row[0].positionX.value = 0
 
                         }
-                    }
-                    else continue
+                        successful = true
+                    } else continue
                 }
 
                 "1110" -> {
@@ -182,6 +195,7 @@ class GameController(private val coroutineScope: CoroutineScope) {
                             row[1].level.value = null
                             row[1].positionX.value = 0
                         }
+                        successful = true
                     } else if (row[0].level.value == row[1].level.value) {
                         row[0].positionX.value += 2
                         row[1].positionX.value++
@@ -193,11 +207,13 @@ class GameController(private val coroutineScope: CoroutineScope) {
                             row[0].level.value = null
                             row[0].positionX.value = 0
                         }
+                        successful = true
                     } else {
                         row[0].positionX.value++
                         row[1].positionX.value++
                         row[2].positionX.value++
                         row[3].positionX.value = 0
+                        successful = true
                     }
                 }
                 "0111" -> {
@@ -210,6 +226,7 @@ class GameController(private val coroutineScope: CoroutineScope) {
                             row[2].level.value = null
                             row[2].positionX.value = 1
                         }
+                        successful = true
                     } else if (row[1].level.value == row[2].level.value) {
                         row[1].positionX.value++
                         coroutineScope.launch {
@@ -218,6 +235,7 @@ class GameController(private val coroutineScope: CoroutineScope) {
                             row[1].level.value = null
                             row[1].positionX.value = 1
                         }
+                        successful = true
                     } else continue
                 }
                 "1011" -> {
@@ -242,8 +260,10 @@ class GameController(private val coroutineScope: CoroutineScope) {
                         row[0].positionX.value++
                         row[1].positionX.value = 0
                     }
+                    successful = true
                 }
                 "1101" -> {
+                    successful = true
                     if (row[1].level.value == row[3].level.value) {
                         row[0].positionX.value += 2
                         row[1].positionX.value += 2
@@ -272,6 +292,7 @@ class GameController(private val coroutineScope: CoroutineScope) {
                 }
 
                 "1100" -> {
+                    successful = true
                     if (row[0].level.value == row[1].level.value) {
                         row[1].positionX.value += 2
                         row[0].positionX.value += 3
@@ -291,6 +312,7 @@ class GameController(private val coroutineScope: CoroutineScope) {
                     }
                 }
                 "1010" -> {
+                    successful = true
                     if (row[0].level.value == row[2].level.value) {
                         row[2].positionX.value++
                         row[0].positionX.value += 3
@@ -308,6 +330,7 @@ class GameController(private val coroutineScope: CoroutineScope) {
                     }
                 }
                 "1001" -> {
+                    successful = true
                     if (row[0].level.value == row[3].level.value) {
                         row[0].positionX.value += 3
                         coroutineScope.launch {
@@ -322,6 +345,7 @@ class GameController(private val coroutineScope: CoroutineScope) {
                     }
                 }
                 "0101" -> {
+                    successful = true
                     if (row[1].level.value == row[3].level.value) {
                         row[1].positionX.value += 2
                         coroutineScope.launch {
@@ -336,6 +360,7 @@ class GameController(private val coroutineScope: CoroutineScope) {
                     }
                 }
                 "0110" -> {
+                    successful = true
                     if (row[1].level.value == row[2].level.value) {
                         row[2].positionX.value++
                         row[1].positionX.value += 2
@@ -361,26 +386,39 @@ class GameController(private val coroutineScope: CoroutineScope) {
                             row[2].level.value = null
                             row[2].positionX.value = 2
                         }
+                        successful = true
                     } else continue
                 }
 
                 "1000" -> {
+                    successful = true
                     row[0].positionX.value = 3
                     row[3].positionX.value = 0
                 }
                 "0100" -> {
+                    successful = true
                     row[1].positionX.value = 3
                     row[3].positionX.value = 1
                 }
                 "0010" -> {
+                    successful = true
                     row[2].positionX.value = 3
                     row[3].positionX.value = 2
                 }
+            }
+
+        }
+        if (successful) {
+            coroutineScope.launch {
+                delay(Constants.ANIMATION_DURATION.toLong())
+                generateNext()
+                moves.value++
             }
         }
     }
 
     fun moveLeft() {
+        var successful = false
         val scheme = getRowScheme()
         for (row in scheme) {
             when (String(CharArray(4) { index -> if (row[index].level.value == null) '0' else '1' })) {
@@ -398,8 +436,8 @@ class GameController(private val coroutineScope: CoroutineScope) {
                             row[3].positionX.value = 3
                             row[1].positionX.value = 2
                         }
-                    }
-                    else if (row[0].level.value == row[1].level.value) {
+                        successful = true
+                    } else if (row[0].level.value == row[1].level.value) {
                         row[3].positionX.value--
                         row[2].positionX.value--
                         row[1].positionX.value--
@@ -409,8 +447,9 @@ class GameController(private val coroutineScope: CoroutineScope) {
                             row[1].level.value = null
                             row[1].positionX.value = 3
                         }
-                    }
-                    else if (row[1].level.value == row[2].level.value) {
+                        successful = true
+                    } else if (row[1].level.value == row[2].level.value) {
+                        successful = true
                         row[3].positionX.value--
                         row[2].positionX.value--
                         coroutineScope.launch {
@@ -419,8 +458,8 @@ class GameController(private val coroutineScope: CoroutineScope) {
                             row[2].level.value = null
                             row[2].positionX.value = 3
                         }
-                    }
-                    else if (row[3].level.value == row[2].level.value) {
+                    } else if (row[3].level.value == row[2].level.value) {
+                        successful = true
                         row[3].positionX.value--
                         coroutineScope.launch {
                             delay(Constants.ANIMATION_DURATION.toLong())
@@ -429,12 +468,12 @@ class GameController(private val coroutineScope: CoroutineScope) {
                             row[3].positionX.value = 3
 
                         }
-                    }
-                    else continue
+                    } else continue
                 }
 
                 "1110" -> {
                     if (row[1].level.value == row[0].level.value) {
+                        successful = true
                         row[2].positionX.value--
                         row[1].positionX.value--
                         coroutineScope.launch {
@@ -444,6 +483,7 @@ class GameController(private val coroutineScope: CoroutineScope) {
                             row[1].positionX.value = 2
                         }
                     } else if (row[2].level.value == row[1].level.value) {
+                        successful = true
                         row[2].positionX.value--
                         coroutineScope.launch {
                             delay(Constants.ANIMATION_DURATION.toLong())
@@ -454,63 +494,66 @@ class GameController(private val coroutineScope: CoroutineScope) {
                     } else continue
                 }
                 "0111" -> {
-                if (row[2].level.value == row[1].level.value) {
-                    row[3].positionX.value -= 2
-                    row[2].positionX.value -= 2
-                    row[1].positionX.value--
-                    row[0].positionX.value = 2
-                    coroutineScope.launch {
-                        delay(Constants.ANIMATION_DURATION.toLong())
-                        row[1].level.value = row[1].level.value!! + 1
-                        row[2].level.value = null
-                        row[2].positionX.value = 3
+                    successful = true
+                    if (row[2].level.value == row[1].level.value) {
+                        row[3].positionX.value -= 2
+                        row[2].positionX.value -= 2
+                        row[1].positionX.value--
+                        row[0].positionX.value = 2
+                        coroutineScope.launch {
+                            delay(Constants.ANIMATION_DURATION.toLong())
+                            row[1].level.value = row[1].level.value!! + 1
+                            row[2].level.value = null
+                            row[2].positionX.value = 3
+                        }
+                    } else if (row[3].level.value == row[2].level.value) {
+                        row[3].positionX.value -= 2
+                        row[2].positionX.value--
+                        row[1].positionX.value--
+                        row[0].positionX.value = 3
+                        coroutineScope.launch {
+                            delay(Constants.ANIMATION_DURATION.toLong())
+                            row[2].level.value = row[2].level.value!! + 1
+                            row[3].level.value = null
+                            row[3].positionX.value = 3
+                        }
+                    } else {
+                        row[3].positionX.value--
+                        row[2].positionX.value--
+                        row[1].positionX.value--
+                        row[0].positionX.value = 3
                     }
-                } else if (row[3].level.value == row[2].level.value) {
-                    row[3].positionX.value -= 2
-                    row[2].positionX.value--
-                    row[1].positionX.value--
-                    row[0].positionX.value = 3
-                    coroutineScope.launch {
-                        delay(Constants.ANIMATION_DURATION.toLong())
-                        row[2].level.value = row[2].level.value!! + 1
-                        row[3].level.value = null
-                        row[3].positionX.value = 3
-                    }
-                } else {
-                    row[3].positionX.value--
-                    row[2].positionX.value--
-                    row[1].positionX.value--
-                    row[0].positionX.value = 3
                 }
-            }
                 "1011" -> {
-                if (row[2].level.value == row[0].level.value) {
-                    row[3].positionX.value -= 2
-                    row[2].positionX.value -= 2
-                    row[1].positionX.value = 2
-                    coroutineScope.launch {
-                        delay(Constants.ANIMATION_DURATION.toLong())
-                        row[0].level.value = row[0].level.value!! + 1
-                        row[2].level.value = null
-                        row[2].positionX.value = 3
+                    successful = true
+                    if (row[2].level.value == row[0].level.value) {
+                        row[3].positionX.value -= 2
+                        row[2].positionX.value -= 2
+                        row[1].positionX.value = 2
+                        coroutineScope.launch {
+                            delay(Constants.ANIMATION_DURATION.toLong())
+                            row[0].level.value = row[0].level.value!! + 1
+                            row[2].level.value = null
+                            row[2].positionX.value = 3
+                        }
+                    } else if (row[3].level.value == row[2].level.value) {
+                        row[2].positionX.value--
+                        row[3].positionX.value -= 2
+                        row[1].positionX.value = 2
+                        coroutineScope.launch {
+                            delay(Constants.ANIMATION_DURATION.toLong())
+                            row[2].level.value = row[2].level.value!! + 1
+                            row[3].level.value = null
+                            row[3].positionX.value = 3
+                        }
+                    } else {
+                        row[3].positionX.value--
+                        row[2].positionX.value--
+                        row[1].positionX.value = 3
                     }
-                } else if (row[3].level.value == row[2].level.value) {
-                    row[2].positionX.value--
-                    row[3].positionX.value -= 2
-                    row[1].positionX.value = 2
-                    coroutineScope.launch {
-                        delay(Constants.ANIMATION_DURATION.toLong())
-                        row[2].level.value = row[2].level.value!! + 1
-                        row[3].level.value = null
-                        row[3].positionX.value = 3
-                    }
-                } else {
-                    row[3].positionX.value--
-                    row[2].positionX.value--
-                    row[1].positionX.value = 3
                 }
-            }
                 "1101" -> {
+                    successful = true
                     if (row[1].level.value == row[0].level.value) {
                         row[3].positionX.value -= 2
                         row[1].positionX.value--
@@ -535,6 +578,7 @@ class GameController(private val coroutineScope: CoroutineScope) {
                 }
 
                 "0011" -> {
+                    successful = true
                     if (row[3].level.value == row[2].level.value) {
                         row[2].positionX.value -= 2
                         row[3].positionX.value -= 3
@@ -555,6 +599,7 @@ class GameController(private val coroutineScope: CoroutineScope) {
                 }
                 "1100" -> {
                     if (row[1].level.value == row[0].level.value) {
+                        successful = true
                         row[1].positionX.value--
                         coroutineScope.launch {
                             delay(Constants.ANIMATION_DURATION.toLong())
@@ -562,9 +607,10 @@ class GameController(private val coroutineScope: CoroutineScope) {
                             row[1].level.value = null
                             row[1].positionX.value = 1
                         }
-                    } else continue
+                    } else successful = false
                 }
                 "0101" -> {
+                    successful = true
                     if (row[3].level.value == row[1].level.value) {
                         row[1].positionX.value--
                         row[3].positionX.value -= 3
@@ -582,6 +628,7 @@ class GameController(private val coroutineScope: CoroutineScope) {
                     }
                 }
                 "1010" -> {
+                    successful = true
                     if (row[2].level.value == row[0].level.value) {
                         row[2].positionX.value -= 2
                         coroutineScope.launch {
@@ -596,6 +643,7 @@ class GameController(private val coroutineScope: CoroutineScope) {
                     }
                 }
                 "1001" -> {
+                    successful = true
                     if (row[3].level.value == row[0].level.value) {
                         row[3].positionX.value = 0
                         coroutineScope.launch {
@@ -610,6 +658,7 @@ class GameController(private val coroutineScope: CoroutineScope) {
                     }
                 }
                 "0110" -> {
+                    successful = true
                     if (row[2].level.value == row[1].level.value) {
                         row[1].positionX.value--
                         row[2].positionX.value -= 2
@@ -628,27 +677,39 @@ class GameController(private val coroutineScope: CoroutineScope) {
                 }
 
                 "0001" -> {
+                    successful = true
                     row[3].positionX.value = 0
                     row[0].positionX.value = 3
                 }
                 "0010" -> {
+                    successful = true
                     row[2].positionX.value = 0
                     row[0].positionX.value = 2
                 }
                 "0100" -> {
+                    successful = true
                     row[1].positionX.value = 0
                     row[0].positionX.value = 1
                 }
             }
         }
+        if (successful) {
+            coroutineScope.launch {
+                delay(Constants.ANIMATION_DURATION.toLong())
+                generateNext()
+                moves.value++
+            }
+        }
     }
 
     fun moveDown() {
+        var successful = true
         val scheme = getColumnScheme()
         for (column in scheme) {
             when (String(CharArray(4) { index -> if (column[index].level.value == null) '0' else '1' })) {
                 "1111" -> {
                     if (column[3].level.value == column[2].level.value && column[0].level.value == column[1].level.value) {
+                        successful = true
                         column[2].positionY.value++
                         column[1].positionY.value++
                         column[0].positionY.value += 2
@@ -661,8 +722,8 @@ class GameController(private val coroutineScope: CoroutineScope) {
                             column[0].positionY.value = 0
                             column[2].positionY.value = 1
                         }
-                    }
-                    else if (column[3].level.value == column[2].level.value) {
+                    } else if (column[3].level.value == column[2].level.value) {
+                        successful = true
                         column[0].positionY.value++
                         column[1].positionY.value++
                         column[2].positionY.value++
@@ -672,8 +733,8 @@ class GameController(private val coroutineScope: CoroutineScope) {
                             column[2].level.value = null
                             column[2].positionY.value = 0
                         }
-                    }
-                    else if (column[2].level.value == column[1].level.value) {
+                    } else if (column[2].level.value == column[1].level.value) {
+                        successful = true
                         column[0].positionY.value++
                         column[1].positionY.value++
                         coroutineScope.launch {
@@ -682,8 +743,8 @@ class GameController(private val coroutineScope: CoroutineScope) {
                             column[1].level.value = null
                             column[1].positionY.value = 0
                         }
-                    }
-                    else if (column[0].level.value == column[1].level.value) {
+                    } else if (column[0].level.value == column[1].level.value) {
+                        successful = true
                         column[0].positionY.value++
                         coroutineScope.launch {
                             delay(Constants.ANIMATION_DURATION.toLong())
@@ -692,11 +753,11 @@ class GameController(private val coroutineScope: CoroutineScope) {
                             column[0].positionY.value = 0
 
                         }
-                    }
-                    else continue
+                    } else continue
                 }
 
                 "1110" -> {
+                    successful = true
                     if (column[1].level.value == column[2].level.value) {
                         column[0].positionY.value += 2
                         column[1].positionY.value += 2
@@ -728,6 +789,7 @@ class GameController(private val coroutineScope: CoroutineScope) {
                 }
                 "0111" -> {
                     if (column[2].level.value == column[3].level.value) {
+                        successful = true
                         column[1].positionY.value++
                         column[2].positionY.value++
                         coroutineScope.launch {
@@ -737,6 +799,7 @@ class GameController(private val coroutineScope: CoroutineScope) {
                             column[2].positionY.value = 1
                         }
                     } else if (column[1].level.value == column[2].level.value) {
+                        successful = true
                         column[1].positionY.value++
                         coroutineScope.launch {
                             delay(Constants.ANIMATION_DURATION.toLong())
@@ -747,6 +810,7 @@ class GameController(private val coroutineScope: CoroutineScope) {
                     } else continue
                 }
                 "1011" -> {
+                    successful = true
                     if (column[2].level.value == column[3].level.value) {
                         column[0].positionY.value += 2
                         column[2].positionY.value++
@@ -770,6 +834,7 @@ class GameController(private val coroutineScope: CoroutineScope) {
                     }
                 }
                 "1101" -> {
+                    successful = true
                     if (column[1].level.value == column[3].level.value) {
                         column[0].positionY.value += 2
                         column[1].positionY.value += 2
@@ -798,6 +863,7 @@ class GameController(private val coroutineScope: CoroutineScope) {
                 }
 
                 "1100" -> {
+                    successful = true
                     if (column[0].level.value == column[1].level.value) {
                         column[1].positionY.value += 2
                         column[0].positionY.value += 3
@@ -817,6 +883,7 @@ class GameController(private val coroutineScope: CoroutineScope) {
                     }
                 }
                 "1010" -> {
+                    successful = true
                     if (column[0].level.value == column[2].level.value) {
                         column[2].positionY.value++
                         column[0].positionY.value += 3
@@ -834,6 +901,7 @@ class GameController(private val coroutineScope: CoroutineScope) {
                     }
                 }
                 "1001" -> {
+                    successful = true
                     if (column[0].level.value == column[3].level.value) {
                         column[0].positionY.value += 3
                         coroutineScope.launch {
@@ -848,6 +916,7 @@ class GameController(private val coroutineScope: CoroutineScope) {
                     }
                 }
                 "0101" -> {
+                    successful = true
                     if (column[1].level.value == column[3].level.value) {
                         column[1].positionY.value += 2
                         coroutineScope.launch {
@@ -862,6 +931,7 @@ class GameController(private val coroutineScope: CoroutineScope) {
                     }
                 }
                 "0110" -> {
+                    successful = true
                     if (column[1].level.value == column[2].level.value) {
                         column[2].positionY.value++
                         column[1].positionY.value += 2
@@ -880,6 +950,7 @@ class GameController(private val coroutineScope: CoroutineScope) {
                 }
                 "0011" -> {
                     if (column[2].level.value == column[3].level.value) {
+                        successful = true
                         column[2].positionY.value++
                         coroutineScope.launch {
                             delay(Constants.ANIMATION_DURATION.toLong())
@@ -891,27 +962,39 @@ class GameController(private val coroutineScope: CoroutineScope) {
                 }
 
                 "1000" -> {
+                    successful = true
                     column[0].positionY.value = 3
                     column[3].positionY.value = 0
                 }
                 "0100" -> {
+                    successful = true
                     column[1].positionY.value = 3
                     column[3].positionY.value = 1
                 }
                 "0010" -> {
+                    successful = true
                     column[2].positionY.value = 3
                     column[3].positionY.value = 2
                 }
+            }
+        }
+        if (successful) {
+            coroutineScope.launch {
+                delay(Constants.ANIMATION_DURATION.toLong())
+                generateNext()
+                moves.value++
             }
         }
     }
 
     fun moveUp() {
         val scheme = getColumnScheme()
+        var successful = true
         for (column in scheme) {
             when (String(CharArray(4) { index -> if (column[index].level.value == null) '0' else '1' })) {
                 "1111" -> {
                     if (column[0].level.value == column[1].level.value && column[2].level.value == column[3].level.value) {
+                        successful = true
                         column[1].positionY.value--
                         column[2].positionY.value--
                         column[3].positionY.value -= 2
@@ -924,8 +1007,8 @@ class GameController(private val coroutineScope: CoroutineScope) {
                             column[3].positionY.value = 3
                             column[1].positionY.value = 2
                         }
-                    }
-                    else if (column[0].level.value == column[1].level.value) {
+                    } else if (column[0].level.value == column[1].level.value) {
+                        successful = true
                         column[3].positionY.value--
                         column[2].positionY.value--
                         column[1].positionY.value--
@@ -935,8 +1018,8 @@ class GameController(private val coroutineScope: CoroutineScope) {
                             column[1].level.value = null
                             column[1].positionY.value = 3
                         }
-                    }
-                    else if (column[1].level.value == column[2].level.value) {
+                    } else if (column[1].level.value == column[2].level.value) {
+                        successful = true
                         column[3].positionY.value--
                         column[2].positionY.value--
                         coroutineScope.launch {
@@ -945,8 +1028,8 @@ class GameController(private val coroutineScope: CoroutineScope) {
                             column[2].level.value = null
                             column[2].positionY.value = 3
                         }
-                    }
-                    else if (column[3].level.value == column[2].level.value) {
+                    } else if (column[3].level.value == column[2].level.value) {
+                        successful = true
                         column[3].positionY.value--
                         coroutineScope.launch {
                             delay(Constants.ANIMATION_DURATION.toLong())
@@ -955,12 +1038,12 @@ class GameController(private val coroutineScope: CoroutineScope) {
                             column[3].positionY.value = 3
 
                         }
-                    }
-                    else continue
+                    } else continue
                 }
 
                 "1110" -> {
                     if (column[1].level.value == column[0].level.value) {
+                        successful = true
                         column[2].positionY.value--
                         column[1].positionY.value--
                         coroutineScope.launch {
@@ -970,6 +1053,7 @@ class GameController(private val coroutineScope: CoroutineScope) {
                             column[1].positionY.value = 2
                         }
                     } else if (column[2].level.value == column[1].level.value) {
+                        successful = true
                         column[2].positionY.value--
                         coroutineScope.launch {
                             delay(Constants.ANIMATION_DURATION.toLong())
@@ -980,6 +1064,7 @@ class GameController(private val coroutineScope: CoroutineScope) {
                     } else continue
                 }
                 "0111" -> {
+                    successful = true
                     if (column[2].level.value == column[1].level.value) {
                         column[3].positionY.value -= 2
                         column[2].positionY.value -= 2
@@ -1010,6 +1095,7 @@ class GameController(private val coroutineScope: CoroutineScope) {
                     }
                 }
                 "1011" -> {
+                    successful = true
                     if (column[2].level.value == column[0].level.value) {
                         column[3].positionY.value -= 2
                         column[2].positionY.value -= 2
@@ -1037,6 +1123,7 @@ class GameController(private val coroutineScope: CoroutineScope) {
                     }
                 }
                 "1101" -> {
+                    successful = true
                     if (column[1].level.value == column[0].level.value) {
                         column[3].positionY.value -= 2
                         column[1].positionY.value--
@@ -1061,6 +1148,7 @@ class GameController(private val coroutineScope: CoroutineScope) {
                 }
 
                 "0011" -> {
+                    successful = true
                     if (column[3].level.value == column[2].level.value) {
                         column[2].positionY.value -= 2
                         column[3].positionY.value -= 3
@@ -1081,6 +1169,7 @@ class GameController(private val coroutineScope: CoroutineScope) {
                 }
                 "1100" -> {
                     if (column[1].level.value == column[0].level.value) {
+                        successful = true
                         column[1].positionY.value--
                         coroutineScope.launch {
                             delay(Constants.ANIMATION_DURATION.toLong())
@@ -1088,9 +1177,10 @@ class GameController(private val coroutineScope: CoroutineScope) {
                             column[1].level.value = null
                             column[1].positionY.value = 1
                         }
-                    } else continue
+                    } else successful = false
                 }
                 "0101" -> {
+                    successful = true
                     if (column[3].level.value == column[1].level.value) {
                         column[1].positionY.value--
                         column[3].positionY.value -= 3
@@ -1108,6 +1198,7 @@ class GameController(private val coroutineScope: CoroutineScope) {
                     }
                 }
                 "1010" -> {
+                    successful = true
                     if (column[2].level.value == column[0].level.value) {
                         column[2].positionY.value -= 2
                         coroutineScope.launch {
@@ -1122,6 +1213,7 @@ class GameController(private val coroutineScope: CoroutineScope) {
                     }
                 }
                 "1001" -> {
+                    successful = true
                     if (column[3].level.value == column[0].level.value) {
                         column[3].positionY.value = 0
                         coroutineScope.launch {
@@ -1136,6 +1228,7 @@ class GameController(private val coroutineScope: CoroutineScope) {
                     }
                 }
                 "0110" -> {
+                    successful = true
                     if (column[2].level.value == column[1].level.value) {
                         column[1].positionY.value--
                         column[2].positionY.value -= 2
@@ -1154,19 +1247,47 @@ class GameController(private val coroutineScope: CoroutineScope) {
                 }
 
                 "0001" -> {
+                    successful = true
                     column[3].positionY.value = 0
                     column[0].positionY.value = 3
                 }
                 "0010" -> {
+                    successful = true
                     column[2].positionY.value = 0
                     column[0].positionY.value = 2
                 }
                 "0100" -> {
+                    successful = true
                     column[1].positionY.value = 0
                     column[0].positionY.value = 1
                 }
             }
         }
+        if (successful) {
+            coroutineScope.launch {
+                delay(Constants.ANIMATION_DURATION.toLong())
+                generateNext()
+                moves.value++
+            }
+        }
+    }
+
+    private fun generateNext() {
+        val emptySquaresList = mutableListOf<TileData>()
+        for (tileData in gameState) {
+            if (tileData.level.value == null) emptySquaresList.add(tileData)
+        }
+        if (emptySquaresList.size == 0) {
+            _gameEnded.value = true
+            return
+        }
+        val position = Random.nextInt(emptySquaresList.size)
+        val level = if (Random.nextInt(9) == 0) 2 else 1
+        emptySquaresList[position].level.value = level
+    }
+
+    init {
+        generateNext()
     }
 
     @Composable
