@@ -45,8 +45,14 @@ fun GameLayer(
     val controller = remember {
         GameController(scope)
     }
-    val animatorX = controller.getAnimatorX(squareSize = squareSize, animationDuration = Constants.ANIMATION_DURATION)
-    val animatorY = controller.getAnimatorY(squareSize = squareSize, animationDuration = Constants.ANIMATION_DURATION)
+    val animatorX = controller.getAnimatorX(
+        squareSize = squareSize,
+        animationDuration = Constants.ANIMATION_DURATION
+    )
+    val animatorY = controller.getAnimatorY(
+        squareSize = squareSize,
+        animationDuration = Constants.ANIMATION_DURATION
+    )
     val swipeDirection = remember {
         mutableStateOf(Direction.UNIT)
     }
@@ -66,8 +72,14 @@ fun GameLayer(
             Tile(
                 modifier = Modifier
                     .padding(
-                        start = innerPadding + animatorX[0].value,
-                        top = innerPadding + animatorY[0].value
+                        start = innerPadding +
+                                if (controller.gameState[0].justCreated.value) {
+                                    squareSize * controller.gameState[0].positionX.value
+                                } else animatorX[0].value,
+                        top = innerPadding +
+                                if (controller.gameState[0].justCreated.value) {
+                                    squareSize * controller.gameState[0].positionY.value
+                                } else animatorY[0].value,
                     )
                     .size(squareSize - innerPadding * 2),
                 styles = theme.tileStyles,
@@ -78,8 +90,14 @@ fun GameLayer(
             Tile(
                 modifier = Modifier
                     .padding(
-                        start = innerPadding + animatorX[1].value,
-                        top = innerPadding + animatorY[1].value
+                        start = innerPadding +
+                                if (controller.gameState[1].justCreated.value) {
+                                    squareSize * controller.gameState[1].positionX.value
+                                } else animatorX[1].value,
+                        top = innerPadding +
+                                if (controller.gameState[1].justCreated.value) {
+                                    squareSize * controller.gameState[1].positionY.value
+                                } else animatorY[1].value,
                     )
                     .size(squareSize - innerPadding * 2),
                 styles = theme.tileStyles,
@@ -90,8 +108,14 @@ fun GameLayer(
             Tile(
                 modifier = Modifier
                     .padding(
-                        start = innerPadding + animatorX[2].value,
-                        top = innerPadding + animatorY[2].value
+                        start = innerPadding +
+                                if (controller.gameState[2].justCreated.value) {
+                                    squareSize * controller.gameState[2].positionX.value
+                                } else animatorX[2].value,
+                        top = innerPadding +
+                                if (controller.gameState[2].justCreated.value) {
+                                    squareSize * controller.gameState[2].positionY.value
+                                } else animatorY[2].value,
                     )
                     .size(squareSize - innerPadding * 2),
                 styles = theme.tileStyles,
@@ -102,8 +126,14 @@ fun GameLayer(
             Tile(
                 modifier = Modifier
                     .padding(
-                        start = innerPadding + animatorX[3].value,
-                        top = innerPadding + animatorY[3].value
+                        start = innerPadding +
+                                if (controller.gameState[3].justCreated.value) {
+                                    squareSize * controller.gameState[3].positionX.value
+                                } else animatorX[3].value,
+                        top = innerPadding +
+                                if (controller.gameState[3].justCreated.value) {
+                                    squareSize * controller.gameState[3].positionY.value
+                                } else animatorY[3].value,
                     )
                     .size(squareSize - innerPadding * 2),
                 styles = theme.tileStyles,
@@ -114,8 +144,14 @@ fun GameLayer(
             Tile(
                 modifier = Modifier
                     .padding(
-                        start = innerPadding + animatorX[4].value,
-                        top = innerPadding + animatorY[4].value
+                        start = innerPadding +
+                                if (controller.gameState[4].justCreated.value) {
+                                    squareSize * controller.gameState[4].positionX.value
+                                } else animatorX[4].value,
+                        top = innerPadding +
+                                if (controller.gameState[4].justCreated.value) {
+                                    squareSize * controller.gameState[4].positionY.value
+                                } else animatorY[4].value,
                     )
                     .size(squareSize - innerPadding * 2),
                 styles = theme.tileStyles,
@@ -126,8 +162,14 @@ fun GameLayer(
             Tile(
                 modifier = Modifier
                     .padding(
-                        start = innerPadding + animatorX[5].value,
-                        top = innerPadding + animatorY[5].value
+                        start = innerPadding +
+                                if (controller.gameState[5].justCreated.value) {
+                                    squareSize * controller.gameState[5].positionX.value
+                                } else animatorX[5].value,
+                        top = innerPadding +
+                                if (controller.gameState[5].justCreated.value) {
+                                    squareSize * controller.gameState[5].positionY.value
+                                } else animatorY[5].value,
                     )
                     .size(squareSize - innerPadding * 2),
                 styles = theme.tileStyles,
@@ -138,8 +180,14 @@ fun GameLayer(
             Tile(
                 modifier = Modifier
                     .padding(
-                        start = innerPadding + animatorX[6].value,
-                        top = innerPadding + animatorY[6].value
+                        start = innerPadding +
+                                if (controller.gameState[6].justCreated.value) {
+                                    squareSize * controller.gameState[6].positionX.value
+                                } else animatorX[6].value,
+                        top = innerPadding +
+                                if (controller.gameState[6].justCreated.value) {
+                                    squareSize * controller.gameState[6].positionY.value
+                                } else animatorY[6].value,
                     )
                     .size(squareSize - innerPadding * 2),
                 styles = theme.tileStyles,
@@ -150,8 +198,14 @@ fun GameLayer(
             Tile(
                 modifier = Modifier
                     .padding(
-                        start = innerPadding + animatorX[7].value,
-                        top = innerPadding + animatorY[7].value
+                        start = innerPadding +
+                                if (controller.gameState[7].justCreated.value) {
+                                    squareSize * controller.gameState[7].positionX.value
+                                } else animatorX[7].value,
+                        top = innerPadding +
+                                if (controller.gameState[7].justCreated.value) {
+                                    squareSize * controller.gameState[7].positionY.value
+                                } else animatorY[7].value,
                     )
                     .size(squareSize - innerPadding * 2),
                 styles = theme.tileStyles,
@@ -162,8 +216,14 @@ fun GameLayer(
             Tile(
                 modifier = Modifier
                     .padding(
-                        start = innerPadding + animatorX[8].value,
-                        top = innerPadding + animatorY[8].value
+                        start = innerPadding +
+                                if (controller.gameState[8].justCreated.value) {
+                                    squareSize * controller.gameState[8].positionX.value
+                                } else animatorX[8].value,
+                        top = innerPadding +
+                                if (controller.gameState[8].justCreated.value) {
+                                    squareSize * controller.gameState[8].positionY.value
+                                } else animatorY[8].value,
                     )
                     .size(squareSize - innerPadding * 2),
                 styles = theme.tileStyles,
@@ -174,8 +234,14 @@ fun GameLayer(
             Tile(
                 modifier = Modifier
                     .padding(
-                        start = innerPadding + animatorX[9].value,
-                        top = innerPadding + animatorY[9].value
+                        start = innerPadding +
+                                if (controller.gameState[9].justCreated.value) {
+                                    squareSize * controller.gameState[9].positionX.value
+                                } else animatorX[9].value,
+                        top = innerPadding +
+                                if (controller.gameState[9].justCreated.value) {
+                                    squareSize * controller.gameState[9].positionY.value
+                                } else animatorY[9].value,
                     )
                     .size(squareSize - innerPadding * 2),
                 styles = theme.tileStyles,
@@ -186,8 +252,14 @@ fun GameLayer(
             Tile(
                 modifier = Modifier
                     .padding(
-                        start = innerPadding + animatorX[10].value,
-                        top = innerPadding + animatorY[10].value
+                        start = innerPadding +
+                                if (controller.gameState[10].justCreated.value) {
+                                    squareSize * controller.gameState[10].positionX.value
+                                } else animatorX[10].value,
+                        top = innerPadding +
+                                if (controller.gameState[10].justCreated.value) {
+                                    squareSize * controller.gameState[10].positionY.value
+                                } else animatorY[10].value,
                     )
                     .size(squareSize - innerPadding * 2),
                 styles = theme.tileStyles,
@@ -198,8 +270,14 @@ fun GameLayer(
             Tile(
                 modifier = Modifier
                     .padding(
-                        start = innerPadding + animatorX[11].value,
-                        top = innerPadding + animatorY[11].value
+                        start = innerPadding +
+                                if (controller.gameState[11].justCreated.value) {
+                                    squareSize * controller.gameState[11].positionX.value
+                                } else animatorX[11].value,
+                        top = innerPadding +
+                                if (controller.gameState[11].justCreated.value) {
+                                    squareSize * controller.gameState[11].positionY.value
+                                } else animatorY[11].value,
                     )
                     .size(squareSize - innerPadding * 2),
                 styles = theme.tileStyles,
@@ -210,8 +288,14 @@ fun GameLayer(
             Tile(
                 modifier = Modifier
                     .padding(
-                        start = innerPadding + animatorX[12].value,
-                        top = innerPadding + animatorY[12].value
+                        start = innerPadding +
+                                if (controller.gameState[12].justCreated.value) {
+                                    squareSize * controller.gameState[12].positionX.value
+                                } else animatorX[12].value,
+                        top = innerPadding +
+                                if (controller.gameState[12].justCreated.value) {
+                                    squareSize * controller.gameState[12].positionY.value
+                                } else animatorY[12].value,
                     )
                     .size(squareSize - innerPadding * 2),
                 styles = theme.tileStyles,
@@ -222,8 +306,14 @@ fun GameLayer(
             Tile(
                 modifier = Modifier
                     .padding(
-                        start = innerPadding + animatorX[13].value,
-                        top = innerPadding + animatorY[13].value
+                        start = innerPadding +
+                                if (controller.gameState[13].justCreated.value) {
+                                    squareSize * controller.gameState[13].positionX.value
+                                } else animatorX[13].value,
+                        top = innerPadding +
+                                if (controller.gameState[13].justCreated.value) {
+                                    squareSize * controller.gameState[13].positionY.value
+                                } else animatorY[13].value,
                     )
                     .size(squareSize - innerPadding * 2),
                 styles = theme.tileStyles,
@@ -234,8 +324,14 @@ fun GameLayer(
             Tile(
                 modifier = Modifier
                     .padding(
-                        start = innerPadding + animatorX[14].value,
-                        top = innerPadding + animatorY[14].value
+                        start = innerPadding +
+                                if (controller.gameState[14].justCreated.value) {
+                                    squareSize * controller.gameState[14].positionX.value
+                                } else animatorX[14].value,
+                        top = innerPadding +
+                                if (controller.gameState[14].justCreated.value) {
+                                    squareSize * controller.gameState[14].positionY.value
+                                } else animatorY[14].value,
                     )
                     .size(squareSize - innerPadding * 2),
                 styles = theme.tileStyles,
@@ -246,8 +342,14 @@ fun GameLayer(
             Tile(
                 modifier = Modifier
                     .padding(
-                        start = innerPadding + animatorX[15].value,
-                        top = innerPadding + animatorY[15].value
+                        start = innerPadding +
+                                if (controller.gameState[15].justCreated.value) {
+                                    squareSize * controller.gameState[15].positionX.value
+                                } else animatorX[15].value,
+                        top = innerPadding +
+                                if (controller.gameState[15].justCreated.value) {
+                                    squareSize * controller.gameState[15].positionY.value
+                                } else animatorY[15].value,
                     )
                     .size(squareSize - innerPadding * 2),
                 styles = theme.tileStyles,

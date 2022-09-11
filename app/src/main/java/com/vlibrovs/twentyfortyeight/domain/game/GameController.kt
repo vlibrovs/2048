@@ -130,6 +130,7 @@ class GameController(private val coroutineScope: CoroutineScope) {
     }
 
     fun moveRight() {
+        for (tileData in gameState) tileData.justCreated.value = false
         var successful = false
         val scheme = getRowScheme()
         for (row in scheme) {
@@ -418,6 +419,7 @@ class GameController(private val coroutineScope: CoroutineScope) {
     }
 
     fun moveLeft() {
+        for (tileData in gameState) tileData.justCreated.value = false
         var successful = false
         val scheme = getRowScheme()
         for (row in scheme) {
@@ -703,6 +705,7 @@ class GameController(private val coroutineScope: CoroutineScope) {
     }
 
     fun moveDown() {
+        for (tileData in gameState) tileData.justCreated.value = false
         var successful = true
         val scheme = getColumnScheme()
         for (column in scheme) {
@@ -988,6 +991,7 @@ class GameController(private val coroutineScope: CoroutineScope) {
     }
 
     fun moveUp() {
+        for (tileData in gameState) tileData.justCreated.value = false
         val scheme = getColumnScheme()
         var successful = true
         for (column in scheme) {
@@ -1283,7 +1287,10 @@ class GameController(private val coroutineScope: CoroutineScope) {
         }
         val position = Random.nextInt(emptySquaresList.size)
         val level = if (Random.nextInt(9) == 0) 2 else 1
-        emptySquaresList[position].level.value = level
+        emptySquaresList[position].apply {
+            justCreated.value = true
+            this.level.value = level
+        }
     }
 
     init {
