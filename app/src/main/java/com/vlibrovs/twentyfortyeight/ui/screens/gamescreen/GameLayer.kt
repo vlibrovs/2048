@@ -18,11 +18,12 @@ fun GameLayer(
     modifier: Modifier = Modifier,
     innerPadding: Dp,
     theme: Theme,
-    squareSize: Dp
+    squareSize: Dp,
+    scoreState: MutableState<Int>
 ) {
     val scope = rememberCoroutineScope()
     val controller = remember {
-        SizeFourGameController(scope)
+        SizeFourGameController(scope, scoreState)
     }
     val horizontalAnimator = controller.animator.horizontalAnimator(squareSize = squareSize)
     val verticalAnimator = controller.animator.verticalAnimator(squareSize = squareSize)

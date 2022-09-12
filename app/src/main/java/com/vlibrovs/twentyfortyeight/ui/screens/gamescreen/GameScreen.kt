@@ -32,7 +32,7 @@ fun GameScreen(
     navController: NavController
 ) {
     val values = getValues(rememberWindowInfo().screenWidthInfo)
-    val score = remember {
+    val scoreState = remember {
         mutableStateOf(0)
     }
     Column(
@@ -80,7 +80,7 @@ fun GameScreen(
                 modifier = Modifier
                     .padding(end = 20.dp)
                     .fillMaxWidth(),
-                text = "${score.value}",
+                text = "${scoreState.value}",
                 textAlign = TextAlign.End,
                 fontFamily = Fonts.Poppins,
                 fontWeight = FontWeight.SemiBold,
@@ -150,7 +150,8 @@ fun GameScreen(
                 modifier = Modifier.fillMaxSize(),
                 innerPadding = values.gameFieldInnerPadding,
                 theme = theme,
-                squareSize = maxWidth / 4
+                squareSize = maxWidth / 4,
+                scoreState = scoreState
             )
         }
         Button(

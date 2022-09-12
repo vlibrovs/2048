@@ -1,5 +1,6 @@
 package com.vlibrovs.twentyfortyeight.domain.game.controllers.game_controller
 
+import com.vlibrovs.twentyfortyeight.data.entity.Game
 import com.vlibrovs.twentyfortyeight.domain.game.controllers.animator.Animator
 import com.vlibrovs.twentyfortyeight.domain.game.controllers.generator.Generator
 import com.vlibrovs.twentyfortyeight.domain.game.controllers.move_controller.MoveController
@@ -15,4 +16,6 @@ abstract class GameController(private val coroutineScope: CoroutineScope) {
     abstract val statsController: StatsController
     abstract val generator: Generator
     abstract val animator: Animator
+
+    abstract fun endGame(): Game
 }

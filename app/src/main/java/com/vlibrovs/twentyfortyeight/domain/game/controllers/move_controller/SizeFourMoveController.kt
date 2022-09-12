@@ -29,45 +29,45 @@ class SizeFourMoveController(
                         row[2].positionX.value++
                         row[1].positionX.value++
                         row[0].positionX.value += 2
-                        coroutineScope.launch {
-                            delay(Constants.ANIMATION_DURATION.toLong())
+                        afterAnimation {
                             row[0].level.value = null
                             row[1].level.value = row[1].level.value!! + 1
                             row[2].level.value = null
                             row[3].level.value = row[3].level.value!! + 1
                             row[0].positionX.value = 0
                             row[2].positionX.value = 1
+                            statsController.addScoreByLevel(row[1].level.value!!)
+                            statsController.addScoreByLevel(row[3].level.value!!)
                         }
                         successful = true
                     } else if (row[3].level.value == row[2].level.value) {
                         row[0].positionX.value++
                         row[1].positionX.value++
                         row[2].positionX.value++
-                        coroutineScope.launch {
-                            delay(Constants.ANIMATION_DURATION.toLong())
+                        afterAnimation {
                             row[3].level.value = row[3].level.value!! + 1
                             row[2].level.value = null
                             row[2].positionX.value = 0
+                            statsController.addScoreByLevel(row[3].level.value!!)
                         }
                         successful = true
                     } else if (row[2].level.value == row[1].level.value) {
                         row[0].positionX.value++
                         row[1].positionX.value++
-                        coroutineScope.launch {
-                            delay(Constants.ANIMATION_DURATION.toLong())
+                        afterAnimation {
                             row[2].level.value = row[2].level.value!! + 1
                             row[1].level.value = null
                             row[1].positionX.value = 0
+                            statsController.addScoreByLevel(row[2].level.value!!)
                         }
                         successful = true
                     } else if (row[0].level.value == row[1].level.value) {
                         row[0].positionX.value++
-                        coroutineScope.launch {
-                            delay(Constants.ANIMATION_DURATION.toLong())
+                        afterAnimation {
                             row[1].level.value = row[1].level.value!! + 1
                             row[0].level.value = null
                             row[0].positionX.value = 0
-
+                            statsController.addScoreByLevel(row[1].level.value!!)
                         }
                         successful = true
                     } else continue
@@ -79,11 +79,11 @@ class SizeFourMoveController(
                         row[1].positionX.value += 2
                         row[2].positionX.value++
                         row[3].positionX.value = 1
-                        coroutineScope.launch {
-                            delay(Constants.ANIMATION_DURATION.toLong())
+                        afterAnimation {
                             row[2].level.value = row[2].level.value!! + 1
                             row[1].level.value = null
                             row[1].positionX.value = 0
+                            statsController.addScoreByLevel(row[2].level.value!!)
                         }
                         successful = true
                     } else if (row[0].level.value == row[1].level.value) {
@@ -91,11 +91,11 @@ class SizeFourMoveController(
                         row[1].positionX.value++
                         row[2].positionX.value++
                         row[3].positionX.value = 1
-                        coroutineScope.launch {
-                            delay(Constants.ANIMATION_DURATION.toLong())
+                        afterAnimation {
                             row[1].level.value = row[1].level.value!! + 1
                             row[0].level.value = null
                             row[0].positionX.value = 0
+                            statsController.addScoreByLevel(row[1].level.value!!)
                         }
                         successful = true
                     } else {
@@ -110,20 +110,20 @@ class SizeFourMoveController(
                     if (row[2].level.value == row[3].level.value) {
                         row[1].positionX.value++
                         row[2].positionX.value++
-                        coroutineScope.launch {
-                            delay(Constants.ANIMATION_DURATION.toLong())
+                        afterAnimation {
                             row[3].level.value = row[3].level.value!! + 1
                             row[2].level.value = null
                             row[2].positionX.value = 1
+                            statsController.addScoreByLevel(row[3].level.value!!)
                         }
                         successful = true
                     } else if (row[1].level.value == row[2].level.value) {
                         row[1].positionX.value++
-                        coroutineScope.launch {
-                            delay(Constants.ANIMATION_DURATION.toLong())
+                        afterAnimation {
                             row[2].level.value = row[2].level.value!! + 1
                             row[1].level.value = null
                             row[1].positionX.value = 1
+                            statsController.addScoreByLevel(row[2].level.value!!)
                         }
                         successful = true
                     } else continue
@@ -132,19 +132,19 @@ class SizeFourMoveController(
                     if (row[2].level.value == row[3].level.value) {
                         row[0].positionX.value += 2
                         row[2].positionX.value++
-                        coroutineScope.launch {
-                            delay(Constants.ANIMATION_DURATION.toLong())
+                        afterAnimation {
                             row[3].level.value = row[3].level.value!! + 1
                             row[2].level.value = null
                             row[2].positionX.value = 0
+                            statsController.addScoreByLevel(row[3].level.value!!)
                         }
                     } else if (row[0].level.value == row[2].level.value) {
                         row[0].positionX.value += 2
-                        coroutineScope.launch {
-                            delay(Constants.ANIMATION_DURATION.toLong())
+                        afterAnimation {
                             row[2].level.value = row[2].level.value!! + 1
                             row[0].level.value = null
                             row[0].positionX.value = 0
+                            statsController.addScoreByLevel(row[2].level.value!!)
                         }
                     } else {
                         row[0].positionX.value++
@@ -158,21 +158,21 @@ class SizeFourMoveController(
                         row[0].positionX.value += 2
                         row[1].positionX.value += 2
                         row[2].positionX.value = 1
-                        coroutineScope.launch {
-                            delay(Constants.ANIMATION_DURATION.toLong())
+                        afterAnimation {
                             row[3].level.value = row[3].level.value!! + 1
                             row[1].level.value = null
                             row[1].positionX.value = 0
+                            statsController.addScoreByLevel(row[3].level.value!!)
                         }
                     } else if (row[0].level.value == row[1].level.value) {
                         row[1].positionX.value++
                         row[0].positionX.value += 2
                         row[2].positionX.value = 1
-                        coroutineScope.launch {
-                            delay(Constants.ANIMATION_DURATION.toLong())
+                        afterAnimation {
                             row[1].level.value = row[1].level.value!! + 1
                             row[0].level.value = null
                             row[0].positionX.value = 0
+                            statsController.addScoreByLevel(row[1].level.value!!)
                         }
                     } else {
                         row[0].positionX.value++
@@ -188,11 +188,11 @@ class SizeFourMoveController(
                         row[0].positionX.value += 3
                         row[2].positionX.value = 0
                         row[3].positionX.value = 1
-                        coroutineScope.launch {
-                            delay(Constants.ANIMATION_DURATION.toLong())
+                        afterAnimation {
                             row[1].level.value = row[1].level.value!! + 1
                             row[0].level.value = null
                             row[0].positionX.value = 2
+                            statsController.addScoreByLevel(row[1].level.value!!)
                         }
                     } else {
                         row[0].positionX.value += 2
@@ -207,11 +207,11 @@ class SizeFourMoveController(
                         row[2].positionX.value++
                         row[0].positionX.value += 3
                         row[3].positionX.value = 0
-                        coroutineScope.launch {
-                            delay(Constants.ANIMATION_DURATION.toLong())
+                        afterAnimation {
                             row[2].level.value = row[2].level.value!! + 1
                             row[0].level.value = null
                             row[0].positionX.value = 2
+                            statsController.addScoreByLevel(row[2].level.value!!)
                         }
                     } else {
                         row[0].positionX.value += 2
@@ -223,11 +223,11 @@ class SizeFourMoveController(
                     successful = true
                     if (row[0].level.value == row[3].level.value) {
                         row[0].positionX.value += 3
-                        coroutineScope.launch {
-                            delay(Constants.ANIMATION_DURATION.toLong())
+                        afterAnimation {
                             row[3].level.value = row[3].level.value!! + 1
                             row[0].level.value = null
                             row[0].positionX.value = 0
+                            statsController.addScoreByLevel(row[3].level.value!!)
                         }
                     } else {
                         row[0].positionX.value += 2
@@ -238,11 +238,11 @@ class SizeFourMoveController(
                     successful = true
                     if (row[1].level.value == row[3].level.value) {
                         row[1].positionX.value += 2
-                        coroutineScope.launch {
-                            delay(Constants.ANIMATION_DURATION.toLong())
+                        afterAnimation {
                             row[3].level.value = row[3].level.value!! + 1
                             row[1].level.value = null
                             row[1].positionX.value = 1
+                            statsController.addScoreByLevel(row[3].level.value!!)
                         }
                     } else {
                         row[1].positionX.value++
@@ -255,11 +255,11 @@ class SizeFourMoveController(
                         row[2].positionX.value++
                         row[1].positionX.value += 2
                         row[3].positionX.value = 1
-                        coroutineScope.launch {
-                            delay(Constants.ANIMATION_DURATION.toLong())
+                        afterAnimation {
                             row[2].level.value = row[2].level.value!! + 1
                             row[1].level.value = null
                             row[1].positionX.value = 2
+                            statsController.addScoreByLevel(row[2].level.value!!)
                         }
                     } else {
                         row[1].positionX.value++
@@ -270,11 +270,11 @@ class SizeFourMoveController(
                 "0011" -> {
                     if (row[2].level.value == row[3].level.value) {
                         row[2].positionX.value++
-                        coroutineScope.launch {
-                            delay(Constants.ANIMATION_DURATION.toLong())
+                        afterAnimation {
                             row[3].level.value = row[3].level.value!! + 1
                             row[2].level.value = null
                             row[2].positionX.value = 2
+                            statsController.addScoreByLevel(row[3].level.value!!)
                         }
                         successful = true
                     } else continue
@@ -318,46 +318,46 @@ class SizeFourMoveController(
                         row[1].positionX.value--
                         row[2].positionX.value--
                         row[3].positionX.value -= 2
-                        coroutineScope.launch {
-                            delay(Constants.ANIMATION_DURATION.toLong())
+                        afterAnimation {
                             row[3].level.value = null
                             row[2].level.value = row[2].level.value!! + 1
                             row[1].level.value = null
                             row[0].level.value = row[0].level.value!! + 1
                             row[3].positionX.value = 3
                             row[1].positionX.value = 2
+                            statsController.addScoreByLevel(row[2].level.value!!)
+                            statsController.addScoreByLevel(row[0].level.value!!)
                         }
                         successful = true
                     } else if (row[0].level.value == row[1].level.value) {
                         row[3].positionX.value--
                         row[2].positionX.value--
                         row[1].positionX.value--
-                        coroutineScope.launch {
-                            delay(Constants.ANIMATION_DURATION.toLong())
+                        afterAnimation {
                             row[0].level.value = row[0].level.value!! + 1
                             row[1].level.value = null
                             row[1].positionX.value = 3
+                            statsController.addScoreByLevel(row[0].level.value!!)
                         }
                         successful = true
                     } else if (row[1].level.value == row[2].level.value) {
                         successful = true
                         row[3].positionX.value--
                         row[2].positionX.value--
-                        coroutineScope.launch {
-                            delay(Constants.ANIMATION_DURATION.toLong())
+                        afterAnimation {
                             row[1].level.value = row[1].level.value!! + 1
                             row[2].level.value = null
                             row[2].positionX.value = 3
+                            statsController.addScoreByLevel(row[1].level.value!!)
                         }
                     } else if (row[3].level.value == row[2].level.value) {
                         successful = true
                         row[3].positionX.value--
-                        coroutineScope.launch {
-                            delay(Constants.ANIMATION_DURATION.toLong())
+                        afterAnimation {
                             row[2].level.value = row[2].level.value!! + 1
                             row[3].level.value = null
                             row[3].positionX.value = 3
-
+                            statsController.addScoreByLevel(row[2].level.value!!)
                         }
                     } else continue
                 }
@@ -367,20 +367,20 @@ class SizeFourMoveController(
                         successful = true
                         row[2].positionX.value--
                         row[1].positionX.value--
-                        coroutineScope.launch {
-                            delay(Constants.ANIMATION_DURATION.toLong())
+                        afterAnimation {
                             row[0].level.value = row[0].level.value!! + 1
                             row[1].level.value = null
                             row[1].positionX.value = 2
+                            statsController.addScoreByLevel(row[0].level.value!!)
                         }
                     } else if (row[2].level.value == row[1].level.value) {
                         successful = true
                         row[2].positionX.value--
-                        coroutineScope.launch {
-                            delay(Constants.ANIMATION_DURATION.toLong())
+                        afterAnimation {
                             row[1].level.value = row[1].level.value!! + 1
                             row[2].level.value = null
                             row[2].positionX.value = 2
+                            statsController.addScoreByLevel(row[1].level.value!!)
                         }
                     } else continue
                 }
@@ -391,22 +391,22 @@ class SizeFourMoveController(
                         row[2].positionX.value -= 2
                         row[1].positionX.value--
                         row[0].positionX.value = 2
-                        coroutineScope.launch {
-                            delay(Constants.ANIMATION_DURATION.toLong())
+                        afterAnimation {
                             row[1].level.value = row[1].level.value!! + 1
                             row[2].level.value = null
                             row[2].positionX.value = 3
+                            statsController.addScoreByLevel(row[1].level.value!!)
                         }
                     } else if (row[3].level.value == row[2].level.value) {
                         row[3].positionX.value -= 2
                         row[2].positionX.value--
                         row[1].positionX.value--
                         row[0].positionX.value = 3
-                        coroutineScope.launch {
-                            delay(Constants.ANIMATION_DURATION.toLong())
+                        afterAnimation {
                             row[2].level.value = row[2].level.value!! + 1
                             row[3].level.value = null
                             row[3].positionX.value = 3
+                            statsController.addScoreByLevel(row[2].level.value!!)
                         }
                     } else {
                         row[3].positionX.value--
@@ -421,21 +421,21 @@ class SizeFourMoveController(
                         row[3].positionX.value -= 2
                         row[2].positionX.value -= 2
                         row[1].positionX.value = 2
-                        coroutineScope.launch {
-                            delay(Constants.ANIMATION_DURATION.toLong())
+                        afterAnimation {
                             row[0].level.value = row[0].level.value!! + 1
                             row[2].level.value = null
                             row[2].positionX.value = 3
+                            statsController.addScoreByLevel(row[0].level.value!!)
                         }
                     } else if (row[3].level.value == row[2].level.value) {
                         row[2].positionX.value--
                         row[3].positionX.value -= 2
                         row[1].positionX.value = 2
-                        coroutineScope.launch {
-                            delay(Constants.ANIMATION_DURATION.toLong())
+                        afterAnimation {
                             row[2].level.value = row[2].level.value!! + 1
                             row[3].level.value = null
                             row[3].positionX.value = 3
+                            statsController.addScoreByLevel(row[2].level.value!!)
                         }
                     } else {
                         row[3].positionX.value--
@@ -448,19 +448,19 @@ class SizeFourMoveController(
                     if (row[1].level.value == row[0].level.value) {
                         row[3].positionX.value -= 2
                         row[1].positionX.value--
-                        coroutineScope.launch {
-                            delay(Constants.ANIMATION_DURATION.toLong())
+                        afterAnimation {
                             row[0].level.value = row[0].level.value!! + 1
                             row[1].level.value = null
                             row[1].positionX.value = 3
+                            statsController.addScoreByLevel(row[0].level.value!!)
                         }
                     } else if (row[3].level.value == row[1].level.value) {
                         row[3].positionX.value -= 2
-                        coroutineScope.launch {
-                            delay(Constants.ANIMATION_DURATION.toLong())
+                        afterAnimation {
                             row[1].level.value = row[1].level.value!! + 1
                             row[3].level.value = null
                             row[3].positionX.value = 3
+                            statsController.addScoreByLevel(row[1].level.value!!)
                         }
                     } else {
                         row[3].positionX.value--
@@ -475,11 +475,11 @@ class SizeFourMoveController(
                         row[3].positionX.value -= 3
                         row[1].positionX.value = 3
                         row[0].positionX.value = 2
-                        coroutineScope.launch {
-                            delay(Constants.ANIMATION_DURATION.toLong())
+                        afterAnimation {
                             row[2].level.value = row[2].level.value!! + 1
                             row[3].level.value = null
                             row[3].positionX.value = 1
+                            statsController.addScoreByLevel(row[2].level.value!!)
                         }
                     } else {
                         row[3].positionX.value -= 2
@@ -492,11 +492,11 @@ class SizeFourMoveController(
                     if (row[1].level.value == row[0].level.value) {
                         successful = true
                         row[1].positionX.value--
-                        coroutineScope.launch {
-                            delay(Constants.ANIMATION_DURATION.toLong())
+                        afterAnimation {
                             row[0].level.value = row[0].level.value!! + 1
                             row[1].level.value = null
                             row[1].positionX.value = 1
+                            statsController.addScoreByLevel(row[0].level.value!!)
                         }
                     } else continue
                 }
@@ -506,11 +506,11 @@ class SizeFourMoveController(
                         row[1].positionX.value--
                         row[3].positionX.value -= 3
                         row[0].positionX.value = 3
-                        coroutineScope.launch {
-                            delay(Constants.ANIMATION_DURATION.toLong())
+                        afterAnimation {
                             row[1].level.value = row[1].level.value!! + 1
                             row[3].level.value = null
                             row[3].positionX.value = 1
+                            statsController.addScoreByLevel(row[1].level.value!!)
                         }
                     } else {
                         row[3].positionX.value -= 2
@@ -522,11 +522,11 @@ class SizeFourMoveController(
                     successful = true
                     if (row[2].level.value == row[0].level.value) {
                         row[2].positionX.value -= 2
-                        coroutineScope.launch {
-                            delay(Constants.ANIMATION_DURATION.toLong())
+                        afterAnimation {
                             row[0].level.value = row[0].level.value!! + 1
                             row[2].level.value = null
                             row[2].positionX.value = 2
+                            statsController.addScoreByLevel(row[0].level.value!!)
                         }
                     } else {
                         row[2].positionX.value--
@@ -537,11 +537,11 @@ class SizeFourMoveController(
                     successful = true
                     if (row[3].level.value == row[0].level.value) {
                         row[3].positionX.value = 0
-                        coroutineScope.launch {
-                            delay(Constants.ANIMATION_DURATION.toLong())
+                        afterAnimation {
                             row[0].level.value = row[0].level.value!! + 1
                             row[3].level.value = null
                             row[3].positionX.value = 3
+                            statsController.addScoreByLevel(row[0].level.value!!)
                         }
                     } else {
                         row[3].positionX.value -= 2
@@ -554,11 +554,11 @@ class SizeFourMoveController(
                         row[1].positionX.value--
                         row[2].positionX.value -= 2
                         row[0].positionX.value = 2
-                        coroutineScope.launch {
-                            delay(Constants.ANIMATION_DURATION.toLong())
+                        afterAnimation {
                             row[1].level.value = row[1].level.value!! + 1
                             row[2].level.value = null
                             row[2].positionX.value = 1
+                            statsController.addScoreByLevel(row[1].level.value!!)
                         }
                     } else {
                         row[2].positionX.value--
@@ -605,45 +605,45 @@ class SizeFourMoveController(
                         column[2].positionY.value++
                         column[1].positionY.value++
                         column[0].positionY.value += 2
-                        coroutineScope.launch {
-                            delay(Constants.ANIMATION_DURATION.toLong())
+                        afterAnimation {
                             column[0].level.value = null
                             column[1].level.value = column[1].level.value!! + 1
                             column[2].level.value = null
                             column[3].level.value = column[3].level.value!! + 1
                             column[0].positionY.value = 0
                             column[2].positionY.value = 1
+                            statsController.addScoreByLevel(column[3].level.value!!)
+                            statsController.addScoreByLevel(column[1].level.value!!)
                         }
                     } else if (column[3].level.value == column[2].level.value) {
                         successful = true
                         column[0].positionY.value++
                         column[1].positionY.value++
                         column[2].positionY.value++
-                        coroutineScope.launch {
-                            delay(Constants.ANIMATION_DURATION.toLong())
+                        afterAnimation {
                             column[3].level.value = column[3].level.value!! + 1
                             column[2].level.value = null
                             column[2].positionY.value = 0
+                            statsController.addScoreByLevel(column[3].level.value!!)
                         }
                     } else if (column[2].level.value == column[1].level.value) {
                         successful = true
                         column[0].positionY.value++
                         column[1].positionY.value++
-                        coroutineScope.launch {
-                            delay(Constants.ANIMATION_DURATION.toLong())
+                        afterAnimation {
                             column[2].level.value = column[2].level.value!! + 1
                             column[1].level.value = null
                             column[1].positionY.value = 0
+                            statsController.addScoreByLevel(column[2].level.value!!)
                         }
                     } else if (column[0].level.value == column[1].level.value) {
                         successful = true
                         column[0].positionY.value++
-                        coroutineScope.launch {
-                            delay(Constants.ANIMATION_DURATION.toLong())
+                        afterAnimation {
                             column[1].level.value = column[1].level.value!! + 1
                             column[0].level.value = null
                             column[0].positionY.value = 0
-
+                            statsController.addScoreByLevel(column[1].level.value!!)
                         }
                     } else continue
                 }
@@ -655,22 +655,22 @@ class SizeFourMoveController(
                         column[1].positionY.value += 2
                         column[2].positionY.value++
                         column[3].positionY.value = 1
-                        coroutineScope.launch {
-                            delay(Constants.ANIMATION_DURATION.toLong())
+                        afterAnimation {
                             column[2].level.value = column[2].level.value!! + 1
                             column[1].level.value = null
                             column[1].positionY.value = 0
+                            statsController.addScoreByLevel(column[2].level.value!!)
                         }
                     } else if (column[0].level.value == column[1].level.value) {
                         column[0].positionY.value += 2
                         column[1].positionY.value++
                         column[2].positionY.value++
                         column[3].positionY.value = 1
-                        coroutineScope.launch {
-                            delay(Constants.ANIMATION_DURATION.toLong())
+                        afterAnimation {
                             column[1].level.value = column[1].level.value!! + 1
                             column[0].level.value = null
                             column[0].positionY.value = 0
+                            statsController.addScoreByLevel(column[1].level.value!!)
                         }
                     } else {
                         column[0].positionY.value++
@@ -684,20 +684,20 @@ class SizeFourMoveController(
                         successful = true
                         column[1].positionY.value++
                         column[2].positionY.value++
-                        coroutineScope.launch {
-                            delay(Constants.ANIMATION_DURATION.toLong())
+                        afterAnimation {
                             column[3].level.value = column[3].level.value!! + 1
                             column[2].level.value = null
                             column[2].positionY.value = 1
+                            statsController.addScoreByLevel(column[3].level.value!!)
                         }
                     } else if (column[1].level.value == column[2].level.value) {
                         successful = true
                         column[1].positionY.value++
-                        coroutineScope.launch {
-                            delay(Constants.ANIMATION_DURATION.toLong())
+                        afterAnimation {
                             column[2].level.value = column[2].level.value!! + 1
                             column[1].level.value = null
                             column[1].positionY.value = 1
+                            statsController.addScoreByLevel(column[2].level.value!!)
                         }
                     } else continue
                 }
@@ -706,19 +706,19 @@ class SizeFourMoveController(
                     if (column[2].level.value == column[3].level.value) {
                         column[0].positionY.value += 2
                         column[2].positionY.value++
-                        coroutineScope.launch {
-                            delay(Constants.ANIMATION_DURATION.toLong())
+                        afterAnimation {
                             column[3].level.value = column[3].level.value!! + 1
                             column[2].level.value = null
                             column[2].positionY.value = 0
+                            statsController.addScoreByLevel(column[3].level.value!!)
                         }
                     } else if (column[0].level.value == column[2].level.value) {
                         column[0].positionY.value += 2
-                        coroutineScope.launch {
-                            delay(Constants.ANIMATION_DURATION.toLong())
+                        afterAnimation {
                             column[2].level.value = column[2].level.value!! + 1
                             column[0].level.value = null
                             column[0].positionY.value = 0
+                            statsController.addScoreByLevel(column[2].level.value!!)
                         }
                     } else {
                         column[0].positionY.value++
@@ -731,21 +731,21 @@ class SizeFourMoveController(
                         column[0].positionY.value += 2
                         column[1].positionY.value += 2
                         column[2].positionY.value = 1
-                        coroutineScope.launch {
-                            delay(Constants.ANIMATION_DURATION.toLong())
+                        afterAnimation {
                             column[3].level.value = column[3].level.value!! + 1
                             column[1].level.value = null
                             column[1].positionY.value = 0
+                            statsController.addScoreByLevel(column[3].level.value!!)
                         }
                     } else if (column[0].level.value == column[1].level.value) {
                         column[1].positionY.value++
                         column[0].positionY.value += 2
                         column[2].positionY.value = 1
-                        coroutineScope.launch {
-                            delay(Constants.ANIMATION_DURATION.toLong())
+                        afterAnimation {
                             column[1].level.value = column[1].level.value!! + 1
                             column[0].level.value = null
                             column[0].positionY.value = 0
+                            statsController.addScoreByLevel(column[1].level.value!!)
                         }
                     } else {
                         column[0].positionY.value++
@@ -761,11 +761,11 @@ class SizeFourMoveController(
                         column[0].positionY.value += 3
                         column[2].positionY.value = 0
                         column[3].positionY.value = 1
-                        coroutineScope.launch {
-                            delay(Constants.ANIMATION_DURATION.toLong())
+                        afterAnimation {
                             column[1].level.value = column[1].level.value!! + 1
                             column[0].level.value = null
                             column[0].positionY.value = 2
+                            statsController.addScoreByLevel(column[1].level.value!!)
                         }
                     } else {
                         column[0].positionY.value += 2
@@ -780,11 +780,11 @@ class SizeFourMoveController(
                         column[2].positionY.value++
                         column[0].positionY.value += 3
                         column[3].positionY.value = 0
-                        coroutineScope.launch {
-                            delay(Constants.ANIMATION_DURATION.toLong())
+                        afterAnimation {
                             column[2].level.value = column[2].level.value!! + 1
                             column[0].level.value = null
                             column[0].positionY.value = 2
+                            statsController.addScoreByLevel(column[2].level.value!!)
                         }
                     } else {
                         column[0].positionY.value += 2
@@ -796,11 +796,11 @@ class SizeFourMoveController(
                     successful = true
                     if (column[0].level.value == column[3].level.value) {
                         column[0].positionY.value += 3
-                        coroutineScope.launch {
-                            delay(Constants.ANIMATION_DURATION.toLong())
+                        afterAnimation {
                             column[3].level.value = column[3].level.value!! + 1
                             column[0].level.value = null
                             column[0].positionY.value = 0
+                            statsController.addScoreByLevel(column[3].level.value!!)
                         }
                     } else {
                         column[0].positionY.value += 2
@@ -811,11 +811,11 @@ class SizeFourMoveController(
                     successful = true
                     if (column[1].level.value == column[3].level.value) {
                         column[1].positionY.value += 2
-                        coroutineScope.launch {
-                            delay(Constants.ANIMATION_DURATION.toLong())
+                        afterAnimation {
                             column[3].level.value = column[3].level.value!! + 1
                             column[1].level.value = null
                             column[1].positionY.value = 1
+                            statsController.addScoreByLevel(column[3].level.value!!)
                         }
                     } else {
                         column[1].positionY.value++
@@ -828,11 +828,11 @@ class SizeFourMoveController(
                         column[2].positionY.value++
                         column[1].positionY.value += 2
                         column[3].positionY.value = 1
-                        coroutineScope.launch {
-                            delay(Constants.ANIMATION_DURATION.toLong())
+                        afterAnimation {
                             column[2].level.value = column[2].level.value!! + 1
                             column[1].level.value = null
                             column[1].positionY.value = 2
+                            statsController.addScoreByLevel(column[2].level.value!!)
                         }
                     } else {
                         column[1].positionY.value++
@@ -844,11 +844,11 @@ class SizeFourMoveController(
                     if (column[2].level.value == column[3].level.value) {
                         successful = true
                         column[2].positionY.value++
-                        coroutineScope.launch {
-                            delay(Constants.ANIMATION_DURATION.toLong())
+                        afterAnimation {
                             column[3].level.value = column[3].level.value!! + 1
                             column[2].level.value = null
                             column[2].positionY.value = 2
+                            statsController.addScoreByLevel(column[3].level.value!!)
                         }
                     } else continue
                 }
@@ -891,44 +891,45 @@ class SizeFourMoveController(
                         column[1].positionY.value--
                         column[2].positionY.value--
                         column[3].positionY.value -= 2
-                        coroutineScope.launch {
-                            delay(Constants.ANIMATION_DURATION.toLong())
+                        afterAnimation {
                             column[3].level.value = null
                             column[2].level.value = column[2].level.value!! + 1
                             column[1].level.value = null
                             column[0].level.value = column[0].level.value!! + 1
                             column[3].positionY.value = 3
                             column[1].positionY.value = 2
+                            statsController.addScoreByLevel(column[0].level.value!!)
+                            statsController.addScoreByLevel(column[2].level.value!!)
                         }
                     } else if (column[0].level.value == column[1].level.value) {
                         successful = true
                         column[3].positionY.value--
                         column[2].positionY.value--
                         column[1].positionY.value--
-                        coroutineScope.launch {
-                            delay(Constants.ANIMATION_DURATION.toLong())
+                        afterAnimation {
                             column[0].level.value = column[0].level.value!! + 1
                             column[1].level.value = null
                             column[1].positionY.value = 3
+                            statsController.addScoreByLevel(column[0].level.value!!)
                         }
                     } else if (column[1].level.value == column[2].level.value) {
                         successful = true
                         column[3].positionY.value--
                         column[2].positionY.value--
-                        coroutineScope.launch {
-                            delay(Constants.ANIMATION_DURATION.toLong())
+                        afterAnimation {
                             column[1].level.value = column[1].level.value!! + 1
                             column[2].level.value = null
                             column[2].positionY.value = 3
+                            statsController.addScoreByLevel(column[1].level.value!!)
                         }
                     } else if (column[3].level.value == column[2].level.value) {
                         successful = true
                         column[3].positionY.value--
-                        coroutineScope.launch {
-                            delay(Constants.ANIMATION_DURATION.toLong())
+                        afterAnimation {
                             column[2].level.value = column[2].level.value!! + 1
                             column[3].level.value = null
                             column[3].positionY.value = 3
+                            statsController.addScoreByLevel(column[2].level.value!!)
 
                         }
                     } else continue
@@ -939,20 +940,20 @@ class SizeFourMoveController(
                         successful = true
                         column[2].positionY.value--
                         column[1].positionY.value--
-                        coroutineScope.launch {
-                            delay(Constants.ANIMATION_DURATION.toLong())
+                        afterAnimation {
                             column[0].level.value = column[0].level.value!! + 1
                             column[1].level.value = null
                             column[1].positionY.value = 2
+                            statsController.addScoreByLevel(column[0].level.value!!)
                         }
                     } else if (column[2].level.value == column[1].level.value) {
                         successful = true
                         column[2].positionY.value--
-                        coroutineScope.launch {
-                            delay(Constants.ANIMATION_DURATION.toLong())
+                        afterAnimation {
                             column[1].level.value = column[1].level.value!! + 1
                             column[2].level.value = null
                             column[2].positionY.value = 2
+                            statsController.addScoreByLevel(column[1].level.value!!)
                         }
                     } else continue
                 }
@@ -963,22 +964,22 @@ class SizeFourMoveController(
                         column[2].positionY.value -= 2
                         column[1].positionY.value--
                         column[0].positionY.value = 2
-                        coroutineScope.launch {
-                            delay(Constants.ANIMATION_DURATION.toLong())
+                        afterAnimation {
                             column[1].level.value = column[1].level.value!! + 1
                             column[2].level.value = null
                             column[2].positionY.value = 3
+                            statsController.addScoreByLevel(column[1].level.value!!)
                         }
                     } else if (column[3].level.value == column[2].level.value) {
                         column[3].positionY.value -= 2
                         column[2].positionY.value--
                         column[1].positionY.value--
                         column[0].positionY.value = 3
-                        coroutineScope.launch {
-                            delay(Constants.ANIMATION_DURATION.toLong())
+                        afterAnimation {
                             column[2].level.value = column[2].level.value!! + 1
                             column[3].level.value = null
                             column[3].positionY.value = 3
+                            statsController.addScoreByLevel(column[2].level.value!!)
                         }
                     } else {
                         column[3].positionY.value--
@@ -993,21 +994,21 @@ class SizeFourMoveController(
                         column[3].positionY.value -= 2
                         column[2].positionY.value -= 2
                         column[1].positionY.value = 2
-                        coroutineScope.launch {
-                            delay(Constants.ANIMATION_DURATION.toLong())
+                        afterAnimation {
                             column[0].level.value = column[0].level.value!! + 1
                             column[2].level.value = null
                             column[2].positionY.value = 3
+                            statsController.addScoreByLevel(column[0].level.value!!)
                         }
                     } else if (column[3].level.value == column[2].level.value) {
                         column[2].positionY.value--
                         column[3].positionY.value -= 2
                         column[1].positionY.value = 2
-                        coroutineScope.launch {
-                            delay(Constants.ANIMATION_DURATION.toLong())
+                        afterAnimation {
                             column[2].level.value = column[2].level.value!! + 1
                             column[3].level.value = null
                             column[3].positionY.value = 3
+                            statsController.addScoreByLevel(column[2].level.value!!)
                         }
                     } else {
                         column[3].positionY.value--
@@ -1020,19 +1021,19 @@ class SizeFourMoveController(
                     if (column[1].level.value == column[0].level.value) {
                         column[3].positionY.value -= 2
                         column[1].positionY.value--
-                        coroutineScope.launch {
-                            delay(Constants.ANIMATION_DURATION.toLong())
+                        afterAnimation {
                             column[0].level.value = column[0].level.value!! + 1
                             column[1].level.value = null
                             column[1].positionY.value = 3
+                            statsController.addScoreByLevel(column[0].level.value!!)
                         }
                     } else if (column[3].level.value == column[1].level.value) {
                         column[3].positionY.value -= 2
-                        coroutineScope.launch {
-                            delay(Constants.ANIMATION_DURATION.toLong())
+                        afterAnimation {
                             column[1].level.value = column[1].level.value!! + 1
                             column[3].level.value = null
                             column[3].positionY.value = 3
+                            statsController.addScoreByLevel(column[1].level.value!!)
                         }
                     } else {
                         column[3].positionY.value--
@@ -1047,11 +1048,11 @@ class SizeFourMoveController(
                         column[3].positionY.value -= 3
                         column[1].positionY.value = 3
                         column[0].positionY.value = 2
-                        coroutineScope.launch {
-                            delay(Constants.ANIMATION_DURATION.toLong())
+                        afterAnimation {
                             column[2].level.value = column[2].level.value!! + 1
                             column[3].level.value = null
                             column[3].positionY.value = 1
+                            statsController.addScoreByLevel(column[2].level.value!!)
                         }
                     } else {
                         column[3].positionY.value -= 2
@@ -1064,11 +1065,11 @@ class SizeFourMoveController(
                     if (column[1].level.value == column[0].level.value) {
                         successful = true
                         column[1].positionY.value--
-                        coroutineScope.launch {
-                            delay(Constants.ANIMATION_DURATION.toLong())
+                        afterAnimation {
                             column[0].level.value = column[0].level.value!! + 1
                             column[1].level.value = null
                             column[1].positionY.value = 1
+                            statsController.addScoreByLevel(column[0].level.value!!)
                         }
                     } else continue
                 }
@@ -1078,11 +1079,11 @@ class SizeFourMoveController(
                         column[1].positionY.value--
                         column[3].positionY.value -= 3
                         column[0].positionY.value = 3
-                        coroutineScope.launch {
-                            delay(Constants.ANIMATION_DURATION.toLong())
+                        afterAnimation {
                             column[1].level.value = column[1].level.value!! + 1
                             column[3].level.value = null
                             column[3].positionY.value = 1
+                            statsController.addScoreByLevel(column[1].level.value!!)
                         }
                     } else {
                         column[3].positionY.value -= 2
@@ -1094,11 +1095,11 @@ class SizeFourMoveController(
                     successful = true
                     if (column[2].level.value == column[0].level.value) {
                         column[2].positionY.value -= 2
-                        coroutineScope.launch {
-                            delay(Constants.ANIMATION_DURATION.toLong())
+                        afterAnimation {
                             column[0].level.value = column[0].level.value!! + 1
                             column[2].level.value = null
                             column[2].positionY.value = 2
+                            statsController.addScoreByLevel(column[0].level.value!!)
                         }
                     } else {
                         column[2].positionY.value--
@@ -1109,11 +1110,11 @@ class SizeFourMoveController(
                     successful = true
                     if (column[3].level.value == column[0].level.value) {
                         column[3].positionY.value = 0
-                        coroutineScope.launch {
-                            delay(Constants.ANIMATION_DURATION.toLong())
+                        afterAnimation {
                             column[0].level.value = column[0].level.value!! + 1
                             column[3].level.value = null
                             column[3].positionY.value = 3
+                            statsController.addScoreByLevel(column[0].level.value!!)
                         }
                     } else {
                         column[3].positionY.value -= 2
@@ -1126,11 +1127,11 @@ class SizeFourMoveController(
                         column[1].positionY.value--
                         column[2].positionY.value -= 2
                         column[0].positionY.value = 2
-                        coroutineScope.launch {
-                            delay(Constants.ANIMATION_DURATION.toLong())
+                        afterAnimation {
                             column[1].level.value = column[1].level.value!! + 1
                             column[2].level.value = null
                             column[2].positionY.value = 1
+                            statsController.addScoreByLevel(column[1].level.value!!)
                         }
                     } else {
                         column[2].positionY.value--
@@ -1157,11 +1158,17 @@ class SizeFourMoveController(
             }
         }
         if (successful) {
-            coroutineScope.launch {
-                delay(Constants.ANIMATION_DURATION.toLong())
+            afterAnimation {
                 generator.generate()
                 statsController.moves.value++
             }
+        }
+    }
+
+    private fun afterAnimation(code: suspend () -> Unit) {
+        coroutineScope.launch {
+            delay(Constants.ANIMATION_DURATION.toLong())
+            code()
         }
     }
 }
