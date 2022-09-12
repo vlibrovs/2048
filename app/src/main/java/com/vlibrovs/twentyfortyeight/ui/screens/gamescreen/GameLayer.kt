@@ -28,6 +28,8 @@ import com.vlibrovs.twentyfortyeight.domain.game.GameController
 import com.vlibrovs.twentyfortyeight.domain.game.TileData
 import com.vlibrovs.twentyfortyeight.ui.common.fonts.Fonts
 import kotlinx.coroutines.*
+import java.lang.Exception
+import java.lang.NullPointerException
 import kotlin.math.abs
 import kotlin.math.pow
 import kotlin.math.roundToInt
@@ -56,14 +58,50 @@ fun GameLayer(
     val swipeDirection = remember {
         mutableStateOf(Direction.UNIT)
     }
+    val allowMove = remember {
+        mutableStateOf(true)
+    }
     BoxWithConstraints(
         modifier = modifier
-            .swipeDirectionListener(swipeDirection) { direction ->
+            .swipeDirectionListener(
+                directionState = swipeDirection,
+                allowMoveState = allowMove,
+                coroutineScope = scope
+            ) { direction ->
                 when (direction) {
-                    Direction.RIGHT -> controller.moveRight()
-                    Direction.UP -> controller.moveUp()
-                    Direction.DOWN -> controller.moveDown()
-                    Direction.LEFT -> controller.moveLeft()
+                    Direction.RIGHT -> try {
+                        controller.moveRight()
+                        Log.d(TAG, "GameLayer: Successfully executed GameController#moveRight()")
+                    } catch (e: NullPointerException) {
+                        Log.d(
+                            TAG,
+                            "GameLayer: Exception caught executing GameController#moveRight()"
+                        )
+                    }
+                    Direction.UP -> try {
+                        controller.moveUp()
+                        Log.d(TAG, "GameLayer: Successfully executed GameController#moveUp()")
+                    } catch (e: NullPointerException) {
+                        Log.d(TAG, "GameLayer: Exception caught executing GameController#moveUp()")
+                    }
+                    Direction.DOWN -> try {
+                        controller.moveDown()
+                        Log.d(TAG, "GameLayer: Successfully executed GameController#moveDown()")
+                    } catch (e: NullPointerException) {
+                        Log.d(
+                            TAG,
+                            "GameLayer: Exception caught executing GameController#moveDown()"
+                        )
+                    }
+                    Direction.LEFT -> try {
+                        controller.moveLeft()
+                        Log.d(TAG, "GameLayer: Successfully executed GameController#moveLeft()")
+                    } catch (e: NullPointerException) {
+                        Log.d(
+                            TAG,
+                            "GameLayer: Exception caught executing GameController#moveLeft()"
+                        )
+                    }
                     Direction.UNIT -> Unit
                 }
             }
@@ -383,6 +421,8 @@ fun Tile(
 
 fun Modifier.swipeDirectionListener(
     directionState: MutableState<Direction>,
+    allowMoveState: MutableState<Boolean>,
+    coroutineScope: CoroutineScope,
     onSwipeEnd: (Direction) -> Unit
 ): Modifier {
     return this.pointerInput(Unit) {
@@ -415,8 +455,15 @@ fun Modifier.swipeDirectionListener(
                 }
             },
             onDragEnd = {
-                onSwipeEnd(directionState.value)
-                directionState.value = Direction.UNIT
+                if (allowMoveState.value) {
+                    onSwipeEnd(directionState.value)
+                    directionState.value = Direction.UNIT
+                    coroutineScope.launch(Dispatchers.Default) {
+                        allowMoveState.value = false
+                        delay(timeMillis = Constants.ANIMATION_DURATION*2L)
+                        allowMoveState.value = true
+                    }
+                }
             })
     }
 }

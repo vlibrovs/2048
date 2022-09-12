@@ -609,7 +609,7 @@ class GameController(private val coroutineScope: CoroutineScope) {
                             row[1].level.value = null
                             row[1].positionX.value = 1
                         }
-                    } else successful = false
+                    } else continue
                 }
                 "0101" -> {
                     successful = true
@@ -706,7 +706,7 @@ class GameController(private val coroutineScope: CoroutineScope) {
 
     fun moveDown() {
         for (tileData in gameState) tileData.justCreated.value = false
-        var successful = true
+        var successful = false
         val scheme = getColumnScheme()
         for (column in scheme) {
             when (String(CharArray(4) { index -> if (column[index].level.value == null) '0' else '1' })) {
@@ -993,7 +993,7 @@ class GameController(private val coroutineScope: CoroutineScope) {
     fun moveUp() {
         for (tileData in gameState) tileData.justCreated.value = false
         val scheme = getColumnScheme()
-        var successful = true
+        var successful = false
         for (column in scheme) {
             when (String(CharArray(4) { index -> if (column[index].level.value == null) '0' else '1' })) {
                 "1111" -> {
@@ -1181,7 +1181,7 @@ class GameController(private val coroutineScope: CoroutineScope) {
                             column[1].level.value = null
                             column[1].positionY.value = 1
                         }
-                    } else successful = false
+                    } else continue
                 }
                 "0101" -> {
                     successful = true
@@ -1276,7 +1276,7 @@ class GameController(private val coroutineScope: CoroutineScope) {
         }
     }
 
-    private fun generateNext() {
+    fun generateNext() {
         val emptySquaresList = mutableListOf<TileData>()
         for (tileData in gameState) {
             if (tileData.level.value == null) emptySquaresList.add(tileData)
