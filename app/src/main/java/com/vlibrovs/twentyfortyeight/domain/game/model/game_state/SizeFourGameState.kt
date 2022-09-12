@@ -117,4 +117,15 @@ class SizeFourGameState(
     override fun iterator(): Iterator<TileData> = values.iterator()
 
     override fun get(index: Int) = values[index]
+
+    override fun toString(): String {
+        val sb = StringBuilder()
+        var counter = 1
+        for (tileData in this) {
+            sb.append(tileData.level.value ?: 0).append(' ')
+            if (counter % 4 == 0 && counter != 16) sb.appendLine()
+            counter++
+        }
+        return sb.toString()
+    }
 }
