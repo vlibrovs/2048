@@ -1,4 +1,4 @@
-package com.vlibrovs.twentyfortyeight.domain.game
+package com.vlibrovs.twentyfortyeight.domain.game.model
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
