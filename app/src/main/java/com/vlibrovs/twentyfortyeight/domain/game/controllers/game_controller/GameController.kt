@@ -1,6 +1,6 @@
 package com.vlibrovs.twentyfortyeight.domain.game.controllers.game_controller
 
-import com.vlibrovs.twentyfortyeight.data.entity.Game
+import com.vlibrovs.twentyfortyeight.data.model.game.Game
 import com.vlibrovs.twentyfortyeight.domain.game.controllers.animator.Animator
 import com.vlibrovs.twentyfortyeight.domain.game.controllers.generator.Generator
 import com.vlibrovs.twentyfortyeight.domain.game.controllers.move_controller.MoveController

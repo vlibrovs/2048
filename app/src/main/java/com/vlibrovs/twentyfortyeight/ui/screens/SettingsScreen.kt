@@ -22,21 +22,24 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
 import com.vlibrovs.twentyfortyeight.R
 import com.vlibrovs.twentyfortyeight.common.getValues
-import com.vlibrovs.twentyfortyeight.data.model.Theme
+import com.vlibrovs.twentyfortyeight.data.model.theme.Theme
 import com.vlibrovs.twentyfortyeight.ui.common.composables.Button
 import com.vlibrovs.twentyfortyeight.ui.common.composables.SecondaryBackgroundBox
 import com.vlibrovs.twentyfortyeight.ui.common.fonts.Fonts
 import com.vlibrovs.twentyfortyeight.ui.common.navigation.Screen
 import com.vlibrovs.twentyfortyeight.ui.common.window.rememberWindowInfo
+import com.vlibrovs.twentyfortyeight.ui.viewmodel.MainViewModel
 
 @Composable
 fun SettingsScreen(
     theme: Theme,
     themes: List<Theme>,
-    navController: NavController
+    navController: NavController,
+    viewModel: MainViewModel
 ) {
     val values = getValues(rememberWindowInfo().screenWidthInfo)
     Column(
@@ -106,7 +109,7 @@ fun SettingsScreen(
                     modifier = Modifier.fillMaxSize()
                 ) {
                     items(themes) {
-                        ThemeItem(theme = it, navController = navController)
+                        ThemeItem(theme = it, navController = navController, viewModel)
                     }
                 }
             }
@@ -124,7 +127,8 @@ fun SettingsScreen(
 }
 
 @Composable
-fun ThemeItem(theme: Theme, navController: NavController) {
+fun ThemeItem(theme: Theme, navController: NavController, viewModel: MainViewModel) {
+    val isSelected = theme == viewModel.selectedTheme.value
     val values = getValues(rememberWindowInfo().screenWidthInfo)
     Row(
         modifier = Modifier
@@ -136,11 +140,14 @@ fun ThemeItem(theme: Theme, navController: NavController) {
             )
             .padding(values.themeItemPadding)
             .clickable {
-                navController.navigate(Screen.ThemeEdit.route+"?editTheme=${theme.name}")
+                if (isSelected) {
+                    navController.navigate(Screen.ThemeEdit.route+"?editTheme=${theme.name}")
+                }
+                else viewModel.selectTheme(theme)
             },
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement =
-        if (theme.isSelected) Arrangement.SpaceBetween
+        if (isSelected) Arrangement.SpaceBetween
         else Arrangement.Start
     ) {
         Text(
@@ -157,7 +164,7 @@ fun ThemeItem(theme: Theme, navController: NavController) {
                 )
             )
         )
-        if (theme.isSelected) {
+        if (isSelected) {
             Box(
                 modifier = Modifier
                     .size(values.addThemeButtonSize / 1.5f)

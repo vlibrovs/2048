@@ -1,9 +1,8 @@
-package com.vlibrovs.twentyfortyeight.data.model
+package com.vlibrovs.twentyfortyeight.data.model.theme
 
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.res.stringResource
-import com.vlibrovs.twentyfortyeight.data.entity.ThemeEntity
+import com.vlibrovs.twentyfortyeight.data.model.Gradient
 import java.lang.StringBuilder
 
 data class Theme(
@@ -14,17 +13,16 @@ data class Theme(
     var textColor: Color,
     var linesColor: Color,
     var tileStyles: Map<Int, Gradient>,
-    var isSelected: Boolean = false
 ) {
     fun toThemeEntity(): ThemeEntity {
         val sb = StringBuilder()
-        for (style in tileStyles.values) {
-            style.apply {
-                sb.append("/")
+        for (level in tileStyles.keys) {
+            tileStyles[level]!!.apply {
+                sb.append(level).append("/")
                     .append(colorStart.toArgb())
                     .append("/")
                     .append(colorEnd.toArgb())
-                    .append("/\n")
+                    .appendLine()
             }
         }
         return ThemeEntity(
@@ -50,7 +48,6 @@ data class Theme(
             buttonColor = Color(0xFF73CCCC),
             textColor = Color(0xFFF0FFFF),
             linesColor = Color(0x1E1E1E1E),
-            isSelected = true,
             tileStyles = mapOf(
                 Pair(
                     1, Gradient(

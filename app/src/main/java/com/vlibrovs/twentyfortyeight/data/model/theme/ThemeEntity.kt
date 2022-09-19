@@ -1,10 +1,9 @@
-package com.vlibrovs.twentyfortyeight.data.entity
+package com.vlibrovs.twentyfortyeight.data.model.theme
 
 import androidx.compose.ui.graphics.Color
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.vlibrovs.twentyfortyeight.data.model.Gradient
-import com.vlibrovs.twentyfortyeight.data.model.Theme
 
 @Entity(tableName = "themes")
 data class ThemeEntity(
@@ -20,14 +19,13 @@ data class ThemeEntity(
 ) {
     fun toTheme(): Theme {
         val tileStylesMap = mutableMapOf<Int, Gradient>()
-        var level = 1
         for (line in tileStyles.lines()) {
             val values = line.split('/')
+            val level = values[0].toInt()
             tileStylesMap[level] = Gradient(
-                Color(values[0].toInt()),
-                Color(values[1].toInt())
+                Color(values[1].toInt()),
+                Color(values[2].toInt())
             )
-            level++
         }
         return Theme(
             name = name,

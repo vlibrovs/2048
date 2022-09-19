@@ -3,13 +3,9 @@ package com.vlibrovs.twentyfortyeight.ui.activity
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavType
@@ -18,20 +14,32 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import com.vlibrovs.twentyfortyeight.data.entity.Game
-import com.vlibrovs.twentyfortyeight.data.model.Theme
+import com.vlibrovs.twentyfortyeight.common.Constants
+import com.vlibrovs.twentyfortyeight.data.model.theme.Theme
 import com.vlibrovs.twentyfortyeight.ui.common.navigation.Screen
 import com.vlibrovs.twentyfortyeight.ui.screens.*
 import com.vlibrovs.twentyfortyeight.ui.screens.gamescreen.GameScreen
-import java.util.*
+import com.vlibrovs.twentyfortyeight.ui.viewmodel.MainViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : ComponentActivity() {
+
+    private val viewModel by viewModel<MainViewModel>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val sharedPreferences = getSharedPreferences(Constants.PREFERENCE_KEY, MODE_PRIVATE)
+        if (sharedPreferences.getString(Constants.SELECTED_THEME, null) == null)
+            with(sharedPreferences.edit()) {
+                putString(Constants.SELECTED_THEME, Theme.Main.name)
+            }
+        viewModel.sharedPreferences = sharedPreferences
+        sharedPreferences.getString(Constants.SELECTED_THEME, null)
+            ?.let { viewModel.selectTheme(it) }
         setContent {
             val systemUiController = rememberSystemUiController()
-            var theme by remember {
-                mutableStateOf(Theme.Main)
+            val theme by remember {
+                viewModel.selectedTheme
             }
             val navController = rememberNavController()
             systemUiController.setStatusBarColor(theme.backgroundGradient.colorStart)
@@ -52,24 +60,20 @@ class MainActivity : ComponentActivity() {
                     SettingsScreen(
                         theme = theme,
                         navController = navController,
-                        themes = listOf(theme)
-                    ) // TODO: Replace with actual list of themes
+                        themes = viewModel.themeList,
+                        viewModel = viewModel
+                    )
                 }
 
                 composable(route = Screen.Stats.route) {
                     StatsScreen(
                         theme = theme, navController = navController,
-                        games = listOf(
-                            Game(1, 19287, 236, Date()),
-                            Game(2, 187236, 123, Date()),
-                            Game(3, 127863, 136, Date()),
-                            Game(4, 123412, 743, Date())
-                        ),
-                        bestScore = 0,
-                        averageMoves = 0,
-                        averageScore = 0,
-                        mostMoves = 0
-                    ) // TODO: Replace with actual data
+                        games = viewModel.gameList,
+                        bestScore = viewModel.bestScore,
+                        averageMoves = viewModel.averageMoves,
+                        averageScore = viewModel.averageScore,
+                        mostMoves = viewModel.mostMoves
+                    )
                 }
 
                 composable(route = Screen.ThemeEdit.route + "?editThemeName={editThemeName}",
@@ -102,18 +106,19 @@ class MainActivity : ComponentActivity() {
                     ) // TODO: Replace with actual argument
                 }
 
-                composable(route = Screen.ColorPicker.route + "/{editColor}/{entryRoute}", arguments = listOf(
-                    navArgument("editColor") {
-                        type = NavType.IntType
-                        nullable = false
-                        defaultValue = 0xffffffff
-                    },
-                    navArgument("entryRoute") {
-                        type = NavType.StringType
-                        nullable = false
-                        defaultValue = ""
-                    }
-                )) { entry ->
+                composable(route = Screen.ColorPicker.route + "/{editColor}/{entryRoute}",
+                    arguments = listOf(
+                        navArgument("editColor") {
+                            type = NavType.IntType
+                            nullable = false
+                            defaultValue = 0xffffffff
+                        },
+                        navArgument("entryRoute") {
+                            type = NavType.StringType
+                            nullable = false
+                            defaultValue = ""
+                        }
+                    )) { entry ->
                     ColorPickerScreen(
                         theme = theme,
                         color = if (entry.arguments != null) Color(entry.arguments!!.getInt("editColor")) else Color.White,

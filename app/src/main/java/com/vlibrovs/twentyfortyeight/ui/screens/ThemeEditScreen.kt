@@ -17,14 +17,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Devices
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.vlibrovs.twentyfortyeight.R
-import com.vlibrovs.twentyfortyeight.common.Values
 import com.vlibrovs.twentyfortyeight.common.getValues
-import com.vlibrovs.twentyfortyeight.data.model.Theme
+import com.vlibrovs.twentyfortyeight.data.model.theme.Theme
 import com.vlibrovs.twentyfortyeight.ui.common.composables.Button
 import com.vlibrovs.twentyfortyeight.ui.common.composables.ColorCircle
 import com.vlibrovs.twentyfortyeight.ui.common.composables.SecondaryBackgroundBox

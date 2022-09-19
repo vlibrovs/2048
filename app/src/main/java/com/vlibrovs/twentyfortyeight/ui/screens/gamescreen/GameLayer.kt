@@ -6,7 +6,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import com.vlibrovs.twentyfortyeight.data.model.Direction
-import com.vlibrovs.twentyfortyeight.data.model.Theme
+import com.vlibrovs.twentyfortyeight.data.model.theme.Theme
 import com.vlibrovs.twentyfortyeight.domain.game.controllers.game_controller.SizeFourGameController
 import com.vlibrovs.twentyfortyeight.ui.common.functions.swipeDirectionListener
 import java.lang.NullPointerException
@@ -49,12 +49,14 @@ fun GameLayer(
                             TAG,
                             "GameLayer: Exception caught executing GameController#moveRight()"
                         )
+                        Log.d(TAG, controller.gameState.toString())
                     }
                     Direction.UP -> try {
                         controller.moveController.moveUp()
                         Log.d(TAG, "GameLayer: Successfully executed GameController#moveUp()")
                     } catch (e: NullPointerException) {
                         Log.d(TAG, "GameLayer: Exception caught executing GameController#moveUp()")
+                        Log.d(TAG, controller.gameState.toString())
                     }
                     Direction.DOWN -> try {
                         controller.moveController.moveDown()
@@ -64,6 +66,7 @@ fun GameLayer(
                             TAG,
                             "GameLayer: Exception caught executing GameController#moveDown()"
                         )
+                        Log.d(TAG, controller.gameState.toString())
                     }
                     Direction.LEFT -> try {
                         controller.moveController.moveLeft()
@@ -73,6 +76,7 @@ fun GameLayer(
                             TAG,
                             "GameLayer: Exception caught executing GameController#moveLeft()"
                         )
+                        Log.d(TAG, controller.gameState.toString())
                     }
                     Direction.UNIT -> Unit
                 }
