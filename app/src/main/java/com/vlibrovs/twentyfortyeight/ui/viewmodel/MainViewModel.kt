@@ -1,6 +1,7 @@
 package com.vlibrovs.twentyfortyeight.ui.viewmodel
 
 import android.content.SharedPreferences
+import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -10,6 +11,8 @@ import com.vlibrovs.twentyfortyeight.data.model.theme.Theme
 import com.vlibrovs.twentyfortyeight.data.repository.Repository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+
+const val TAG = "Themes"
 
 class MainViewModel(private val repository: Repository) : ViewModel() {
 
@@ -66,18 +69,26 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
         for (theme in _themeList) {
             if (theme == newTheme) {
                 selectedTheme.value = newTheme
-                sharedPreferences!!.edit().putString(Constants.SELECTED_THEME, newTheme.name)
+                sharedPreferences!!.edit().apply{
+                    putString(Constants.SELECTED_THEME, newTheme.name)
+                    apply()
+                }
             }
         }
+        Log.d(TAG, "selectTheme: New theme is ${sharedPreferences!!.getString(Constants.SELECTED_THEME, "")}")
     }
 
     fun selectTheme(newThemeName: String) {
         for (theme in _themeList) {
             if (theme.name == newThemeName) {
                 selectedTheme.value = theme
-                sharedPreferences!!.edit().putString(Constants.SELECTED_THEME, newThemeName)
+                sharedPreferences!!.edit().apply{
+                    putString(Constants.SELECTED_THEME, newThemeName)
+                    apply()
+                }
             }
         }
+        Log.d(TAG, "selectTheme: New theme is ${sharedPreferences!!.getString(Constants.SELECTED_THEME, "")}")
     }
 
     private fun getGames() {

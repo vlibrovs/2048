@@ -1,6 +1,7 @@
 package com.vlibrovs.twentyfortyeight.ui.activity
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
@@ -22,6 +23,8 @@ import com.vlibrovs.twentyfortyeight.ui.screens.gamescreen.GameScreen
 import com.vlibrovs.twentyfortyeight.ui.viewmodel.MainViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
+const val TAG = "Themes"
+
 class MainActivity : ComponentActivity() {
 
     private val viewModel by viewModel<MainViewModel>()
@@ -29,13 +32,10 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val sharedPreferences = getSharedPreferences(Constants.PREFERENCE_KEY, MODE_PRIVATE)
-        if (sharedPreferences.getString(Constants.SELECTED_THEME, null) == null)
-            with(sharedPreferences.edit()) {
-                putString(Constants.SELECTED_THEME, Theme.Main.name)
-            }
         viewModel.sharedPreferences = sharedPreferences
-        sharedPreferences.getString(Constants.SELECTED_THEME, null)
-            ?.let { viewModel.selectTheme(it) }
+        viewModel.selectTheme(
+            sharedPreferences.getString(Constants.SELECTED_THEME, "Main Theme") ?: Theme.Main.name
+        )
         setContent {
             val systemUiController = rememberSystemUiController()
             val theme by remember {
