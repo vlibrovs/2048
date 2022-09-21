@@ -19,19 +19,40 @@ import com.github.skydoves.colorpicker.compose.HsvColorPicker
 import com.github.skydoves.colorpicker.compose.rememberColorPickerController
 import com.vlibrovs.twentyfortyeight.R
 import com.vlibrovs.twentyfortyeight.common.getValues
+import com.vlibrovs.twentyfortyeight.data.model.theme.ColorPosition
 import com.vlibrovs.twentyfortyeight.data.model.theme.Theme
+import com.vlibrovs.twentyfortyeight.data.model.theme.ThemePropertyType
 import com.vlibrovs.twentyfortyeight.ui.common.composables.Button
 import com.vlibrovs.twentyfortyeight.ui.common.composables.SecondaryBackgroundBox
 import com.vlibrovs.twentyfortyeight.ui.common.fonts.Fonts
+import com.vlibrovs.twentyfortyeight.ui.common.navigation.Screen
 import com.vlibrovs.twentyfortyeight.ui.common.window.rememberWindowInfo
+import com.vlibrovs.twentyfortyeight.ui.viewmodel.EditViewModel
+import org.koin.core.scope.ScopeID
 
 @Composable
 fun ColorPickerScreen(
     theme: Theme,
-    color: Color,
     navController: NavController,
-    entryRoute: String
+    editViewModel: EditViewModel
 ) {
+    val themePropertyType = editViewModel.themePropertyType!!
+    val color = remember {
+        when (themePropertyType) {
+            is ThemePropertyType.BackgroundColor -> {
+                editViewModel.themeBuilder!!.backgroundGradient.run {
+                    if (themePropertyType.position == ColorPosition.START) colorStart else colorEnd
+                }
+            }
+            is ThemePropertyType.ButtonColor -> editViewModel.themeBuilder!!.buttonColor
+            is ThemePropertyType.LinesColor -> editViewModel.themeBuilder!!.linesColor
+            is ThemePropertyType.SecondaryBackgroundColor -> editViewModel.themeBuilder!!.secondaryBackgroundColor
+            is ThemePropertyType.TextColor -> editViewModel.themeBuilder!!.textColor
+            is ThemePropertyType.TileColor -> editViewModel.themeBuilder!!.tileStyles[themePropertyType.level]!!.run {
+                if (themePropertyType.colorPosition == ColorPosition.START) colorStart else colorEnd
+            }
+        }
+    }
     val values = getValues(rememberWindowInfo().screenWidthInfo)
     val controller = rememberColorPickerController()
     var currentColor by remember {
@@ -140,7 +161,42 @@ fun ColorPickerScreen(
             text = stringResource(id = R.string.save),
             fontSize = values.buttonTextSize,
             onClick = {
-                navController.navigate(entryRoute.replace('*', '/'))
+                when (themePropertyType) {
+                    is ThemePropertyType.BackgroundColor -> {
+                        editViewModel.themeBuilder!!.backgroundGradient.apply {
+                            when (themePropertyType.position) {
+                                ColorPosition.START -> colorStart = currentColor
+                                ColorPosition.END -> colorEnd = currentColor
+                            }
+                        }
+                        navController.navigate(Screen.ThemeEdit.route)
+                    }
+                    is ThemePropertyType.ButtonColor -> {
+                        editViewModel.themeBuilder!!.buttonColor = currentColor
+                        navController.navigate(Screen.ThemeEdit.route)
+                    }
+                    is ThemePropertyType.LinesColor -> {
+                        editViewModel.themeBuilder!!.linesColor = currentColor
+                        navController.navigate(Screen.ThemeEdit.route)
+                    }
+                    is ThemePropertyType.SecondaryBackgroundColor -> {
+                        editViewModel.themeBuilder!!.secondaryBackgroundColor = currentColor
+                        navController.navigate(Screen.ThemeEdit.route)
+                    }
+                    is ThemePropertyType.TextColor -> {
+                        editViewModel.themeBuilder!!.textColor = currentColor
+                        navController.navigate(Screen.ThemeEdit.route)
+                    }
+                    is ThemePropertyType.TileColor -> {
+                        editViewModel.themeBuilder!!.tileStyles[themePropertyType.level]!!.apply {
+                            when (themePropertyType.colorPosition) {
+                                ColorPosition.START -> colorStart = currentColor
+                                ColorPosition.END -> colorEnd = currentColor
+                            }
+                        }
+                        navController.navigate(Screen.TilesStyles.route)
+                    }
+                }
             },
             theme = theme
         )
@@ -151,7 +207,10 @@ fun ColorPickerScreen(
             text = stringResource(id = R.string.cancel),
             fontSize = values.buttonTextSize,
             onClick = {
-                navController.navigate(entryRoute.replace('*', '/'))
+                navController.navigate(
+                    if (themePropertyType is ThemePropertyType.TileColor)
+                        Screen.TilesStyles.route else Screen.ThemeEdit.route
+                )
             },
             theme = theme
         )

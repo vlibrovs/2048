@@ -12,18 +12,21 @@ import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import com.vlibrovs.twentyfortyeight.R
 import com.vlibrovs.twentyfortyeight.common.getValues
+import com.vlibrovs.twentyfortyeight.data.model.theme.ColorPosition
 import com.vlibrovs.twentyfortyeight.data.model.theme.Theme
+import com.vlibrovs.twentyfortyeight.data.model.theme.ThemePropertyType
 import com.vlibrovs.twentyfortyeight.ui.common.composables.Button
 import com.vlibrovs.twentyfortyeight.ui.common.composables.ColorCircle
 import com.vlibrovs.twentyfortyeight.ui.common.composables.SecondaryBackgroundBox
 import com.vlibrovs.twentyfortyeight.ui.common.composables.Tile
 import com.vlibrovs.twentyfortyeight.ui.common.navigation.Screen
 import com.vlibrovs.twentyfortyeight.ui.common.window.rememberWindowInfo
+import com.vlibrovs.twentyfortyeight.ui.viewmodel.EditViewModel
 
 @Composable
 fun TileStylesScreen(
     theme: Theme,
-    editTheme: Theme?,
+    editViewModel: EditViewModel,
     navController: NavController
 ) {
     val values = getValues(rememberWindowInfo().screenWidthInfo)
@@ -51,7 +54,7 @@ fun TileStylesScreen(
                     TileStyleSetting(
                         tileLevel = index + 1,
                         theme = theme,
-                        editTheme = editTheme,
+                        editViewModel = editViewModel,
                         navController = navController
                     )
                 }
@@ -60,7 +63,9 @@ fun TileStylesScreen(
         Button(
             text = stringResource(id = R.string.save),
             fontSize = values.buttonTextSize,
-            onClick = { navController.navigate(Screen.ThemeEdit.route + "?editTheme=${editTheme?.name}") },
+            onClick = {
+                navController.navigate(Screen.ThemeEdit.route)
+            },
             theme = theme
         )
     }
@@ -70,7 +75,7 @@ fun TileStylesScreen(
 fun TileStyleSetting(
     tileLevel: Int,
     theme: Theme,
-    editTheme: Theme?,
+    editViewModel: EditViewModel,
     navController: NavController
 ) {
     val values = getValues(rememberWindowInfo().screenWidthInfo)
@@ -92,14 +97,15 @@ fun TileStyleSetting(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.End
         ) {
-            val style = (editTheme ?: theme).tileStyles[tileLevel]!!
+            val style = editViewModel.themeBuilder!!.tileStyles[tileLevel]!!
             ColorCircle(
                 fillColor = style.colorStart,
                 outlineColor = theme.linesColor,
                 outlineWidth = values.colorCircleOutlineWidth,
                 size = values.addThemeButtonSize,
                 onClick = {
-                    navController.navigate(Screen.ColorPicker.route+"/${style.colorStart.toArgb()}/${Screen.TilesStyles.route}")
+                    editViewModel.themePropertyType = ThemePropertyType.TileColor(level = tileLevel, colorPosition = ColorPosition.START)
+                    navController.navigate(Screen.ColorPicker.route)
                 }
             )
             Spacer(modifier = Modifier.width(values.settingsInboxPadding.calculateTopPadding()))
@@ -109,7 +115,8 @@ fun TileStyleSetting(
                 outlineWidth = values.colorCircleOutlineWidth,
                 size = values.addThemeButtonSize,
                 onClick = {
-                    navController.navigate(Screen.ColorPicker.route+"/${style.colorEnd.toArgb()}/${Screen.TilesStyles.route}")
+                    editViewModel.themePropertyType = ThemePropertyType.TileColor(level = tileLevel, colorPosition = ColorPosition.END)
+                    navController.navigate(Screen.ColorPicker.route)
                 }
             )
         }

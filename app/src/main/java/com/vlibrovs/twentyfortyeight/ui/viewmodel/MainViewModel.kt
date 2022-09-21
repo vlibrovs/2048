@@ -7,12 +7,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vlibrovs.twentyfortyeight.common.Constants
 import com.vlibrovs.twentyfortyeight.data.model.game.Game
+import com.vlibrovs.twentyfortyeight.data.model.theme.DefaultThemes
 import com.vlibrovs.twentyfortyeight.data.model.theme.Theme
 import com.vlibrovs.twentyfortyeight.data.repository.Repository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-
-const val TAG = "Themes"
 
 class MainViewModel(private val repository: Repository) : ViewModel() {
 
@@ -61,34 +60,37 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
             return most
         }
 
-    val selectedTheme = mutableStateOf(Theme.Main)
+    var selectedTheme = DefaultThemes.Main
 
     var sharedPreferences: SharedPreferences? = null
 
     fun selectTheme(newTheme: Theme) {
         for (theme in _themeList) {
             if (theme == newTheme) {
-                selectedTheme.value = newTheme
-                sharedPreferences!!.edit().apply{
+                selectedTheme = newTheme
+                sharedPreferences!!.edit().apply {
                     putString(Constants.SELECTED_THEME, newTheme.name)
                     apply()
                 }
             }
         }
-        Log.d(TAG, "selectTheme: New theme is ${sharedPreferences!!.getString(Constants.SELECTED_THEME, "")}")
     }
 
     fun selectTheme(newThemeName: String) {
         for (theme in _themeList) {
             if (theme.name == newThemeName) {
-                selectedTheme.value = theme
-                sharedPreferences!!.edit().apply{
+                selectedTheme = theme
+                sharedPreferences!!.edit().apply {
                     putString(Constants.SELECTED_THEME, newThemeName)
                     apply()
                 }
             }
         }
-        Log.d(TAG, "selectTheme: New theme is ${sharedPreferences!!.getString(Constants.SELECTED_THEME, "")}")
+    }
+
+    fun getThemeByName(name: String?): Theme? {
+        for (theme in _themeList) if (theme.name == name) return theme
+        return null
     }
 
     private fun getGames() {
@@ -102,6 +104,18 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
         _themeList.clear()
         viewModelScope.launch(Dispatchers.IO) {
             _themeList += repository.getAllThemes()
+        }
+    }
+
+    fun addTheme(theme: Theme) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.addTheme(theme)
+        }
+    }
+
+    fun addGame(game: Game) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.addGame(game)
         }
     }
 

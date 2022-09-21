@@ -1,47 +1,22 @@
 package com.vlibrovs.twentyfortyeight.data.model.theme
 
-import androidx.compose.runtime.Applier
 import androidx.compose.ui.graphics.Color
-import androidx.room.Entity
+import com.vlibrovs.twentyfortyeight.common.Constants
 import com.vlibrovs.twentyfortyeight.data.model.Gradient
 
-@Entity(tableName = "themes")
-data class Theme(
-    var id: Int? = null,
-    var name: String,
-    var backgroundGradient: Gradient,
-    var secondaryBackgroundColor: Color,
-    var buttonColor: Color,
-    var textColor: Color,
-    var linesColor: Color,
-    var tileStyles: Map<Int, Gradient>
-) {
+object DefaultThemes {
 
-    fun edit(block: Builder.() -> Unit = {}) : Builder {
-        return Builder(
-            id,
-            name,
-            backgroundGradient,
-            secondaryBackgroundColor,
-            buttonColor,
-            textColor,
-            linesColor,
-            tileStyles as MutableMap<Int, Gradient>
-        ).apply(block)
-    }
-
-    class Builder(
-        var id: Int? = null,
-        var name: String = "",
-        val backgroundGradient: Gradient = Gradient(
-            DefaultThemes.Main.backgroundGradient.colorStart,
-            DefaultThemes.Main.backgroundGradient.colorEnd
+    val Main = Theme(
+        name = Constants.MAIN_THEME_NAME,
+        backgroundGradient = Gradient(
+            Color(0xFF66FFFF),
+            Color(0xFFCCFFFF),
         ),
-        var secondaryBackgroundColor: Color = DefaultThemes.Main.secondaryBackgroundColor,
-        var buttonColor: Color = DefaultThemes.Main.buttonColor,
-        var textColor: Color = DefaultThemes.Main.textColor,
-        var linesColor: Color = DefaultThemes.Main.linesColor,
-        val tileStyles: MutableMap<Int, Gradient> = mutableMapOf(
+        secondaryBackgroundColor = Color(0x75324E4E),
+        buttonColor = Color(0xFF73CCCC),
+        textColor = Color(0xFFF0FFFF),
+        linesColor = Color(0x1E1E1E1E),
+        tileStyles = mapOf(
             Pair(
                 1, Gradient(
                     colorStart = Color(0xFF00FFFF),
@@ -145,21 +120,6 @@ data class Theme(
                 )
             )
         )
-    ) {
-        fun addTileStyle(level: Int, gradient: Gradient) {
-            tileStyles[level] = gradient
-        }
-
-        fun build() = Theme(
-            id = id,
-            name = name,
-            backgroundGradient = backgroundGradient,
-            secondaryBackgroundColor = secondaryBackgroundColor,
-            buttonColor = buttonColor,
-            textColor = textColor,
-            linesColor = linesColor,
-            tileStyles = tileStyles
-        )
-    }
+    )
 
 }

@@ -32,6 +32,7 @@ import com.vlibrovs.twentyfortyeight.ui.common.composables.SecondaryBackgroundBo
 import com.vlibrovs.twentyfortyeight.ui.common.fonts.Fonts
 import com.vlibrovs.twentyfortyeight.ui.common.navigation.Screen
 import com.vlibrovs.twentyfortyeight.ui.common.window.rememberWindowInfo
+import com.vlibrovs.twentyfortyeight.ui.viewmodel.EditViewModel
 import com.vlibrovs.twentyfortyeight.ui.viewmodel.MainViewModel
 
 @Composable
@@ -39,7 +40,8 @@ fun SettingsScreen(
     theme: Theme,
     themes: List<Theme>,
     navController: NavController,
-    viewModel: MainViewModel
+    viewModel: MainViewModel,
+    editViewModel: EditViewModel
 ) {
     val values = getValues(rememberWindowInfo().screenWidthInfo)
     Column(
@@ -94,7 +96,10 @@ fun SettingsScreen(
                             .background(
                                 shape = CircleShape,
                                 color = theme.buttonColor
-                            ),
+                            ).clickable {
+                                editViewModel.themeBuilder = Theme.Builder()
+                                navController.navigate(Screen.ThemeEdit.route)
+                            },
                         contentAlignment = Alignment.Center
                     ) {
                         Icon(
@@ -109,7 +114,7 @@ fun SettingsScreen(
                     modifier = Modifier.fillMaxSize()
                 ) {
                     items(themes) {
-                        ThemeItem(theme = it, navController = navController, viewModel)
+                        ThemeItem(theme = it, navController = navController, viewModel, editViewModel)
                     }
                 }
             }
@@ -127,8 +132,8 @@ fun SettingsScreen(
 }
 
 @Composable
-fun ThemeItem(theme: Theme, navController: NavController, viewModel: MainViewModel) {
-    val isSelected = theme == viewModel.selectedTheme.value
+fun ThemeItem(theme: Theme, navController: NavController, viewModel: MainViewModel, editViewModel: EditViewModel) {
+    val isSelected = theme == viewModel.selectedTheme
     val values = getValues(rememberWindowInfo().screenWidthInfo)
     Row(
         modifier = Modifier
@@ -141,7 +146,8 @@ fun ThemeItem(theme: Theme, navController: NavController, viewModel: MainViewMod
             .padding(values.themeItemPadding)
             .clickable {
                 if (isSelected) {
-                    navController.navigate(Screen.ThemeEdit.route+"?editTheme=${theme.name}")
+                    editViewModel.themeBuilder = theme.edit()
+                    navController.navigate(Screen.ThemeEdit.route)
                 }
                 else viewModel.selectTheme(theme)
             },
