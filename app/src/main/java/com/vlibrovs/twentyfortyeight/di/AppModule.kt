@@ -12,6 +12,7 @@ import com.vlibrovs.twentyfortyeight.domain.game.model.game_state.SizeFourGameSt
 import com.vlibrovs.twentyfortyeight.ui.viewmodel.EditViewModel
 import com.vlibrovs.twentyfortyeight.ui.viewmodel.MainViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
+import org.koin.core.parameter.parametersOf
 import org.koin.dsl.module
 import java.util.*
 
@@ -24,7 +25,7 @@ val appModule = module {
         MainViewModel(get())
     }
 
-    viewModel {
-        EditViewModel()
+    viewModel { parameters ->
+        EditViewModel(get(), parameters.get())
     }
 }

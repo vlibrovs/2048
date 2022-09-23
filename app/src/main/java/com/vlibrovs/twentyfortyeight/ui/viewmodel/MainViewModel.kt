@@ -1,7 +1,6 @@
 package com.vlibrovs.twentyfortyeight.ui.viewmodel
 
 import android.content.SharedPreferences
-import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -60,36 +59,14 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
             return most
         }
 
-    var selectedTheme = DefaultThemes.Main
+    var selectedThemeId = mutableStateOf(-1)
 
     var sharedPreferences: SharedPreferences? = null
 
-    fun selectTheme(newTheme: Theme) {
-        for (theme in _themeList) {
-            if (theme == newTheme) {
-                selectedTheme = newTheme
-                sharedPreferences!!.edit().apply {
-                    putString(Constants.SELECTED_THEME, newTheme.name)
-                    apply()
-                }
-            }
+    fun getThemeById(id: Int): Theme? {
+        for (theme in themeList) {
+            if (theme.id == id) return theme
         }
-    }
-
-    fun selectTheme(newThemeName: String) {
-        for (theme in _themeList) {
-            if (theme.name == newThemeName) {
-                selectedTheme = theme
-                sharedPreferences!!.edit().apply {
-                    putString(Constants.SELECTED_THEME, newThemeName)
-                    apply()
-                }
-            }
-        }
-    }
-
-    fun getThemeByName(name: String?): Theme? {
-        for (theme in _themeList) if (theme.name == name) return theme
         return null
     }
 
@@ -100,7 +77,7 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
         }
     }
 
-    private fun getThemes() {
+    fun getThemes() {
         _themeList.clear()
         viewModelScope.launch(Dispatchers.IO) {
             _themeList += repository.getAllThemes()
@@ -109,13 +86,13 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
 
     fun addTheme(theme: Theme) {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.addTheme(theme)
+            repository.saveTheme(theme)
         }
     }
 
     fun addGame(game: Game) {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.addGame(game)
+            repository.saveGame(game)
         }
     }
 

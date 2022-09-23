@@ -7,6 +7,7 @@ import com.vlibrovs.twentyfortyeight.data.model.Gradient
 object DefaultThemes {
 
     val Main = Theme(
+        id = -1,
         name = Constants.MAIN_THEME_NAME,
         backgroundGradient = Gradient(
             Color(0xFF66FFFF),

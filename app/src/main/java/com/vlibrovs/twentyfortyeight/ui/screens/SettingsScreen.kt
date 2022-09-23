@@ -22,7 +22,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
 import com.vlibrovs.twentyfortyeight.R
 import com.vlibrovs.twentyfortyeight.common.getValues
@@ -133,7 +132,7 @@ fun SettingsScreen(
 
 @Composable
 fun ThemeItem(theme: Theme, navController: NavController, viewModel: MainViewModel, editViewModel: EditViewModel) {
-    val isSelected = theme == viewModel.selectedTheme
+    val isSelected = theme.id == viewModel.selectedThemeId.value
     val values = getValues(rememberWindowInfo().screenWidthInfo)
     Row(
         modifier = Modifier
@@ -149,7 +148,7 @@ fun ThemeItem(theme: Theme, navController: NavController, viewModel: MainViewMod
                     editViewModel.themeBuilder = theme.edit()
                     navController.navigate(Screen.ThemeEdit.route)
                 }
-                else viewModel.selectTheme(theme)
+                else viewModel.selectedThemeId.value = theme.id!!
             },
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement =

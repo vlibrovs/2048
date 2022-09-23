@@ -1,10 +1,10 @@
 package com.vlibrovs.twentyfortyeight.ui.activity
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -13,49 +13,75 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.vlibrovs.twentyfortyeight.common.Constants
+import com.vlibrovs.twentyfortyeight.data.model.theme.Theme
 import com.vlibrovs.twentyfortyeight.ui.common.navigation.Screen
 import com.vlibrovs.twentyfortyeight.ui.screens.*
 import com.vlibrovs.twentyfortyeight.ui.screens.gamescreen.GameScreen
 import com.vlibrovs.twentyfortyeight.ui.viewmodel.EditViewModel
 import com.vlibrovs.twentyfortyeight.ui.viewmodel.MainViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.ParametersDefinition
+import org.koin.core.parameter.ParametersHolder
 
 class MainActivity : ComponentActivity() {
 
     private val viewModel by viewModel<MainViewModel>()
-    private val editViewModel by viewModel<EditViewModel>()
+    private val editViewModel by viewModel<EditViewModel>(
+        // Test only
+        parameters = object : ParametersDefinition {
+            override fun invoke(): ParametersHolder {
+                return ParametersHolder(
+                    mutableListOf({ theme: Theme ->
+                        viewModel.apply {
+                            getThemes()
+                            selectedThemeId.value = theme.id!!
+                        }
+                    })
+                )
+            }
+        }
+    )
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val sharedPreferences = getSharedPreferences(Constants.PREFERENCE_KEY, MODE_PRIVATE)
         viewModel.sharedPreferences = sharedPreferences
-        viewModel.selectTheme(
-            sharedPreferences.getString(Constants.SELECTED_THEME, Constants.MAIN_THEME_NAME)
-                ?: Constants.MAIN_THEME_NAME
-        )
+        viewModel.selectedThemeId.value = (
+                sharedPreferences.getString(Constants.SELECTED_THEME_ID, "-1")?.toInt()
+                    ?: -1
+                )
         setContent {
             val systemUiController = rememberSystemUiController()
-            val theme by remember {
-                mutableStateOf(viewModel.selectedTheme)
-            }
             val navController = rememberNavController()
-            systemUiController.setStatusBarColor(theme.backgroundGradient.colorStart)
+            systemUiController.setStatusBarColor(viewModel.run {
+                getThemeById(selectedThemeId.value)!!
+            }.backgroundGradient.colorStart)
             NavHost(
                 modifier = Modifier.fillMaxSize(),
                 navController = navController,
                 startDestination = Screen.MainMenu.route
             ) {
                 composable(route = Screen.MainMenu.route) {
-                    MainMenuScreen(theme = theme, navController = navController)
+                    MainMenuScreen(
+                        theme = viewModel.run {
+                            getThemeById(selectedThemeId.value)!!
+                        },
+                        navController = navController
+                    )
                 }
 
                 composable(route = Screen.Game.route) {
-                    GameScreen(theme = theme, navController = navController)
+                    GameScreen(theme = viewModel.run {
+                        getThemeById(selectedThemeId.value)!!
+                    }, navController = navController)
                 }
 
                 composable(route = Screen.Settings.route) {
                     SettingsScreen(
-                        theme = theme,
+                        theme = viewModel.run {
+                            getThemeById(selectedThemeId.value)!!
+                        },
                         navController = navController,
                         themes = viewModel.themeList,
                         viewModel = viewModel,
@@ -65,7 +91,9 @@ class MainActivity : ComponentActivity() {
 
                 composable(route = Screen.Stats.route) {
                     StatsScreen(
-                        theme = theme, navController = navController,
+                        theme = viewModel.run {
+                            getThemeById(selectedThemeId.value)!!
+                        }, navController = navController,
                         games = viewModel.gameList,
                         bestScore = viewModel.bestScore,
                         averageMoves = viewModel.averageMoves,
@@ -76,7 +104,9 @@ class MainActivity : ComponentActivity() {
 
                 composable(route = Screen.ThemeEdit.route) {
                     ThemeEditScreen(
-                        currentTheme = theme,
+                        currentTheme = viewModel.run {
+                            getThemeById(selectedThemeId.value)!!
+                        },
                         navController = navController,
                         editViewModel = editViewModel
                     )
@@ -84,7 +114,9 @@ class MainActivity : ComponentActivity() {
 
                 composable(route = Screen.TilesStyles.route) {
                     TileStylesScreen(
-                        theme = theme,
+                        theme = viewModel.run {
+                            getThemeById(selectedThemeId.value)!!
+                        },
                         editViewModel = editViewModel,
                         navController = navController
                     )
@@ -92,7 +124,9 @@ class MainActivity : ComponentActivity() {
 
                 composable(route = Screen.ColorPicker.route) {
                     ColorPickerScreen(
-                        theme = theme,
+                        theme = viewModel.run {
+                            getThemeById(selectedThemeId.value)!!
+                        },
                         navController = navController,
                         editViewModel = editViewModel
                     )

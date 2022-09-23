@@ -164,8 +164,8 @@ fun ThemeEditScreen(
             text = stringResource(id = R.string.save),
             fontSize = values.buttonTextSize,
             onClick = {
-                navController.navigate(Screen.Settings.route)
                 editViewModel.finish()
+                navController.navigate(Screen.Settings.route)
             },
             theme = currentTheme
         )

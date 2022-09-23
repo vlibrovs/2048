@@ -12,9 +12,12 @@ import java.util.*
 
 class TestRepository : Repository {
 
+    var nextId = 0
+
     private val themes = mutableListOf(
         DefaultThemes.Main,
         Theme(
+            id = -2,
             name = "Dark Theme",
             backgroundGradient = Gradient(Color.DarkGray, Color.LightGray),
             secondaryBackgroundColor = Color(0x99ffffff),
@@ -138,11 +141,29 @@ class TestRepository : Repository {
     override suspend fun getAllThemes() = themes as List<Theme>
     override suspend fun getAllGames() = games as List<Game>
 
-    override suspend fun addTheme(theme: Theme) {
-        themes.add(theme)
+    override suspend fun saveTheme(theme: Theme) {
+        if (themes.containsId(theme.id)) {
+            themes.replaceById(theme.id!!, theme)
+        }
+        else themes.add(theme)
     }
 
-    override suspend fun addGame(game: Game) {
+    override suspend fun saveGame(game: Game) {
         games.add(game)
     }
+
+    private fun List<Theme>.containsId(id: Int?): Boolean {
+        if (id == null) return false
+        for (theme in this) {
+            if (theme.id == id) return true
+        }
+        return false
+    }
+
+    private fun MutableList<Theme>.replaceById(id: Int, newTheme: Theme) {
+        for (i in 0 until this.size) {
+            if (this[i].id == id) this[i] = newTheme
+        }
+    }
+
 }
