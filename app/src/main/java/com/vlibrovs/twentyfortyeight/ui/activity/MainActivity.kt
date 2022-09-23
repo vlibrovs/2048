@@ -26,26 +26,17 @@ import org.koin.core.parameter.ParametersHolder
 class MainActivity : ComponentActivity() {
 
     private val viewModel by viewModel<MainViewModel>()
-    private val editViewModel by viewModel<EditViewModel>(
-        // Test only
-        parameters = object : ParametersDefinition {
-            override fun invoke(): ParametersHolder {
-                return ParametersHolder(
-                    mutableListOf({ theme: Theme ->
-                        viewModel.apply {
-                            getThemes()
-                            selectedThemeId.value = theme.id!!
-                        }
-                    })
-                )
-            }
-        }
-    )
+    private val editViewModel by viewModel<EditViewModel>()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val sharedPreferences = getSharedPreferences(Constants.PREFERENCE_KEY, MODE_PRIVATE)
+        editViewModel.onThemeSave = {
+            viewModel.apply {
+                getThemes()
+            }
+        }
         viewModel.sharedPreferences = sharedPreferences
         viewModel.selectedThemeId.value = (
                 sharedPreferences.getString(Constants.SELECTED_THEME_ID, "-1")?.toInt()

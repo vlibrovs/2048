@@ -67,7 +67,7 @@ fun ThemeEditScreen(
                         value = themeName,
                         onValueChange = {
                             themeName = it
-                            editViewModel.themeBuilder!!.name
+                            editViewModel.themeBuilder!!.name = it
                         },
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(50.dp),
@@ -247,23 +247,23 @@ fun PropertyItem(
             horizontalArrangement = Arrangement.End
         ) {
             ColorCircle(
-                fillColor = secondColor,
-                outlineColor = theme.linesColor,
-                outlineWidth = values.colorCircleOutlineWidth,
-                size = values.addThemeButtonSize,
-                onClick = {
-                    editViewModel.themePropertyType = ThemePropertyType.BackgroundColor(ColorPosition.END)
-                    navController.navigate(Screen.ColorPicker.route)
-                }
-            )
-            Spacer(modifier = Modifier.width(values.settingsInboxPadding.calculateTopPadding()))
-            ColorCircle(
                 fillColor = firstColor,
                 outlineColor = theme.linesColor,
                 outlineWidth = values.colorCircleOutlineWidth,
                 size = values.addThemeButtonSize,
                 onClick = {
                     editViewModel.themePropertyType = ThemePropertyType.BackgroundColor(ColorPosition.START)
+                    navController.navigate(Screen.ColorPicker.route)
+                }
+            )
+            Spacer(modifier = Modifier.width(values.settingsInboxPadding.calculateTopPadding()))
+            ColorCircle(
+                fillColor = secondColor,
+                outlineColor = theme.linesColor,
+                outlineWidth = values.colorCircleOutlineWidth,
+                size = values.addThemeButtonSize,
+                onClick = {
+                    editViewModel.themePropertyType = ThemePropertyType.BackgroundColor(ColorPosition.END)
                     navController.navigate(Screen.ColorPicker.route)
                 }
             )

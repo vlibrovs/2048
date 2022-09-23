@@ -145,7 +145,12 @@ class TestRepository : Repository {
         if (themes.containsId(theme.id)) {
             themes.replaceById(theme.id!!, theme)
         }
-        else themes.add(theme)
+        else {
+            themes.add(theme.apply {
+                id = nextId
+                nextId++
+            })
+        }
     }
 
     override suspend fun saveGame(game: Game) {

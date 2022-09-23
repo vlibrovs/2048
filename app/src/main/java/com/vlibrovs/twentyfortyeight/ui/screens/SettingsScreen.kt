@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.vlibrovs.twentyfortyeight.R
 import com.vlibrovs.twentyfortyeight.common.getValues
+import com.vlibrovs.twentyfortyeight.data.model.theme.DefaultThemes
 import com.vlibrovs.twentyfortyeight.data.model.theme.Theme
 import com.vlibrovs.twentyfortyeight.ui.common.composables.Button
 import com.vlibrovs.twentyfortyeight.ui.common.composables.SecondaryBackgroundBox
@@ -144,7 +145,7 @@ fun ThemeItem(theme: Theme, navController: NavController, viewModel: MainViewMod
             )
             .padding(values.themeItemPadding)
             .clickable {
-                if (isSelected) {
+                if (isSelected && theme != DefaultThemes.Main) {
                     editViewModel.themeBuilder = theme.edit()
                     navController.navigate(Screen.ThemeEdit.route)
                 }

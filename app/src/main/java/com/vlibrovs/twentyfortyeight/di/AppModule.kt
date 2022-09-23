@@ -25,7 +25,7 @@ val appModule = module {
         MainViewModel(get())
     }
 
-    viewModel { parameters ->
-        EditViewModel(get(), parameters.get())
+    viewModel {
+        EditViewModel(get())
     }
 }
