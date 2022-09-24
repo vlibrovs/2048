@@ -7,9 +7,8 @@ import com.vlibrovs.twentyfortyeight.domain.game.controllers.scheme_controller.S
 import com.vlibrovs.twentyfortyeight.domain.game.controllers.stats_controller.StatsController
 import com.vlibrovs.twentyfortyeight.domain.game.model.TileData
 import com.vlibrovs.twentyfortyeight.domain.game.model.game_state.GameState
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import com.vlibrovs.twentyfortyeight.ui.viewmodel.MainViewModel
+import kotlinx.coroutines.*
 
 class SizeFourMoveController(
     private val gameState: GameState,
@@ -17,7 +16,8 @@ class SizeFourMoveController(
     private val generator: Generator,
     private val statsController: StatsController,
     private val coroutineScope: CoroutineScope,
-    private val game: UnfinishedGame
+    private val game: UnfinishedGame,
+    private val viewModel: MainViewModel
 ) : MoveController(gameState, schemeController, generator, statsController, coroutineScope) {
 
     override fun moveRight() {
@@ -302,13 +302,7 @@ class SizeFourMoveController(
 
         }
         if (successful) {
-            coroutineScope.launch {
-                afterAnimation {
-                    generator.generate()
-                    statsController.makeMove()
-                    game.extra = gameState.toString()
-                }
-            }
+            onMoveSuccess()
         }
     }
 
@@ -589,14 +583,7 @@ class SizeFourMoveController(
                 }
             }
         }
-        if (successful) {
-            coroutineScope.launch {
-                delay(Constants.ANIMATION_DURATION.toLong())
-                generator.generate()
-                statsController.makeMove()
-                game.extra = gameState.toString()
-            }
-        }
+        if (successful) onMoveSuccess()
     }
 
     override fun moveDown() {
@@ -876,14 +863,7 @@ class SizeFourMoveController(
                 }
             }
         }
-        if (successful) {
-            coroutineScope.launch {
-                delay(Constants.ANIMATION_DURATION.toLong())
-                generator.generate()
-                statsController.makeMove()
-                game.extra = gameState.toString()
-            }
-        }
+        if (successful) onMoveSuccess()
     }
 
     override fun moveUp() {
@@ -1164,14 +1144,7 @@ class SizeFourMoveController(
                 }
             }
         }
-        if (successful) {
-            afterAnimation {
-                generator.generate()
-                statsController.makeMove()
-                game.extra = gameState.toString()
-                game.extra = gameState.toString()
-            }
-        }
+        if (successful) onMoveSuccess()
     }
 
     private fun afterAnimation(code: suspend () -> Unit) {
@@ -1215,4 +1188,12 @@ class SizeFourMoveController(
 
     private fun Array<TileData>.tilesLevelEqual(first: Int, second: Int) =
         this[first].level.value == this[second].level.value
+
+    private fun onMoveSuccess() {
+        afterAnimation {
+            generator.generate()
+            statsController.makeMove()
+            game.extra = gameState.toString()
+        }
+    }
 }

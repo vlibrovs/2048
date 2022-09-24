@@ -1,6 +1,7 @@
 package com.vlibrovs.twentyfortyeight.domain.game.model.game_state
 
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.focus.FocusRequester.Companion.FocusRequesterFactory.component1
 import com.vlibrovs.twentyfortyeight.domain.game.model.TileData
 
 class SizeFourGameState(
@@ -119,12 +120,16 @@ class SizeFourGameState(
     override fun get(index: Int) = values[index]
 
     override fun toString(): String {
-        val sb = StringBuilder()
-        var counter = 1
+        val array = Array(4) { Array(4) { 0 } }
         for (tileData in this) {
-            sb.append(tileData.level.value ?: 0).append(' ')
-            if (counter % 4 == 0 && counter != 16) sb.appendLine()
-            counter++
+            array[tileData.positionY.value][tileData.positionX.value] = tileData.level.value ?: 0
+        }
+        val sb = StringBuilder()
+        for (y in 0..3) {
+            for (x in 0..3) {
+                sb.append(array[y][x])
+                    .append(if (x == 3 && y == 3) "" else if (x == 3) '\n' else " ")
+            }
         }
         return sb.toString()
     }

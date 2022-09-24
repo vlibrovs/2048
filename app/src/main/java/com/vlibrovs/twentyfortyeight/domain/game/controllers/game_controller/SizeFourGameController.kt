@@ -41,7 +41,8 @@ class SizeFourGameController(
         generator,
         statsController,
         coroutineScope,
-        game = game
+        game = game,
+        viewModel = viewModel
     )
     override val animator =
         SizeFourAnimator(animationDuration = Constants.ANIMATION_DURATION, gameState = gameState)

@@ -1,5 +1,6 @@
 package com.vlibrovs.twentyfortyeight.ui.screens.gamescreen
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -36,8 +37,12 @@ fun GameScreen(
     newGame: Boolean
 ) {
     val values = getValues(rememberWindowInfo().screenWidthInfo)
-    val game = if (newGame) UnfinishedGame()
-    else viewModel.getCurrentGame()!!.toSizeFourUnfinishedGame()
+    val game by remember {
+        mutableStateOf(if (newGame)
+            UnfinishedGame()
+        else
+            viewModel.getCurrentGame()!!.toSizeFourUnfinishedGame())
+    }
     val scoreState = remember {
         mutableStateOf(game.score)
     }
@@ -166,7 +171,10 @@ fun GameScreen(
             modifier = Modifier.fillMaxWidth(),
             text = stringResource(id = R.string.back),
             fontSize = values.buttonTextSize,
-            onClick = { navController.navigate(Screen.MainMenu.route) },
+            onClick = {
+                viewModel.saveGame(game)
+                navController.navigate(Screen.MainMenu.route)
+            },
             theme = theme
         )
     }

@@ -50,10 +50,6 @@ fun GameLayer(
                 allowMoveState = allowMove,
                 coroutineScope = scope
             ) { direction ->
-                scope.launch(Dispatchers.IO) {
-                    delay(Constants.ANIMATION_DURATION * 2L)
-                    viewModel.saveGame(game)
-                }
                 when (direction) {
                     Direction.RIGHT -> try {
                         controller.moveController.moveRight()

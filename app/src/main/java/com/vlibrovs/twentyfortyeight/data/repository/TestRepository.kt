@@ -158,12 +158,26 @@ class TestRepository : Repository {
     }
 
     override suspend fun saveGame(game: Game) {
-        games.add(game.apply {
-            if (number == null) {
-                number = nextGameNumber
-                nextGameNumber++
+        var update = false
+        for (savedGame in games) {
+            if (savedGame.number == game.number) {
+                update = true
+                savedGame.apply {
+                    score = game.score
+                    moves = game.moves
+                    extra = game.extra
+                    finished = game.finished
+                }
             }
-        })
+        }
+        if (!update) {
+            games.add(game.apply {
+                if (number == null) {
+                    number = nextGameNumber
+                    nextGameNumber++
+                }
+            })
+        }
     }
 
     private fun List<Theme>.containsId(id: Int?): Boolean {
