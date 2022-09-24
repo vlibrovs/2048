@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vlibrovs.twentyfortyeight.common.Constants
 import com.vlibrovs.twentyfortyeight.data.model.game.Game
+import com.vlibrovs.twentyfortyeight.data.model.game.UnfinishedGame
 import com.vlibrovs.twentyfortyeight.data.model.theme.DefaultThemes
 import com.vlibrovs.twentyfortyeight.data.model.theme.Theme
 import com.vlibrovs.twentyfortyeight.data.repository.Repository
@@ -70,6 +71,12 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
         return null
     }
 
+    fun finishCurrentGame() {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.finishCurrentGame()
+        }
+    }
+
     private fun getGames() {
         _gameList.clear()
         viewModelScope.launch(Dispatchers.IO) {
@@ -84,16 +91,17 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
         }
     }
 
-    fun addTheme(theme: Theme) {
-        viewModelScope.launch(Dispatchers.IO) {
-            repository.saveTheme(theme)
-        }
-    }
-
-    fun addGame(game: Game) {
+    fun saveGame(game: Game) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.saveGame(game)
         }
+    }
+
+    fun getCurrentGame(): Game? {
+        for (game in gameList) {
+            if (!game.finished) return game
+        }
+        return null
     }
 
     init {

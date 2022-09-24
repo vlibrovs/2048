@@ -12,7 +12,8 @@ import java.util.*
 
 class TestRepository : Repository {
 
-    var nextId = 0
+    private var nextThemeId = 0
+    private var nextGameNumber = 6
 
     private val themes = mutableListOf(
         DefaultThemes.Main,
@@ -135,7 +136,7 @@ class TestRepository : Repository {
         FinishedGame(2, 187236, 123, Date()),
         FinishedGame(3, 127863, 136, Date()),
         FinishedGame(4, 123412, 743, Date()),
-        UnfinishedGame(5, 123412, 743, SizeFourGameState()),
+        UnfinishedGame(5, 123412, 743, SizeFourGameState(first = 11)),
     )
 
     override suspend fun getAllThemes() = themes as List<Theme>
@@ -144,17 +145,25 @@ class TestRepository : Repository {
     override suspend fun saveTheme(theme: Theme) {
         if (themes.containsId(theme.id)) {
             themes.replaceById(theme.id!!, theme)
-        }
-        else {
+        } else {
             themes.add(theme.apply {
-                id = nextId
-                nextId++
+                id = nextThemeId
+                nextThemeId++
             })
         }
     }
 
+    override suspend fun finishCurrentGame() {
+        for (game in games) if (!game.finished) game.finished = true
+    }
+
     override suspend fun saveGame(game: Game) {
-        games.add(game)
+        games.add(game.apply {
+            if (number == null) {
+                number = nextGameNumber
+                nextGameNumber++
+            }
+        })
     }
 
     private fun List<Theme>.containsId(id: Int?): Boolean {

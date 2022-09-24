@@ -5,10 +5,18 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
+import com.vlibrovs.twentyfortyeight.common.Constants
 import com.vlibrovs.twentyfortyeight.data.model.Direction
+import com.vlibrovs.twentyfortyeight.data.model.game.UnfinishedGame
 import com.vlibrovs.twentyfortyeight.data.model.theme.Theme
 import com.vlibrovs.twentyfortyeight.domain.game.controllers.game_controller.SizeFourGameController
+import com.vlibrovs.twentyfortyeight.domain.game.model.game_state.SizeFourGameState
 import com.vlibrovs.twentyfortyeight.ui.common.functions.swipeDirectionListener
+import com.vlibrovs.twentyfortyeight.ui.viewmodel.MainViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withTimeout
 import java.lang.NullPointerException
 
 const val TAG = "GameLayer"
@@ -19,11 +27,13 @@ fun GameLayer(
     innerPadding: Dp,
     theme: Theme,
     squareSize: Dp,
-    scoreState: MutableState<Int>
+    scoreState: MutableState<Int>,
+    viewModel: MainViewModel,
+    game: UnfinishedGame
 ) {
     val scope = rememberCoroutineScope()
     val controller = remember {
-        SizeFourGameController(scope, scoreState)
+        SizeFourGameController(game = game, coroutineScope =  scope, scoreState =  scoreState, viewModel = viewModel)
     }
     val horizontalAnimator = controller.animator.horizontalAnimator(squareSize = squareSize)
     val verticalAnimator = controller.animator.verticalAnimator(squareSize = squareSize)
@@ -40,6 +50,10 @@ fun GameLayer(
                 allowMoveState = allowMove,
                 coroutineScope = scope
             ) { direction ->
+                scope.launch(Dispatchers.IO) {
+                    delay(Constants.ANIMATION_DURATION * 2L)
+                    viewModel.saveGame(game)
+                }
                 when (direction) {
                     Direction.RIGHT -> try {
                         controller.moveController.moveRight()

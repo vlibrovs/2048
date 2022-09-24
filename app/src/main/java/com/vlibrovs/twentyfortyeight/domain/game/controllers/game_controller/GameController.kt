@@ -9,7 +9,7 @@ import com.vlibrovs.twentyfortyeight.domain.game.controllers.stats_controller.St
 import com.vlibrovs.twentyfortyeight.domain.game.model.game_state.GameState
 import kotlinx.coroutines.CoroutineScope
 
-abstract class GameController(private val coroutineScope: CoroutineScope) {
+abstract class GameController {
     abstract val gameState: GameState
     abstract val schemeController: SchemeController
     abstract val moveController: MoveController
@@ -17,5 +17,6 @@ abstract class GameController(private val coroutineScope: CoroutineScope) {
     abstract val generator: Generator
     abstract val animator: Animator
 
-    abstract fun endGame(): Game
+    abstract fun finish()
+    abstract fun pause()
 }

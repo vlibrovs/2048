@@ -23,11 +23,13 @@ import com.vlibrovs.twentyfortyeight.ui.common.composables.IconButton
 import com.vlibrovs.twentyfortyeight.ui.common.fonts.Fonts
 import com.vlibrovs.twentyfortyeight.ui.common.navigation.Screen
 import com.vlibrovs.twentyfortyeight.ui.common.window.rememberWindowInfo
+import com.vlibrovs.twentyfortyeight.ui.viewmodel.MainViewModel
 
 @Composable
 fun MainMenuScreen(
     theme: Theme,
-    navController: NavController
+    navController: NavController,
+    viewModel: MainViewModel
 ) {
     val values = getValues(rememberWindowInfo().screenWidthInfo)
     Column(
@@ -65,7 +67,9 @@ fun MainMenuScreen(
                     .height(values.buttonHeight),
                 text = stringResource(id = R.string.continueStr),
                 fontSize = values.buttonTextSize,
-                onClick = { navController.navigate(Screen.Game.route) },
+                onClick = {
+                    navController.navigate(Screen.Game.route+"/${viewModel.getCurrentGame() == null}")
+                },
                 theme = theme
             )
 
@@ -75,7 +79,11 @@ fun MainMenuScreen(
                     .height(values.buttonHeight),
                 text = stringResource(id = R.string.new_game),
                 fontSize = values.buttonTextSize,
-                onClick = { navController.navigate(Screen.Game.route) },
+                onClick = {
+                    if (viewModel.getCurrentGame() != null) viewModel.finishCurrentGame()
+
+                    navController.navigate(Screen.Game.route+"/true")
+                },
                 theme = theme
             )
 

@@ -8,9 +8,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.vlibrovs.twentyfortyeight.common.Constants
 import com.vlibrovs.twentyfortyeight.data.model.theme.Theme
@@ -58,14 +60,26 @@ class MainActivity : ComponentActivity() {
                         theme = viewModel.run {
                             getThemeById(selectedThemeId.value)!!
                         },
-                        navController = navController
+                        navController = navController,
+                        viewModel = viewModel
                     )
                 }
 
-                composable(route = Screen.Game.route) {
-                    GameScreen(theme = viewModel.run {
-                        getThemeById(selectedThemeId.value)!!
-                    }, navController = navController)
+                composable(route = Screen.Game.route + "/{newGame}", arguments = listOf(
+                    navArgument(name = "newGame") {
+                        type = NavType.BoolType
+                        nullable = false
+                        defaultValue = false
+                    }
+                )) {
+                    GameScreen(
+                        theme = viewModel.run {
+                            getThemeById(selectedThemeId.value)!!
+                        },
+                        navController = navController,
+                        viewModel = viewModel,
+                        newGame = it.arguments?.getBoolean("newGame") ?: false
+                    )
                 }
 
                 composable(route = Screen.Settings.route) {

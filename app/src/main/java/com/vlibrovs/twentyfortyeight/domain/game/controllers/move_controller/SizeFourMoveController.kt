@@ -1,6 +1,7 @@
 package com.vlibrovs.twentyfortyeight.domain.game.controllers.move_controller
 
 import com.vlibrovs.twentyfortyeight.common.Constants
+import com.vlibrovs.twentyfortyeight.data.model.game.UnfinishedGame
 import com.vlibrovs.twentyfortyeight.domain.game.controllers.generator.Generator
 import com.vlibrovs.twentyfortyeight.domain.game.controllers.scheme_controller.SchemeController
 import com.vlibrovs.twentyfortyeight.domain.game.controllers.stats_controller.StatsController
@@ -15,7 +16,8 @@ class SizeFourMoveController(
     private val schemeController: SchemeController,
     private val generator: Generator,
     private val statsController: StatsController,
-    private val coroutineScope: CoroutineScope
+    private val coroutineScope: CoroutineScope,
+    private val game: UnfinishedGame
 ) : MoveController(gameState, schemeController, generator, statsController, coroutineScope) {
 
     override fun moveRight() {
@@ -301,9 +303,11 @@ class SizeFourMoveController(
         }
         if (successful) {
             coroutineScope.launch {
-                delay(Constants.ANIMATION_DURATION.toLong())
-                generator.generate()
-                statsController.moves.value++
+                afterAnimation {
+                    generator.generate()
+                    statsController.makeMove()
+                    game.extra = gameState.toString()
+                }
             }
         }
     }
@@ -589,7 +593,8 @@ class SizeFourMoveController(
             coroutineScope.launch {
                 delay(Constants.ANIMATION_DURATION.toLong())
                 generator.generate()
-                statsController.moves.value++
+                statsController.makeMove()
+                game.extra = gameState.toString()
             }
         }
     }
@@ -875,7 +880,8 @@ class SizeFourMoveController(
             coroutineScope.launch {
                 delay(Constants.ANIMATION_DURATION.toLong())
                 generator.generate()
-                statsController.moves.value++
+                statsController.makeMove()
+                game.extra = gameState.toString()
             }
         }
     }
@@ -1161,7 +1167,9 @@ class SizeFourMoveController(
         if (successful) {
             afterAnimation {
                 generator.generate()
-                statsController.moves.value++
+                statsController.makeMove()
+                game.extra = gameState.toString()
+                game.extra = gameState.toString()
             }
         }
     }
@@ -1205,5 +1213,6 @@ class SizeFourMoveController(
         this.level.value = null
     }
 
-    private fun Array<TileData>.tilesLevelEqual(first: Int, second: Int) = this[first].level.value == this[second].level.value
+    private fun Array<TileData>.tilesLevelEqual(first: Int, second: Int) =
+        this[first].level.value == this[second].level.value
 }
