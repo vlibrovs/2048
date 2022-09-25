@@ -154,7 +154,15 @@ class TestRepository : Repository {
     }
 
     override suspend fun finishCurrentGame() {
-        for (game in games) if (!game.finished) game.finished = true
+        for ((index, game) in games.withIndex()) if (!game.finished) {
+            val finishedGame = FinishedGame(
+                number = game.number,
+                score = game.score,
+                moves = game.moves,
+                date = Date()
+            )
+            games[index] = finishedGame
+        }
     }
 
     override suspend fun saveGame(game: Game) {

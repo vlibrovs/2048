@@ -12,6 +12,7 @@ import com.vlibrovs.twentyfortyeight.data.model.theme.Theme
 import com.vlibrovs.twentyfortyeight.data.repository.Repository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withTimeout
 
 class MainViewModel(private val repository: Repository) : ViewModel() {
 
@@ -74,6 +75,9 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
     fun finishCurrentGame() {
         viewModelScope.launch(Dispatchers.IO) {
             repository.finishCurrentGame()
+            withTimeout(100L) {
+                getGames()
+            }
         }
     }
 
@@ -94,6 +98,9 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
     fun saveGame(game: Game) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.saveGame(game)
+            withTimeout(100L) {
+                getGames()
+            }
         }
     }
 

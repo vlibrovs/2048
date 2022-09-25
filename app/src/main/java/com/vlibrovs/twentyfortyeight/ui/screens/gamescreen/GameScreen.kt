@@ -38,10 +38,14 @@ fun GameScreen(
 ) {
     val values = getValues(rememberWindowInfo().screenWidthInfo)
     val game by remember {
-        mutableStateOf(if (newGame)
-            UnfinishedGame()
-        else
-            viewModel.getCurrentGame()!!.toSizeFourUnfinishedGame())
+        mutableStateOf(
+            if (newGame) {
+                val createdGame = UnfinishedGame()
+                viewModel.saveGame(createdGame)
+                createdGame
+            } else
+                viewModel.getCurrentGame()!!.toSizeFourUnfinishedGame()
+        )
     }
     val scoreState = remember {
         mutableStateOf(game.score)
