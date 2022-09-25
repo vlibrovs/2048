@@ -72,6 +72,11 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
         return null
     }
 
+    fun selectThemeById(id: Int) {
+        selectedThemeId.value = id
+        sharedPreferences!!.edit().putString(Constants.SELECTED_THEME_ID, id.toString()).apply()
+    }
+
     fun finishCurrentGame() {
         viewModelScope.launch(Dispatchers.IO) {
             repository.finishCurrentGame()

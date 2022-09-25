@@ -40,10 +40,10 @@ class MainActivity : ComponentActivity() {
             }
         }
         viewModel.sharedPreferences = sharedPreferences
-        viewModel.selectedThemeId.value = (
-                sharedPreferences.getString(Constants.SELECTED_THEME_ID, "-1")?.toInt()
-                    ?: -1
-                )
+        viewModel.selectThemeById(
+            sharedPreferences.getString(Constants.SELECTED_THEME_ID, "-1")?.toInt()
+                ?: -1
+        )
         setContent {
             val systemUiController = rememberSystemUiController()
             val navController = rememberNavController()

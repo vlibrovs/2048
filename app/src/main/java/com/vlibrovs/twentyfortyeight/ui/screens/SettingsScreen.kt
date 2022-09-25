@@ -149,7 +149,7 @@ fun ThemeItem(theme: Theme, navController: NavController, viewModel: MainViewMod
                     editViewModel.themeBuilder = theme.edit()
                     navController.navigate(Screen.ThemeEdit.route)
                 }
-                else viewModel.selectedThemeId.value = theme.id!!
+                else viewModel.selectThemeById(theme.id!!)
             },
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement =
