@@ -1,6 +1,7 @@
 package com.vlibrovs.twentyfortyeight.ui.screens.gamescreen
 
 import android.util.Log
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -19,6 +20,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.navigation.NavDirections
 import com.vlibrovs.twentyfortyeight.R
 import com.vlibrovs.twentyfortyeight.common.getValues
 import com.vlibrovs.twentyfortyeight.data.model.game.UnfinishedGame
@@ -46,6 +48,10 @@ fun GameScreen(
             } else
                 viewModel.getCurrentGame()!!.toSizeFourUnfinishedGame()
         )
+    }
+    BackHandler {
+        navController.popBackStack()
+        viewModel.saveGame(game)
     }
     val scoreState = remember {
         mutableStateOf(game.score)

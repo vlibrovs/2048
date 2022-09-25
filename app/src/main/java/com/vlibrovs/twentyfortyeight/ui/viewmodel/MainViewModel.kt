@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vlibrovs.twentyfortyeight.common.Constants
+import com.vlibrovs.twentyfortyeight.data.model.game.FinishedGame
 import com.vlibrovs.twentyfortyeight.data.model.game.Game
 import com.vlibrovs.twentyfortyeight.data.model.game.UnfinishedGame
 import com.vlibrovs.twentyfortyeight.data.model.theme.DefaultThemes
@@ -13,6 +14,7 @@ import com.vlibrovs.twentyfortyeight.data.repository.Repository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeout
+import java.util.*
 
 class MainViewModel(private val repository: Repository) : ViewModel() {
 
@@ -61,6 +63,8 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
             return most
         }
 
+    var gameSaver: () -> Unit = {}
+
     var selectedThemeId = mutableStateOf(-1)
 
     var sharedPreferences: SharedPreferences? = null
@@ -79,9 +83,13 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
 
     fun finishCurrentGame() {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.finishCurrentGame()
-            withTimeout(100L) {
-                getGames()
+            for (game in _gameList) if (!game.finished) {
+                saveGame(FinishedGame(
+                    number = game.number,
+                    score = game.score,
+                    moves = game.moves,
+                    date = Date()
+                ))
             }
         }
     }
@@ -103,9 +111,7 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
     fun saveGame(game: Game) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.saveGame(game)
-            withTimeout(100L) {
-                getGames()
-            }
+            getGames()
         }
     }
 
