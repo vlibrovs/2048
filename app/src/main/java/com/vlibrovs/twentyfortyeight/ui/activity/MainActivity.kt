@@ -16,6 +16,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.vlibrovs.twentyfortyeight.common.Constants
+import com.vlibrovs.twentyfortyeight.data.model.theme.DefaultThemes
 import com.vlibrovs.twentyfortyeight.data.model.theme.Theme
 import com.vlibrovs.twentyfortyeight.ui.common.navigation.Screen
 import com.vlibrovs.twentyfortyeight.ui.screens.*
@@ -111,7 +112,7 @@ class MainActivity : ComponentActivity() {
                 composable(route = Screen.ThemeEdit.route) {
                     ThemeEditScreen(
                         currentTheme = viewModel.run {
-                            getThemeById(selectedThemeId.value)!!
+                            getThemeById(selectedThemeId.value) ?: DefaultThemes.Main
                         },
                         navController = navController,
                         editViewModel = editViewModel

@@ -153,6 +153,14 @@ class TestRepository : Repository {
         }
     }
 
+    override suspend fun clearThemes() {
+        themes.clear()
+    }
+
+    override suspend fun clearGames() {
+        games.clear()
+    }
+
     override suspend fun saveGame(game: Game) {
         var update = false
         for (savedGame in games) {

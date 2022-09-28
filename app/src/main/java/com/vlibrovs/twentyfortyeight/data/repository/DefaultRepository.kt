@@ -9,7 +9,7 @@ class DefaultRepository(database: GameDatabase) : Repository {
     private val dao = database.getDao()
 
     override suspend fun getAllThemes(): List<Theme> {
-        return dao.getAllThemes()
+        return dao.getAllThemes().map { themeEntity -> themeEntity.toTheme() }
     }
 
     override suspend fun getAllGames(): List<Game> {
@@ -17,7 +17,15 @@ class DefaultRepository(database: GameDatabase) : Repository {
     }
 
     override suspend fun saveTheme(theme: Theme) {
-        dao.upsertTheme(theme)
+        dao.upsertTheme(theme.toEntity())
+    }
+
+    override suspend fun clearThemes() {
+        dao.clearThemes()
+    }
+
+    override suspend fun clearGames() {
+        dao.clearGames()
     }
 
     override suspend fun saveGame(game: Game) {

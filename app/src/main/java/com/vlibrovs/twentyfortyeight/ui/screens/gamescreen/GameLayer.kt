@@ -8,6 +8,7 @@ import androidx.compose.ui.unit.Dp
 import com.vlibrovs.twentyfortyeight.common.Constants
 import com.vlibrovs.twentyfortyeight.data.model.Direction
 import com.vlibrovs.twentyfortyeight.data.model.game.UnfinishedGame
+import com.vlibrovs.twentyfortyeight.data.model.game_result.GameResult
 import com.vlibrovs.twentyfortyeight.data.model.theme.Theme
 import com.vlibrovs.twentyfortyeight.domain.game.controllers.game_controller.SizeFourGameController
 import com.vlibrovs.twentyfortyeight.domain.game.model.game_state.SizeFourGameState
@@ -29,11 +30,12 @@ fun GameLayer(
     squareSize: Dp,
     scoreState: MutableState<Int>,
     viewModel: MainViewModel,
-    game: UnfinishedGame
+    game: UnfinishedGame,
+    gameResultState: MutableState<GameResult>
 ) {
     val scope = rememberCoroutineScope()
     val controller = remember {
-        SizeFourGameController(game = game, coroutineScope =  scope, scoreState =  scoreState, viewModel = viewModel)
+        SizeFourGameController(game = game, coroutineScope =  scope, scoreState =  scoreState, viewModel = viewModel, gameResultState = gameResultState)
     }
     val horizontalAnimator = controller.animator.horizontalAnimator(squareSize = squareSize)
     val verticalAnimator = controller.animator.verticalAnimator(squareSize = squareSize)

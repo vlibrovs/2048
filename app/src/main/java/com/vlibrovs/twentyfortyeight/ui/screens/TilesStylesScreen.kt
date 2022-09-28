@@ -7,7 +7,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import com.vlibrovs.twentyfortyeight.R
@@ -53,7 +52,6 @@ fun TileStylesScreen(
                 items(17) { index ->
                     TileStyleSetting(
                         tileLevel = index + 1,
-                        theme = theme,
                         editViewModel = editViewModel,
                         navController = navController
                     )
@@ -74,7 +72,6 @@ fun TileStylesScreen(
 @Composable
 fun TileStyleSetting(
     tileLevel: Int,
-    theme: Theme,
     editViewModel: EditViewModel,
     navController: NavController
 ) {
@@ -88,7 +85,7 @@ fun TileStyleSetting(
     ) {
         Tile(
             level = tileLevel,
-            theme = theme,
+            themeBuilder = editViewModel.themeBuilder!!,
             size = values.tileStyleSize,
             cornerRadius = values.tileStyleCornerRadius,
             fontMap = values.tileStyleFontSize
@@ -100,7 +97,7 @@ fun TileStyleSetting(
             val style = editViewModel.themeBuilder!!.tileStyles[tileLevel]!!
             ColorCircle(
                 fillColor = style.colorStart,
-                outlineColor = theme.linesColor,
+                outlineColor = editViewModel.themeBuilder!!.linesColor,
                 outlineWidth = values.colorCircleOutlineWidth,
                 size = values.addThemeButtonSize,
                 onClick = {
@@ -111,7 +108,7 @@ fun TileStyleSetting(
             Spacer(modifier = Modifier.width(values.settingsInboxPadding.calculateTopPadding()))
             ColorCircle(
                 fillColor = style.colorEnd,
-                outlineColor = theme.linesColor,
+                outlineColor = editViewModel.themeBuilder!!.linesColor,
                 outlineWidth = values.colorCircleOutlineWidth,
                 size = values.addThemeButtonSize,
                 onClick = {

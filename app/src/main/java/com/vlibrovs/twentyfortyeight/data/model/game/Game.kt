@@ -7,7 +7,7 @@ import java.text.DateFormat
 import java.util.*
 
 @Entity(tableName = "games")
-abstract class Game(
+open class Game(
     @PrimaryKey(autoGenerate = true)
     var number: Int? = null,
     var score: Int,

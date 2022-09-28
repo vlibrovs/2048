@@ -1,7 +1,9 @@
 package com.vlibrovs.twentyfortyeight.domain.game.controllers.move_controller
 
+import androidx.compose.runtime.MutableState
 import com.vlibrovs.twentyfortyeight.common.Constants
 import com.vlibrovs.twentyfortyeight.data.model.game.UnfinishedGame
+import com.vlibrovs.twentyfortyeight.data.model.game_result.GameResult
 import com.vlibrovs.twentyfortyeight.domain.game.controllers.generator.Generator
 import com.vlibrovs.twentyfortyeight.domain.game.controllers.scheme_controller.SchemeController
 import com.vlibrovs.twentyfortyeight.domain.game.controllers.stats_controller.StatsController
@@ -17,7 +19,7 @@ class SizeFourMoveController(
     private val statsController: StatsController,
     private val coroutineScope: CoroutineScope,
     private val game: UnfinishedGame,
-    private val viewModel: MainViewModel
+    private val gameResultState: MutableState<GameResult>
 ) : MoveController(gameState, schemeController, generator, statsController, coroutineScope) {
 
     override fun moveRight() {
@@ -1191,6 +1193,9 @@ class SizeFourMoveController(
 
     private fun onMoveSuccess() {
         afterAnimation {
+            for (tileData in gameState) {
+                if (tileData.level.value == 11) gameResultState.value = GameResult.WIN
+            }
             generator.generate()
             statsController.makeMove()
             game.extra = gameState.toString()

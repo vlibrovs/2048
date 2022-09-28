@@ -8,4 +8,6 @@ interface Repository {
     suspend fun getAllGames(): List<Game>
     suspend fun saveTheme(theme: Theme)
     suspend fun saveGame(game: Game)
+    suspend fun clearThemes()
+    suspend fun clearGames()
 }

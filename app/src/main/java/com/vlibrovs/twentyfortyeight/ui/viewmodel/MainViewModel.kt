@@ -1,6 +1,7 @@
 package com.vlibrovs.twentyfortyeight.ui.viewmodel
 
 import android.content.SharedPreferences
+import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -23,13 +24,14 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
     val gameList: List<Game>
         get() = _gameList
 
-    private val _themeList = mutableListOf<Theme>()
+    private val _themeList = mutableListOf(DefaultThemes.Main)
 
     val themeList: List<Theme>
         get() = _themeList
 
     val bestScore: Int
         get() {
+            if (gameList.isEmpty()) return 0
             var best = 0
             for (game in gameList) {
                 if (game.score > best) best = game.score
@@ -39,6 +41,7 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
 
     val averageMoves: Int
         get() {
+            if (gameList.isEmpty()) return 0
             var sum = 0
             for (game in gameList) {
                 sum += game.moves
@@ -47,6 +50,7 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
         }
     val averageScore: Int
         get() {
+            if (gameList.isEmpty()) return 0
             var sum = 0
             for (game in gameList) {
                 sum += game.score
@@ -56,6 +60,7 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
 
     val mostMoves: Int
         get() {
+            if (gameList.isEmpty()) return 0
             var most = 0
             for (game in gameList) {
                 if (game.moves > most) most = game.moves
@@ -97,12 +102,13 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
     private fun getGames() {
         _gameList.clear()
         viewModelScope.launch(Dispatchers.IO) {
-            _gameList += repository.getAllGames()
+            _gameList += repository.getAllGames().reversed()
         }
     }
 
     fun getThemes() {
         _themeList.clear()
+        _themeList.add(DefaultThemes.Main)
         viewModelScope.launch(Dispatchers.IO) {
             _themeList += repository.getAllThemes()
         }
@@ -112,6 +118,7 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             repository.saveGame(game)
             getGames()
+            Log.d("Games", "Games: ${gameList.size}")
         }
     }
 
@@ -120,6 +127,18 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
             if (!game.finished) return game
         }
         return null
+    }
+
+    private fun clearThemes() {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.clearThemes()
+        }
+    }
+
+    private fun clearGames() {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.clearGames()
+        }
     }
 
     init {

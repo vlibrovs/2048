@@ -25,7 +25,7 @@ import kotlin.math.pow
 @Composable
 fun Tile(
     level: Int,
-    theme: Theme,
+    themeBuilder: Theme.Builder,
     size: Dp,
     cornerRadius: Dp,
     fontMap: Map<Int, TextUnit>
@@ -35,14 +35,14 @@ fun Tile(
             .size(size)
             .background(
                 shape = RoundedCornerShape(cornerRadius),
-                brush = Brush.verticalGradient(theme.tileStyles[level]!!.toList())
+                brush = Brush.verticalGradient(themeBuilder.tileStyles[level]!!.toList())
             ),
         contentAlignment = Alignment.Center
     ) {
         val number = remember { 2f.pow(level).toInt() }
         Text(
             text = number.toString(),
-            color = theme.textColor,
+            color = themeBuilder.textColor,
             fontSize = fontMap[number.toString().length] ?: 1.sp,
             fontFamily = Fonts.Poppins,
             fontWeight = FontWeight.Bold,

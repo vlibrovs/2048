@@ -1,6 +1,5 @@
 package com.vlibrovs.twentyfortyeight.ui.screens.gamescreen
 
-import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -20,10 +19,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import androidx.navigation.NavDirections
 import com.vlibrovs.twentyfortyeight.R
 import com.vlibrovs.twentyfortyeight.common.getValues
+import com.vlibrovs.twentyfortyeight.data.model.game.Game
 import com.vlibrovs.twentyfortyeight.data.model.game.UnfinishedGame
+import com.vlibrovs.twentyfortyeight.data.model.game_result.GameResult
 import com.vlibrovs.twentyfortyeight.data.model.theme.Theme
 import com.vlibrovs.twentyfortyeight.ui.common.composables.Button
 import com.vlibrovs.twentyfortyeight.ui.common.fonts.Fonts
@@ -39,12 +39,13 @@ fun GameScreen(
     newGame: Boolean
 ) {
     val values = getValues(rememberWindowInfo().screenWidthInfo)
+    val gameResultState = remember {
+        mutableStateOf(GameResult.EMPTY)
+    }
     val game by remember {
         mutableStateOf(
             if (newGame) {
-                val createdGame = UnfinishedGame()
-                viewModel.saveGame(createdGame)
-                createdGame
+                UnfinishedGame()
             } else
                 viewModel.getCurrentGame()!!.toSizeFourUnfinishedGame()
         )
@@ -174,7 +175,8 @@ fun GameScreen(
                 squareSize = maxWidth / 4,
                 scoreState = scoreState,
                 viewModel = viewModel,
-                game = game
+                game = game,
+                gameResultState = gameResultState
             )
         }
         Button(
