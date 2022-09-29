@@ -99,7 +99,7 @@ fun Overlay(
                 .fillMaxWidth()
                 .fillMaxHeight(0.4f),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+            verticalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
                 text = text,

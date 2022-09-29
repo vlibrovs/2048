@@ -58,6 +58,9 @@ fun GameScreen(
                 viewModel.getCurrentGame()!!.toSizeFourUnfinishedGame()
         )
     }
+    viewModel.saver = {
+        viewModel.saveGame(game)
+    }
     val scoreState = remember {
         mutableStateOf(game.score)
     }

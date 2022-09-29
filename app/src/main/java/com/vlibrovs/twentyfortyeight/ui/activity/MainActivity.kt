@@ -146,8 +146,8 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        viewModel.gameSaver()
+    override fun onStop() {
+        super.onStop()
+        viewModel.saver()
     }
 }

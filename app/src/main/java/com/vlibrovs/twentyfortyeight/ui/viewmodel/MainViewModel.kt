@@ -70,11 +70,11 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
             return most
         }
 
-    var gameSaver: () -> Unit = {}
-
     var selectedThemeId = mutableStateOf(-1)
 
     var sharedPreferences: SharedPreferences? = null
+
+    var saver: () -> Unit = {}
 
     fun getThemeById(id: Int): Theme? {
         for (theme in themeList) {

@@ -1,5 +1,9 @@
 package com.vlibrovs.twentyfortyeight.ui.screens
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -20,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.vlibrovs.twentyfortyeight.R
 import com.vlibrovs.twentyfortyeight.common.getValues
+import com.vlibrovs.twentyfortyeight.data.model.game_result.GameResult
 import com.vlibrovs.twentyfortyeight.data.model.theme.ColorPosition
 import com.vlibrovs.twentyfortyeight.data.model.theme.Theme
 import com.vlibrovs.twentyfortyeight.data.model.theme.ThemePropertyType
@@ -41,134 +46,158 @@ fun ThemeEditScreen(
     var themeName by remember {
         mutableStateOf(editViewModel.themeBuilder?.name ?: currentTheme.name)
     }
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(
-                brush = Brush.verticalGradient(currentTheme.backgroundGradient.toList())
-            )
-            .padding(values.statsPadding),
-        verticalArrangement = Arrangement.SpaceBetween,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        SecondaryBackgroundBox(
-            modifier = Modifier.fillMaxHeight(0.9f),
-            theme = currentTheme,
-            cornerRadius = values.boxCornerRadius
-        ) {
-            Column(
-                modifier = Modifier
-                    .padding(values.settingsInboxPadding)
-                    .fillMaxSize(),
-                verticalArrangement = Arrangement.SpaceBetween
-            ) {
-                Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-                    TextField(
-                        value = themeName,
-                        onValueChange = {
-                            themeName = it
-                            editViewModel.themeBuilder!!.name = it
-                        },
-                        modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(50.dp),
-                        textStyle = TextStyle(
-                            color = currentTheme.textColor,
-                            fontSize = values.buttonTextSize,
-                            fontFamily = Fonts.Poppins
-                        ),
-                        colors = TextFieldDefaults.textFieldColors(
-                            backgroundColor = currentTheme.secondaryBackgroundColor,
-                            focusedIndicatorColor = Color.Transparent,
-                            unfocusedIndicatorColor = Color.Transparent
-                        )
-                    )
-                    if (themeName.isEmpty()) {
-                        Text(
-                            modifier = Modifier.fillMaxWidth(0.9f),
-                            textAlign = TextAlign.Start,
-                            text = stringResource(id = R.string.theme_name),
-                            color = currentTheme.secondaryBackgroundColor,
-                            fontSize = values.buttonTextSize,
-                            fontFamily = Fonts.Poppins
-                        )
-                    }
-                }
-                LazyColumn(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .fillMaxHeight(0.85f)
-                ) {
-                    item {
-                        PropertyItem(
-                            theme = currentTheme,
-                            name = stringResource(id = R.string.primary_background),
-                            firstColor = editViewModel.themeBuilder!!.backgroundGradient.colorStart,
-                            secondColor = editViewModel.themeBuilder!!.backgroundGradient.colorEnd,
-                            navController = navController,
-                            editViewModel = editViewModel
-                        )
-                    }
-                    item {
-                        PropertyItem(
-                            theme = currentTheme,
-                            name = stringResource(id = R.string.secondary_background),
-                            color = editViewModel.themeBuilder!!.secondaryBackgroundColor,
-                            navController = navController,
-                            propertyType = ThemePropertyType.SecondaryBackgroundColor,
-                            editViewModel = editViewModel
-                        )
-                    }
-                    item {
-                        PropertyItem(
-                            theme = currentTheme,
-                            name = stringResource(id = R.string.buttons),
-                            color = editViewModel.themeBuilder!!.buttonColor,
-                            navController = navController,
-                            propertyType = ThemePropertyType.ButtonColor,
-                            editViewModel = editViewModel
-                        )
-                    }
-                    item {
-                        PropertyItem(
-                            theme = currentTheme,
-                            name = stringResource(id = R.string.text),
-                            color = editViewModel.themeBuilder!!.textColor,
-                            navController = navController,
-                            propertyType = ThemePropertyType.TextColor,
-                            editViewModel = editViewModel
-                        )
-                    }
-                    item {
-                        PropertyItem(
-                            theme = currentTheme,
-                            name = stringResource(id = R.string.lines),
-                            color = editViewModel.themeBuilder!!.linesColor,
-                            navController = navController,
-                            propertyType = ThemePropertyType.LinesColor,
-                            editViewModel = editViewModel
-                        )
-                    }
-                }
-                Button(
-                    modifier = Modifier.fillMaxWidth(),
-                    text = stringResource(id = R.string.edit_tiles_styles),
-                    fontSize = values.buttonTextSize,
-                    onClick = {
-                        navController.navigate(Screen.TilesStyles.route)
-                    },
-                    theme = currentTheme
+    var overlayVisibility by remember {
+        mutableStateOf(false)
+    }
+    Box(modifier = Modifier.fillMaxSize()) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(
+                    brush = Brush.verticalGradient(currentTheme.backgroundGradient.toList())
                 )
+                .padding(values.statsPadding),
+            verticalArrangement = Arrangement.SpaceBetween,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            SecondaryBackgroundBox(
+                modifier = Modifier.fillMaxHeight(0.9f),
+                theme = currentTheme,
+                cornerRadius = values.boxCornerRadius
+            ) {
+                Column(
+                    modifier = Modifier
+                        .padding(values.settingsInboxPadding)
+                        .fillMaxSize(),
+                    verticalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+                        TextField(
+                            value = themeName,
+                            onValueChange = {
+                                themeName = it
+                                editViewModel.themeBuilder!!.name = it
+                            },
+                            modifier = Modifier.fillMaxWidth(),
+                            shape = RoundedCornerShape(50.dp),
+                            textStyle = TextStyle(
+                                color = currentTheme.textColor,
+                                fontSize = values.buttonTextSize,
+                                fontFamily = Fonts.Poppins
+                            ),
+                            colors = TextFieldDefaults.textFieldColors(
+                                backgroundColor = currentTheme.secondaryBackgroundColor,
+                                focusedIndicatorColor = Color.Transparent,
+                                unfocusedIndicatorColor = Color.Transparent
+                            )
+                        )
+                        if (themeName.isEmpty()) {
+                            Text(
+                                modifier = Modifier.fillMaxWidth(0.9f),
+                                textAlign = TextAlign.Start,
+                                text = stringResource(id = R.string.theme_name),
+                                color = currentTheme.secondaryBackgroundColor,
+                                fontSize = values.buttonTextSize,
+                                fontFamily = Fonts.Poppins
+                            )
+                        }
+                    }
+                    LazyColumn(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .fillMaxHeight(0.85f)
+                    ) {
+                        item {
+                            PropertyItem(
+                                theme = currentTheme,
+                                name = stringResource(id = R.string.primary_background),
+                                firstColor = editViewModel.themeBuilder!!.backgroundGradient.colorStart,
+                                secondColor = editViewModel.themeBuilder!!.backgroundGradient.colorEnd,
+                                navController = navController,
+                                editViewModel = editViewModel
+                            )
+                        }
+                        item {
+                            PropertyItem(
+                                theme = currentTheme,
+                                name = stringResource(id = R.string.secondary_background),
+                                color = editViewModel.themeBuilder!!.secondaryBackgroundColor,
+                                navController = navController,
+                                propertyType = ThemePropertyType.SecondaryBackgroundColor,
+                                editViewModel = editViewModel
+                            )
+                        }
+                        item {
+                            PropertyItem(
+                                theme = currentTheme,
+                                name = stringResource(id = R.string.buttons),
+                                color = editViewModel.themeBuilder!!.buttonColor,
+                                navController = navController,
+                                propertyType = ThemePropertyType.ButtonColor,
+                                editViewModel = editViewModel
+                            )
+                        }
+                        item {
+                            PropertyItem(
+                                theme = currentTheme,
+                                name = stringResource(id = R.string.text),
+                                color = editViewModel.themeBuilder!!.textColor,
+                                navController = navController,
+                                propertyType = ThemePropertyType.TextColor,
+                                editViewModel = editViewModel
+                            )
+                        }
+                        item {
+                            PropertyItem(
+                                theme = currentTheme,
+                                name = stringResource(id = R.string.lines),
+                                color = editViewModel.themeBuilder!!.linesColor,
+                                navController = navController,
+                                propertyType = ThemePropertyType.LinesColor,
+                                editViewModel = editViewModel
+                            )
+                        }
+                    }
+                    Button(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = stringResource(id = R.string.edit_tiles_styles),
+                        fontSize = values.buttonTextSize,
+                        onClick = {
+                            navController.navigate(Screen.TilesStyles.route)
+                        },
+                        theme = currentTheme
+                    )
+                }
+            }
+            Button(
+                text = stringResource(id = R.string.save),
+                fontSize = values.buttonTextSize,
+                onClick = {
+                    if (themeName.isEmpty()) {
+                        overlayVisibility = true
+                    } else {
+                        editViewModel.finish()
+                        navController.navigate(Screen.Settings.route)
+                    }
+
+                },
+                theme = currentTheme
+            )
+        }
+        AnimatedVisibility(
+            visible = overlayVisibility,
+            enter = fadeIn(tween(durationMillis = 500)),
+            exit = fadeOut(tween(durationMillis = 500))
+        ) {
+            Overlay(
+                modifier = Modifier.fillMaxSize(),
+                theme = currentTheme,
+                text = "Enter a theme name",
+                buttonText = "OK"
+            ) {
+                overlayVisibility = false
             }
         }
-        Button(
-            text = stringResource(id = R.string.save),
-            fontSize = values.buttonTextSize,
-            onClick = {
-                editViewModel.finish()
-                navController.navigate(Screen.Settings.route)
-            },
-            theme = currentTheme
-        )
     }
 }
 
@@ -252,7 +281,8 @@ fun PropertyItem(
                 outlineWidth = values.colorCircleOutlineWidth,
                 size = values.addThemeButtonSize,
                 onClick = {
-                    editViewModel.themePropertyType = ThemePropertyType.BackgroundColor(ColorPosition.START)
+                    editViewModel.themePropertyType =
+                        ThemePropertyType.BackgroundColor(ColorPosition.START)
                     navController.navigate(Screen.ColorPicker.route)
                 }
             )
@@ -263,7 +293,8 @@ fun PropertyItem(
                 outlineWidth = values.colorCircleOutlineWidth,
                 size = values.addThemeButtonSize,
                 onClick = {
-                    editViewModel.themePropertyType = ThemePropertyType.BackgroundColor(ColorPosition.END)
+                    editViewModel.themePropertyType =
+                        ThemePropertyType.BackgroundColor(ColorPosition.END)
                     navController.navigate(Screen.ColorPicker.route)
                 }
             )
