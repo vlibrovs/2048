@@ -44,6 +44,7 @@ sealed class Values {
     abstract val colorStringSize: TextUnit
     abstract val sliderHeight: Dp
     abstract val gameFieldInnerPadding: Dp
+    abstract val tileTextSize: Map<Int, TextUnit>
 
 
     object Compact : Values() {
@@ -74,15 +75,24 @@ sealed class Values {
             Pair(1, 32.sp),
             Pair(2, 30.sp),
             Pair(3, 28.sp),
-            Pair(4, 24.sp),
-            Pair(5, 18.sp),
-            Pair(6, 16.sp)
+            Pair(4, 18.sp),
+            Pair(5, 16.sp),
+            Pair(6, 14.sp)
         )
         override val colorCircleOutlineWidth = 2.dp
         override val colorPickerSize = 250.dp
         override val colorStringSize = 18.sp
         override val sliderHeight = 20.dp
         override val gameFieldInnerPadding = 3.dp
+        override val tileTextSize: Map<Int, TextUnit>
+            get() = mapOf(
+                Pair(1, 32.sp),
+                Pair(2, 30.sp),
+                Pair(3, 28.sp),
+                Pair(4, 24.sp),
+                Pair(5, 20.sp),
+                Pair(6, 18.sp)
+            )
     }
 
     object Medium : Values() {
@@ -110,19 +120,27 @@ sealed class Values {
         override val tileStyleSize = 95.dp
         override val tileStyleCornerRadius = 12.dp
         override val tileStyleFontSize = mapOf(
-            Pair(1, 36.sp),
-            Pair(2, 28.sp),
-            Pair(3, 36.sp),
-            Pair(4, 36.sp),
-            Pair(5, 36.sp),
-            Pair(6, 36.sp)
+            Pair(1, 48.sp),
+            Pair(2, 40.sp),
+            Pair(3, 32.sp),
+            Pair(4, 24.sp),
+            Pair(5, 20.sp),
+            Pair(6, 18.sp)
         )
         override val colorCircleOutlineWidth = 3.dp
         override val colorPickerSize = 300.dp
         override val colorStringSize = 20.sp
         override val sliderHeight = 26.dp
         override val gameFieldInnerPadding = 5.dp
-
+        override val tileTextSize: Map<Int, TextUnit>
+            get() = mapOf(
+                Pair(1, 48.sp),
+                Pair(2, 40.sp),
+                Pair(3, 32.sp),
+                Pair(4, 24.sp),
+                Pair(5, 20.sp),
+                Pair(6, 18.sp)
+            )
     }
 
     object Expanded : Values() {
@@ -162,10 +180,14 @@ sealed class Values {
         override val colorStringSize = 22.sp
         override val sliderHeight = 32.dp
         override val gameFieldInnerPadding = 7.dp
-
+        override val tileTextSize: Map<Int, TextUnit>
+            get() = mapOf(
+                Pair(1, 60.sp),
+                Pair(2, 54.sp),
+                Pair(3, 48.sp),
+                Pair(4, 40.sp),
+                Pair(5, 32.sp),
+                Pair(6, 28.sp)
+            )
     }
 }
-
-/*
-
- */

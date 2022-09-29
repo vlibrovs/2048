@@ -1,6 +1,8 @@
 package com.vlibrovs.twentyfortyeight.ui.screens.gamescreen
 
 import android.util.Log
+import androidx.compose.animation.*
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -34,7 +36,12 @@ fun GameLayer(
 ) {
     val scope = rememberCoroutineScope()
     val controller = remember {
-        SizeFourGameController(game = game, coroutineScope =  scope, scoreState =  scoreState, viewModel = viewModel)
+        SizeFourGameController(
+            game = game,
+            coroutineScope = scope,
+            scoreState = scoreState,
+            viewModel = viewModel
+        )
     }
     val horizontalAnimator = controller.animator.horizontalAnimator(squareSize = squareSize)
     val verticalAnimator = controller.animator.verticalAnimator(squareSize = squareSize)
@@ -93,7 +100,11 @@ fun GameLayer(
                 }
             }
     ) {
-        if (controller.gameState[0].level.value != null) {
+        AnimatedVisibility(
+            visible = controller.gameState[0].level.value != null,
+            exit = ExitTransition.None,
+            enter = fadeIn(tween(Constants.FADE_IN_ANIMATION_DURATION))
+        ) {
             Tile(
                 modifier = Modifier
                     .padding(
@@ -108,10 +119,15 @@ fun GameLayer(
                     )
                     .size(squareSize - innerPadding * 2),
                 styles = theme.tileStyles,
-                level = controller.gameState[0].level.value!!
+                level = controller.gameState[0].level.value,
+                theme = theme
             )
         }
-        if (controller.gameState[1].level.value != null) {
+        AnimatedVisibility(
+            visible = controller.gameState[1].level.value != null,
+            exit = ExitTransition.None,
+            enter = fadeIn(tween(Constants.FADE_IN_ANIMATION_DURATION))
+        ) {
             Tile(
                 modifier = Modifier
                     .padding(
@@ -126,10 +142,15 @@ fun GameLayer(
                     )
                     .size(squareSize - innerPadding * 2),
                 styles = theme.tileStyles,
-                level = controller.gameState[1].level.value!!
+                level = controller.gameState[1].level.value,
+                theme = theme
             )
         }
-        if (controller.gameState[2].level.value != null) {
+        AnimatedVisibility(
+            visible = controller.gameState[2].level.value != null,
+            exit = ExitTransition.None,
+            enter = fadeIn(tween(Constants.FADE_IN_ANIMATION_DURATION))
+        ) {
             Tile(
                 modifier = Modifier
                     .padding(
@@ -144,10 +165,15 @@ fun GameLayer(
                     )
                     .size(squareSize - innerPadding * 2),
                 styles = theme.tileStyles,
-                level = controller.gameState[2].level.value!!
+                level = controller.gameState[2].level.value,
+                theme = theme
             )
         }
-        if (controller.gameState[3].level.value != null) {
+        AnimatedVisibility(
+            visible = controller.gameState[3].level.value != null,
+            exit = ExitTransition.None,
+            enter = fadeIn(tween(Constants.FADE_IN_ANIMATION_DURATION))
+        ) {
             Tile(
                 modifier = Modifier
                     .padding(
@@ -162,10 +188,15 @@ fun GameLayer(
                     )
                     .size(squareSize - innerPadding * 2),
                 styles = theme.tileStyles,
-                level = controller.gameState[3].level.value!!
+                level = controller.gameState[3].level.value,
+                theme = theme
             )
         }
-        if (controller.gameState[4].level.value != null) {
+        AnimatedVisibility(
+            visible = controller.gameState[4].level.value != null,
+            exit = ExitTransition.None,
+            enter = fadeIn(tween(Constants.FADE_IN_ANIMATION_DURATION))
+        ) {
             Tile(
                 modifier = Modifier
                     .padding(
@@ -180,10 +211,15 @@ fun GameLayer(
                     )
                     .size(squareSize - innerPadding * 2),
                 styles = theme.tileStyles,
-                level = controller.gameState[4].level.value!!
+                level = controller.gameState[4].level.value,
+                theme = theme
             )
         }
-        if (controller.gameState[5].level.value != null) {
+        AnimatedVisibility(
+            visible = controller.gameState[5].level.value != null,
+            exit = ExitTransition.None,
+            enter = fadeIn(tween(Constants.FADE_IN_ANIMATION_DURATION))
+        ) {
             Tile(
                 modifier = Modifier
                     .padding(
@@ -198,10 +234,15 @@ fun GameLayer(
                     )
                     .size(squareSize - innerPadding * 2),
                 styles = theme.tileStyles,
-                level = controller.gameState[5].level.value!!
+                level = controller.gameState[5].level.value,
+                theme = theme
             )
         }
-        if (controller.gameState[6].level.value != null) {
+        AnimatedVisibility(
+            visible = controller.gameState[6].level.value != null,
+            exit = ExitTransition.None,
+            enter = fadeIn(tween(Constants.FADE_IN_ANIMATION_DURATION))
+        ) {
             Tile(
                 modifier = Modifier
                     .padding(
@@ -216,10 +257,15 @@ fun GameLayer(
                     )
                     .size(squareSize - innerPadding * 2),
                 styles = theme.tileStyles,
-                level = controller.gameState[6].level.value!!
+                level = controller.gameState[6].level.value,
+                theme = theme
             )
         }
-        if (controller.gameState[7].level.value != null) {
+        AnimatedVisibility(
+            visible = controller.gameState[7].level.value != null,
+            exit = ExitTransition.None,
+            enter = fadeIn(tween(Constants.FADE_IN_ANIMATION_DURATION))
+        ) {
             Tile(
                 modifier = Modifier
                     .padding(
@@ -234,10 +280,15 @@ fun GameLayer(
                     )
                     .size(squareSize - innerPadding * 2),
                 styles = theme.tileStyles,
-                level = controller.gameState[7].level.value!!
+                level = controller.gameState[7].level.value,
+                theme = theme
             )
         }
-        if (controller.gameState[8].level.value != null) {
+        AnimatedVisibility(
+            visible = controller.gameState[8].level.value != null,
+            exit = ExitTransition.None,
+            enter = fadeIn(tween(Constants.FADE_IN_ANIMATION_DURATION))
+        ) {
             Tile(
                 modifier = Modifier
                     .padding(
@@ -252,10 +303,15 @@ fun GameLayer(
                     )
                     .size(squareSize - innerPadding * 2),
                 styles = theme.tileStyles,
-                level = controller.gameState[8].level.value!!
+                level = controller.gameState[8].level.value,
+                theme = theme
             )
         }
-        if (controller.gameState[9].level.value != null) {
+        AnimatedVisibility(
+            visible = controller.gameState[9].level.value != null,
+            exit = ExitTransition.None,
+            enter = fadeIn(tween(Constants.FADE_IN_ANIMATION_DURATION))
+        ) {
             Tile(
                 modifier = Modifier
                     .padding(
@@ -270,10 +326,15 @@ fun GameLayer(
                     )
                     .size(squareSize - innerPadding * 2),
                 styles = theme.tileStyles,
-                level = controller.gameState[9].level.value!!
+                level = controller.gameState[9].level.value,
+                theme = theme
             )
         }
-        if (controller.gameState[10].level.value != null) {
+        AnimatedVisibility(
+            visible = controller.gameState[10].level.value != null,
+            exit = ExitTransition.None,
+            enter = fadeIn(tween(Constants.FADE_IN_ANIMATION_DURATION))
+        ) {
             Tile(
                 modifier = Modifier
                     .padding(
@@ -288,10 +349,15 @@ fun GameLayer(
                     )
                     .size(squareSize - innerPadding * 2),
                 styles = theme.tileStyles,
-                level = controller.gameState[10].level.value!!
+                level = controller.gameState[10].level.value,
+                theme = theme
             )
         }
-        if (controller.gameState[11].level.value != null) {
+        AnimatedVisibility(
+            visible = controller.gameState[11].level.value != null,
+            exit = ExitTransition.None,
+            enter = fadeIn(tween(Constants.FADE_IN_ANIMATION_DURATION))
+        ) {
             Tile(
                 modifier = Modifier
                     .padding(
@@ -306,10 +372,15 @@ fun GameLayer(
                     )
                     .size(squareSize - innerPadding * 2),
                 styles = theme.tileStyles,
-                level = controller.gameState[11].level.value!!
+                level = controller.gameState[11].level.value,
+                theme = theme
             )
         }
-        if (controller.gameState[12].level.value != null) {
+        AnimatedVisibility(
+            visible = controller.gameState[12].level.value != null,
+            exit = ExitTransition.None,
+            enter = fadeIn(tween(Constants.FADE_IN_ANIMATION_DURATION))
+        ) {
             Tile(
                 modifier = Modifier
                     .padding(
@@ -324,10 +395,15 @@ fun GameLayer(
                     )
                     .size(squareSize - innerPadding * 2),
                 styles = theme.tileStyles,
-                level = controller.gameState[12].level.value!!
+                level = controller.gameState[12].level.value,
+                theme = theme
             )
         }
-        if (controller.gameState[13].level.value != null) {
+        AnimatedVisibility(
+            visible = controller.gameState[13].level.value != null,
+            exit = ExitTransition.None,
+            enter = fadeIn(tween(Constants.FADE_IN_ANIMATION_DURATION))
+        ) {
             Tile(
                 modifier = Modifier
                     .padding(
@@ -342,10 +418,15 @@ fun GameLayer(
                     )
                     .size(squareSize - innerPadding * 2),
                 styles = theme.tileStyles,
-                level = controller.gameState[13].level.value!!
+                level = controller.gameState[13].level.value,
+                theme = theme
             )
         }
-        if (controller.gameState[14].level.value != null) {
+        AnimatedVisibility(
+            visible = controller.gameState[14].level.value != null,
+            exit = ExitTransition.None,
+            enter = fadeIn(tween(Constants.FADE_IN_ANIMATION_DURATION))
+        ) {
             Tile(
                 modifier = Modifier
                     .padding(
@@ -360,10 +441,15 @@ fun GameLayer(
                     )
                     .size(squareSize - innerPadding * 2),
                 styles = theme.tileStyles,
-                level = controller.gameState[14].level.value!!
+                level = controller.gameState[14].level.value,
+                theme = theme
             )
         }
-        if (controller.gameState[15].level.value != null) {
+        AnimatedVisibility(
+            visible = controller.gameState[15].level.value != null,
+            exit = ExitTransition.None,
+            enter = fadeIn(tween(Constants.FADE_IN_ANIMATION_DURATION))
+        ) {
             Tile(
                 modifier = Modifier
                     .padding(
@@ -378,7 +464,8 @@ fun GameLayer(
                     )
                     .size(squareSize - innerPadding * 2),
                 styles = theme.tileStyles,
-                level = controller.gameState[15].level.value!!
+                level = controller.gameState[15].level.value,
+                theme = theme
             )
         }
     }
