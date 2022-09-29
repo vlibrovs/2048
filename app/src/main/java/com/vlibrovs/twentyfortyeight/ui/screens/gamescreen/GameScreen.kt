@@ -218,8 +218,8 @@ fun GameScreen(
                         }
                         GameResult.LOSS -> {
                             viewModel.gameResult.value = GameResult.EMPTY
-                            viewModel.saveGame(game)
-                            game = UnfinishedGame()
+                            viewModel.finishCurrentGame()
+                            navController.navigate(Screen.Game.route+"/true")
                         }
                     }
                 },
@@ -238,7 +238,7 @@ fun GameScreen(
                         }
                         GameResult.LOSS -> {
                             viewModel.gameResult.value = GameResult.EMPTY
-                            viewModel.saveGame(game)
+                            viewModel.finishCurrentGame()
                             navController.navigate(Screen.MainMenu.route)
                         }
                     }

@@ -324,7 +324,10 @@ class SizeFourMoveController(
         }
         if (successful) {
             onMoveSuccess()
-            afterAnimation { checkWin(!game.getWinState() && win) }
+            afterAnimation {
+                checkWin(!game.getWinState() && win)
+                checkLoss()
+            }
         }
     }
 
@@ -627,7 +630,10 @@ class SizeFourMoveController(
         }
         if (successful) {
             onMoveSuccess()
-            afterAnimation { checkWin(!game.getWinState() && win) }
+            afterAnimation {
+                checkWin(!game.getWinState() && win)
+                checkLoss()
+            }
         }
     }
 
@@ -930,7 +936,10 @@ class SizeFourMoveController(
         }
         if (successful) {
             onMoveSuccess()
-            afterAnimation { checkWin(!game.getWinState() && win) }
+            afterAnimation {
+                checkWin(!game.getWinState() && win)
+                checkLoss()
+            }
         }
     }
 
@@ -1234,7 +1243,10 @@ class SizeFourMoveController(
         }
         if (successful) {
             onMoveSuccess()
-            afterAnimation { checkWin(!game.getWinState() && win) }
+            afterAnimation {
+                checkWin(!game.getWinState() && win)
+                checkLoss()
+            }
         }
     }
 
@@ -1298,5 +1310,29 @@ class SizeFourMoveController(
             game.setWinState(true)
             viewModel.gameResult.value = GameResult.WIN
         }
+    }
+
+    private fun checkLoss() {
+        for (row in schemeController.getRowScheme()) {
+            for (tileData in row) {
+                if (tileData.level.value == null) {
+                    return
+                }
+            }
+            if (row.tilesLevelEqual(0, 1) || row.tilesLevelEqual(1, 2) || row.tilesLevelEqual(2, 3)) {
+                return
+            }
+        }
+        for (column in schemeController.getColumnScheme()) {
+            for (tileData in column) {
+                if (tileData.level.value == null) {
+                    return
+                }
+            }
+            if (column.tilesLevelEqual(0, 1) || column.tilesLevelEqual(1, 2) || column.tilesLevelEqual(2, 3)) {
+                return
+            }
+        }
+        viewModel.gameResult.value = GameResult.LOSS
     }
 }

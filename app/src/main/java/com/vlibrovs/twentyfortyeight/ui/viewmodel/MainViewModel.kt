@@ -146,22 +146,6 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
     }
 
     init {
-        clearGames()
-        saveGame(
-            UnfinishedGame(
-                number = null,
-                score = 1000,
-                moves = 100,
-                state = SizeFourGameState(
-                    thirteenth = 10,
-                    fourteenth = 10,
-                    first = 9,
-                    second = 9,
-                    third = 9,
-                    fourth = 9
-                )
-            )
-        )
         getThemes()
         getGames()
     }
