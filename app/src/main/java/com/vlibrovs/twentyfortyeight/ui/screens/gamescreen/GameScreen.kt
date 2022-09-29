@@ -1,6 +1,12 @@
 package com.vlibrovs.twentyfortyeight.ui.screens.gamescreen
 
+import android.util.Log
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -20,6 +26,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.vlibrovs.twentyfortyeight.R
+import com.vlibrovs.twentyfortyeight.common.Constants
 import com.vlibrovs.twentyfortyeight.common.getValues
 import com.vlibrovs.twentyfortyeight.data.model.game.Game
 import com.vlibrovs.twentyfortyeight.data.model.game.UnfinishedGame
@@ -29,6 +36,7 @@ import com.vlibrovs.twentyfortyeight.ui.common.composables.Button
 import com.vlibrovs.twentyfortyeight.ui.common.fonts.Fonts
 import com.vlibrovs.twentyfortyeight.ui.common.navigation.Screen
 import com.vlibrovs.twentyfortyeight.ui.common.window.rememberWindowInfo
+import com.vlibrovs.twentyfortyeight.ui.screens.Overlay
 import com.vlibrovs.twentyfortyeight.ui.viewmodel.MainViewModel
 
 @Composable
@@ -36,13 +44,13 @@ fun GameScreen(
     theme: Theme,
     navController: NavController,
     viewModel: MainViewModel,
-    newGame: Boolean
+    newGame: Boolean,
 ) {
     val values = getValues(rememberWindowInfo().screenWidthInfo)
-    val gameResultState = remember {
-        mutableStateOf(GameResult.EMPTY)
+    val gameResult by remember {
+        viewModel.gameResult
     }
-    val game by remember {
+    var game by remember {
         mutableStateOf(
             if (newGame) {
                 UnfinishedGame()
@@ -50,144 +58,204 @@ fun GameScreen(
                 viewModel.getCurrentGame()!!.toSizeFourUnfinishedGame()
         )
     }
-    BackHandler {
-        navController.popBackStack()
-        viewModel.saveGame(game)
-    }
     val scoreState = remember {
         mutableStateOf(game.score)
     }
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(brush = Brush.verticalGradient(theme.backgroundGradient.toList()))
-            .padding(values.gamePadding),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.SpaceBetween
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
     ) {
-        Text(
-            text = "2048",
-            color = theme.textColor,
-            fontSize = values.gameTitleFontSize,
-            fontFamily = Fonts.Poppins,
-            fontWeight = FontWeight.SemiBold,
-            style = TextStyle(
-                shadow = Shadow(
-                    Color(0x30000000),
-                    blurRadius = 4f,
-                    offset = Offset(0f, 6f)
-                )
-            )
-        )
-        Row(
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .background(
-                    color = theme.secondaryBackgroundColor,
-                    shape = RoundedCornerShape(50.dp)
-                ),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+                .fillMaxSize()
+                .background(brush = Brush.verticalGradient(theme.backgroundGradient.toList()))
+                .padding(values.gamePadding),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
-                modifier = Modifier.padding(start = 20.dp),
-                text = stringResource(id = R.string.score) + ':',
-                textAlign = TextAlign.Start,
-                fontFamily = Fonts.Poppins,
-                fontWeight = FontWeight.Normal,
+                text = "2048",
                 color = theme.textColor,
-                fontSize = values.buttonTextSize
-            )
-            Text(
-                modifier = Modifier
-                    .padding(end = 20.dp)
-                    .fillMaxWidth(),
-                text = "${scoreState.value}",
-                textAlign = TextAlign.End,
+                fontSize = values.gameTitleFontSize,
                 fontFamily = Fonts.Poppins,
                 fontWeight = FontWeight.SemiBold,
-                color = theme.textColor,
-                fontSize = values.buttonTextSize
-            )
-        }
-
-        BoxWithConstraints(
-            modifier = Modifier
-                .fillMaxWidth()
-                .aspectRatio(1f)
-                .background(
-                    color = theme.secondaryBackgroundColor,
-                    shape = RoundedCornerShape(20.dp)
+                style = TextStyle(
+                    shadow = Shadow(
+                        Color(0x30000000),
+                        blurRadius = 4f,
+                        offset = Offset(0f, 6f)
+                    )
                 )
-        ) {
+            )
             Row(
-                modifier = Modifier.fillMaxSize(),
-                horizontalArrangement = Arrangement.SpaceEvenly,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(
+                        color = theme.secondaryBackgroundColor,
+                        shape = RoundedCornerShape(50.dp)
+                    ),
+                horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Divider(
-                    modifier = Modifier
-                        .fillMaxHeight()
-                        .width(values.lineWidth)
-                        .background(color = theme.linesColor)
+                Text(
+                    modifier = Modifier.padding(start = 20.dp),
+                    text = stringResource(id = R.string.score) + ':',
+                    textAlign = TextAlign.Start,
+                    fontFamily = Fonts.Poppins,
+                    fontWeight = FontWeight.Normal,
+                    color = theme.textColor,
+                    fontSize = values.buttonTextSize
                 )
-                Divider(
+                Text(
                     modifier = Modifier
-                        .fillMaxHeight()
-                        .width(values.lineWidth)
-                        .background(color = theme.linesColor)
-                )
-                Divider(
-                    modifier = Modifier
-                        .fillMaxHeight()
-                        .width(values.lineWidth)
-                        .background(color = theme.linesColor)
+                        .padding(end = 20.dp)
+                        .fillMaxWidth(),
+                    text = "${scoreState.value}",
+                    textAlign = TextAlign.End,
+                    fontFamily = Fonts.Poppins,
+                    fontWeight = FontWeight.SemiBold,
+                    color = theme.textColor,
+                    fontSize = values.buttonTextSize
                 )
             }
-            Column(
-                modifier = Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.SpaceEvenly,
-                horizontalAlignment = Alignment.CenterHorizontally
+
+            BoxWithConstraints(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .aspectRatio(1f)
+                    .background(
+                        color = theme.secondaryBackgroundColor,
+                        shape = RoundedCornerShape(20.dp)
+                    )
             ) {
-                Divider(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(values.lineWidth)
-                        .background(color = theme.linesColor)
-                )
-                Divider(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(values.lineWidth)
-                        .background(color = theme.linesColor)
-                )
-                Divider(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(values.lineWidth)
-                        .background(color = theme.linesColor)
+                Row(
+                    modifier = Modifier.fillMaxSize(),
+                    horizontalArrangement = Arrangement.SpaceEvenly,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Divider(
+                        modifier = Modifier
+                            .fillMaxHeight()
+                            .width(values.lineWidth)
+                            .background(color = theme.linesColor)
+                    )
+                    Divider(
+                        modifier = Modifier
+                            .fillMaxHeight()
+                            .width(values.lineWidth)
+                            .background(color = theme.linesColor)
+                    )
+                    Divider(
+                        modifier = Modifier
+                            .fillMaxHeight()
+                            .width(values.lineWidth)
+                            .background(color = theme.linesColor)
+                    )
+                }
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.SpaceEvenly,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Divider(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(values.lineWidth)
+                            .background(color = theme.linesColor)
+                    )
+                    Divider(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(values.lineWidth)
+                            .background(color = theme.linesColor)
+                    )
+                    Divider(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(values.lineWidth)
+                            .background(color = theme.linesColor)
+                    )
+                }
+                GameLayer(
+                    modifier = Modifier.fillMaxSize(),
+                    innerPadding = values.gameFieldInnerPadding,
+                    theme = theme,
+                    squareSize = maxWidth / 4,
+                    scoreState = scoreState,
+                    viewModel = viewModel,
+                    game = game
                 )
             }
-            GameLayer(
-                modifier = Modifier.fillMaxSize(),
-                innerPadding = values.gameFieldInnerPadding,
-                theme = theme,
-                squareSize = maxWidth / 4,
-                scoreState = scoreState,
-                viewModel = viewModel,
-                game = game,
-                gameResultState = gameResultState
+            Button(
+                modifier = Modifier.fillMaxWidth(),
+                text = stringResource(id = R.string.back),
+                fontSize = values.buttonTextSize,
+                onClick = {
+                    viewModel.saveGame(game)
+                    navController.navigate(Screen.MainMenu.route)
+                },
+                theme = theme
             )
         }
-        Button(
-            modifier = Modifier.fillMaxWidth(),
-            text = stringResource(id = R.string.back),
-            fontSize = values.buttonTextSize,
-            onClick = {
-                viewModel.saveGame(game)
-                navController.navigate(Screen.MainMenu.route)
-            },
-            theme = theme
-        )
+        AnimatedVisibility(
+            gameResult != GameResult.EMPTY,
+            enter = fadeIn(tween(durationMillis = 500)),
+            exit = fadeOut(tween(durationMillis = 500))
+        ) {
+            Overlay(
+                modifier = Modifier.fillMaxSize(),
+                theme = theme,
+                text = when (gameResult) {
+                    GameResult.EMPTY -> ""
+                    GameResult.WIN -> stringResource(id = R.string.game_win_text)
+                    GameResult.LOSS -> stringResource(id = R.string.game_loss_text)
+                },
+                onButton1Click = {
+                    when (gameResult) {
+                        GameResult.EMPTY -> Unit
+                        GameResult.WIN -> {
+                            viewModel.gameResult.value = GameResult.EMPTY
+                        }
+                        GameResult.LOSS -> {
+                            viewModel.gameResult.value = GameResult.EMPTY
+                            viewModel.saveGame(game)
+                            game = UnfinishedGame()
+                        }
+                    }
+                },
+                button1Text = when (gameResult) {
+                    GameResult.EMPTY -> ""
+                    GameResult.WIN -> stringResource(id = R.string.continueStr)
+                    GameResult.LOSS -> stringResource(id = R.string.new_game)
+                },
+                onButton2Click = {
+                    when (gameResult) {
+                        GameResult.EMPTY -> Unit
+                        GameResult.WIN -> {
+                            viewModel.gameResult.value = GameResult.EMPTY
+                            viewModel.finishCurrentGame()
+                            navController.navigate(Screen.Game.route+"/true")
+                        }
+                        GameResult.LOSS -> {
+                            viewModel.gameResult.value = GameResult.EMPTY
+                            viewModel.saveGame(game)
+                            navController.navigate(Screen.MainMenu.route)
+                        }
+                    }
+                },
+                button2Text = when (gameResult) {
+                    GameResult.EMPTY -> ""
+                    GameResult.WIN -> stringResource(id = R.string.new_game)
+                    GameResult.LOSS -> stringResource(id = R.string.back_to_menu)
+                }
+            )
+
+        }
+    }
+    BackHandler {
+        if (gameResult == GameResult.EMPTY) {
+            navController.navigate(Screen.MainMenu.route)
+            viewModel.saveGame(game)
+        }
     }
 }

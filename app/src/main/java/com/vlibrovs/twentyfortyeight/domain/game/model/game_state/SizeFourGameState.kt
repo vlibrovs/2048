@@ -1,7 +1,6 @@
 package com.vlibrovs.twentyfortyeight.domain.game.model.game_state
 
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.ui.focus.FocusRequester.Companion.FocusRequesterFactory.component1
 import com.vlibrovs.twentyfortyeight.domain.game.model.TileData
 
 class SizeFourGameState(
@@ -139,7 +138,12 @@ class SizeFourGameState(
             val list = mutableListOf<Int?>()
             for (line in string.lines()) {
                 for (levelString in line.trim().split(' ')) {
-                    list.add(if (levelString.toInt() == 0) null else levelString.toInt())
+                    val level = try {
+                        levelString.toInt()
+                    } catch (e: NumberFormatException) {
+                        levelString.replace("w0", "").replace("w1", "").toInt()
+                    }
+                    list.add(if (level == 0) null else level)
                 }
             }
             return if (list.size == 16) SizeFourGameState(

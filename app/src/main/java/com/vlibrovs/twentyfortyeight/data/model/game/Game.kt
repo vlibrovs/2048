@@ -26,6 +26,7 @@ open class Game(
         number,
         score,
         moves,
-        SizeFourGameState.fromString(extra)!!
+        SizeFourGameState.fromString(extra)!!,
+        win = extra.last() == '1'
     )
 }

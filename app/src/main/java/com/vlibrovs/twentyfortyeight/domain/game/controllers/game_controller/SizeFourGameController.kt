@@ -19,8 +19,7 @@ class SizeFourGameController(
     coroutineScope: CoroutineScope,
     scoreState: MutableState<Int>,
     private val viewModel: MainViewModel,
-    game: UnfinishedGame,
-    gameResultState: MutableState<GameResult>
+    game: UnfinishedGame
 ) :
     GameController() {
 
@@ -31,7 +30,7 @@ class SizeFourGameController(
         game = game
     )
     override val schemeController = SizeFourSchemeController(gameState)
-    override val generator = Generator(gameState = gameState, gameResultState = gameResultState)
+    override val generator = Generator(gameState = gameState, viewModel = viewModel)
     override val moveController = SizeFourMoveController(
         gameState,
         schemeController,
@@ -39,7 +38,7 @@ class SizeFourGameController(
         statsController,
         coroutineScope,
         game = game,
-        gameResultState = gameResultState
+        viewModel = viewModel
     )
     override val animator =
         SizeFourAnimator(animationDuration = Constants.ANIMATION_DURATION, gameState = gameState)

@@ -30,12 +30,11 @@ fun GameLayer(
     squareSize: Dp,
     scoreState: MutableState<Int>,
     viewModel: MainViewModel,
-    game: UnfinishedGame,
-    gameResultState: MutableState<GameResult>
+    game: UnfinishedGame
 ) {
     val scope = rememberCoroutineScope()
     val controller = remember {
-        SizeFourGameController(game = game, coroutineScope =  scope, scoreState =  scoreState, viewModel = viewModel, gameResultState = gameResultState)
+        SizeFourGameController(game = game, coroutineScope =  scope, scoreState =  scoreState, viewModel = viewModel)
     }
     val horizontalAnimator = controller.animator.horizontalAnimator(squareSize = squareSize)
     val verticalAnimator = controller.animator.verticalAnimator(squareSize = squareSize)

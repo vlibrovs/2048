@@ -4,16 +4,17 @@ import androidx.compose.runtime.MutableState
 import com.vlibrovs.twentyfortyeight.data.model.game_result.GameResult
 import com.vlibrovs.twentyfortyeight.domain.game.model.TileData
 import com.vlibrovs.twentyfortyeight.domain.game.model.game_state.GameState
+import com.vlibrovs.twentyfortyeight.ui.viewmodel.MainViewModel
 import kotlin.random.Random
 
-class Generator(private val gameState: GameState, private val gameResultState: MutableState<GameResult>) {
+class Generator(private val gameState: GameState, private val viewModel: MainViewModel) {
     fun generate() {
         val emptySquaresList = mutableListOf<TileData>()
         for (tileData in gameState) {
             if (tileData.level.value == null) emptySquaresList.add(tileData)
         }
         if (emptySquaresList.size == 0) {
-            gameResultState.value = GameResult.LOSS
+            viewModel.gameResult.value = GameResult.LOSS
             return
         }
         val position = Random.nextInt(emptySquaresList.size)

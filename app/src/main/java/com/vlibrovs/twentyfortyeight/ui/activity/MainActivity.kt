@@ -6,8 +6,10 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -47,11 +49,13 @@ class MainActivity : ComponentActivity() {
                 ?: -1
         )
         setContent {
+
             val systemUiController = rememberSystemUiController()
             val navController = rememberNavController()
             systemUiController.setStatusBarColor(viewModel.run {
                 getThemeById(selectedThemeId.value)!!
             }.backgroundGradient.colorStart)
+
             NavHost(
                 modifier = Modifier.fillMaxSize(),
                 navController = navController,

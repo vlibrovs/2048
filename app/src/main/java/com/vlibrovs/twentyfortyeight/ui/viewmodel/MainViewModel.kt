@@ -9,9 +9,11 @@ import com.vlibrovs.twentyfortyeight.common.Constants
 import com.vlibrovs.twentyfortyeight.data.model.game.FinishedGame
 import com.vlibrovs.twentyfortyeight.data.model.game.Game
 import com.vlibrovs.twentyfortyeight.data.model.game.UnfinishedGame
+import com.vlibrovs.twentyfortyeight.data.model.game_result.GameResult
 import com.vlibrovs.twentyfortyeight.data.model.theme.DefaultThemes
 import com.vlibrovs.twentyfortyeight.data.model.theme.Theme
 import com.vlibrovs.twentyfortyeight.data.repository.Repository
+import com.vlibrovs.twentyfortyeight.domain.game.model.game_state.SizeFourGameState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeout
@@ -114,6 +116,8 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
         }
     }
 
+    val gameResult = mutableStateOf(GameResult.EMPTY)
+
     fun saveGame(game: Game) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.saveGame(game)
@@ -142,6 +146,22 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
     }
 
     init {
+        clearGames()
+        saveGame(
+            UnfinishedGame(
+                number = null,
+                score = 1000,
+                moves = 100,
+                state = SizeFourGameState(
+                    thirteenth = 10,
+                    fourteenth = 10,
+                    first = 9,
+                    second = 9,
+                    third = 9,
+                    fourth = 9
+                )
+            )
+        )
         getThemes()
         getGames()
     }

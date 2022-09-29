@@ -23,4 +23,7 @@
     <string name="text">Text:</string>
     <string name="lines">Lines:</string>
     <string name="cancel">Cancel</string>
+    <string name="game_win_text">Congratulations, you won!</string>
+    <string name="game_loss_text">Game over</string>
+    <string name="back_to_menu">Back to Menu</string>
 </resources>
