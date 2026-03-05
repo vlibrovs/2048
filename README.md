@@ -28,3 +28,7 @@ An Android implementation of the classic **2048** puzzle game built with **Jetpa
 ![Theme Creation](https://github.com/vlibrovs/2048/blob/main/screenshots/theme_creation.png)
 ![Tile Styles](https://github.com/vlibrovs/2048/blob/main/screenshots/tiles_styles.png)
 ![Color Picker](https://github.com/vlibrovs/2048/blob/main/screenshots/color_picker.png)
+
+## License
+
+This project is licensed under the MIT License – see the [LICENSE](LICENSE) file for details.
