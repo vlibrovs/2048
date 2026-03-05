@@ -1,16 +1,30 @@
 # 2048
-Famous game "2048" implemented using Jetpack Compose
 
-# Features
+An Android implementation of the classic **2048** puzzle game built with **Jetpack Compose**.
 
-- Classical 2048 gameplay with smooth animations and beatiful design
-- Game stats (score, moves count and finish date) stored in local database
-- Theme editor which allows to create awesome themes limited only by your imagination
-- Comfortable color picker which allows to easily select colors for your themes
+⚠️ This project was created in 2022 while I was learning modern Android development and experimenting with Jetpack Compose. It is preserved on GitHub as a learning project and may not reflect my current coding style or best practices.
 
-# Screenshots 
+## Features
 
-![main_menu](https://github.com/vlibrovs/2048/blob/main/screenshots/main_menu.png) ![in_game](https://github.com/vlibrovs/2048/blob/main/screenshots/in_game.png)
-![stats](https://github.com/vlibrovs/2048/blob/main/screenshots/stats.png) ![settings](https://github.com/vlibrovs/2048/blob/main/screenshots/settings.png)
-![theme_creation](https://github.com/vlibrovs/2048/blob/main/screenshots/theme_creation.png) ![tiles_styles](https://github.com/vlibrovs/2048/blob/main/screenshots/tiles_styles.png)
-![color_picker](https://github.com/vlibrovs/2048/blob/main/screenshots/color_picker.png)
+* Classic **2048 gameplay**
+* Smooth tile animations implemented with Jetpack Compose
+* Game statistics stored locally (score, move count, and completion date)
+* Custom **theme editor** for creating personalized tile and UI themes
+* Built-in **color picker** for selecting theme colors
+
+## Tech Stack
+
+* Kotlin
+* Jetpack Compose
+* Android SDK
+* Local database for storing game statistics
+
+## Screenshots
+
+![Main Menu](https://github.com/vlibrovs/2048/blob/main/screenshots/main_menu.png)
+![In Game](https://github.com/vlibrovs/2048/blob/main/screenshots/in_game.png)
+![Statistics](https://github.com/vlibrovs/2048/blob/main/screenshots/stats.png)
+![Settings](https://github.com/vlibrovs/2048/blob/main/screenshots/settings.png)
+![Theme Creation](https://github.com/vlibrovs/2048/blob/main/screenshots/theme_creation.png)
+![Tile Styles](https://github.com/vlibrovs/2048/blob/main/screenshots/tiles_styles.png)
+![Color Picker](https://github.com/vlibrovs/2048/blob/main/screenshots/color_picker.png)
